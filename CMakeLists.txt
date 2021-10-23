@@ -11,7 +11,7 @@ message(STATUS "TUTORIAL_BINARY_DIR='${TUTORIAL_BINARY_DIR}' ")
 
 find_package (OpenGL REQUIRED)
 
-add_subdirectory (external)
+
 
 option(VERBOSE_MODE "cmake verbose mode" ON)
 
@@ -82,18 +82,18 @@ foreach(file ${Model_3D_FILES})
 endforeach()
 
 file(GLOB COMMON_SOURCE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/*.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/*.cpp
+    ${CMAKE_SOURCE_DIR}/common/*.h
+    ${CMAKE_SOURCE_DIR}/common/*.hpp
+    ${CMAKE_SOURCE_DIR}/common/*.cpp
 )
 
 file(GLOB EXT_SOURCE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/*.cpp
+    ${CMAKE_SOURCE_DIR}/external/imgui/*.h
+    ${CMAKE_SOURCE_DIR}/external/imgui/*.cpp
 )
 group_files("${COMMON_SOURCE_FILES}")
 group_files("${EXT_SOURCE_FILES}")
 
 ##===========================================================================##
-
+add_subdirectory (external)
 add_subdirectory(tutorial-double-side-shading)
