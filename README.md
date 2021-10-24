@@ -25,7 +25,7 @@ It is a collection of OpenGL tutorials.
 - waiting for update
 
 ## Credits
-- [glew]()
+- [glew](https://github.com/nigels-com/glew)
 - [glfw](https://github.com/glfw/glfw)
 - [glm]([Groovounet/glm (github.com)](https://github.com/Groovounet/glm))
 - [spdlog](https://github.com/gabime/spdlog)
