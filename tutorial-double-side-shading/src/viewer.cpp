@@ -12,8 +12,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#include "common/objloader.h"
-#include "common/simpleMesh.h"
+#include "objloader.h"
+#include "simpleMesh.h"
 #include "shaderUtility.h"
 
 #include "camera.h" 

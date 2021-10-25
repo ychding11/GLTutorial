@@ -40,5 +40,5 @@ void main()
     vs_out.Normal = N;
         
     gl_Position = P * V * M * vec4(aPos, 1.0);
-    gl_ClipDistance[0] = dot(vec4(M * vec4(aPos, 1.0)), vec4(0,0,-1, 0));
+    gl_ClipDistance[0] = dot(vec4(M * vec4(aPos, 1.0)), vec4(0,0,-1, -0.3));
 }

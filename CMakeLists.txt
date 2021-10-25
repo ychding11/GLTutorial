@@ -23,7 +23,7 @@ function(group_files src_files)
         # replace "a/b/c" --> "a\\b\\c"
         string(REPLACE / \\\\ f ${f})
         # Get the path of the file relative to ${CMAKE_SOURCE_DIR}
-        file(RELATIVE_PATH relative_path ${CMAKE_SOURCE_DIR} ${f})
+        file(RELATIVE_PATH relative_path ${CMAKE_CURRENT_SOURCE_DIR} ${f})
         # Extract the folder, remove the filename from path 
         string(REGEX REPLACE "(.*)(/[^/]*)$" "\\1" relative_path ${relative_path})
 
@@ -46,14 +46,13 @@ function(group_files src_files)
 endfunction()
 
 include_directories(
-	.
-	common/
-	external/glew-1.13.0/include/
-	external/glfw-3.1.2/include/
-	external/glm-0.9.7.1/
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/spdlog/include
+	${CMAKE_SOURCE_DIR}/common/
+	${CMAKE_SOURCE_DIR}/external/glew-1.13.0/include/
+	${CMAKE_SOURCE_DIR}/external/glfw-3.1.2/include/
+	${CMAKE_SOURCE_DIR}/external/glm-0.9.7.1/
 )
 
+include_directories( ${CMAKE_SOURCE_DIR}/external/spdlog/include )
 include_directories( ${CMAKE_SOURCE_DIR}/external/imgui )
 include_directories( ${CMAKE_SOURCE_DIR}/external/fonts )
 
@@ -67,7 +66,6 @@ add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
 )
 
-#file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Model/Suzanne.obj DESTINATION Model/)
 file( GLOB TEXTURE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/textures/*.jpg )
 file( COPY ${TEXTURE_FILES} DESTINATION ${TUTORIAL_BINARY_DIR}/textures/)
 
@@ -91,6 +89,7 @@ file(GLOB EXT_SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/external/imgui/*.h
     ${CMAKE_SOURCE_DIR}/external/imgui/*.cpp
 )
+
 group_files("${COMMON_SOURCE_FILES}")
 group_files("${EXT_SOURCE_FILES}")
 
