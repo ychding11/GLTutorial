@@ -5,13 +5,6 @@ set(TARGET_NAME "double-side-shading")
 file( GLOB SHADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/shaders/*.glsl )
 file( COPY ${SHADER_FILES} DESTINATION ${TUTORIAL_BINARY_DIR}/shaders/ )
 
-foreach(shader ${SHADER_FILES})
-    set_source_files_properties( ${shader} PROPERTIES HEADER_FILE_ONLY TRUE )
-    #add_custom_command( TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${shader} shaders/ )
-    add_custom_command( TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${shader} ${TUTORIAL_BINARY_DIR}/shaders/ )
-    message(STATUS "copy ${shader} into ${TUTORIAL_BINARY_DIR}/shaders") 
-endforeach()
-
 
 file(GLOB SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
@@ -31,3 +24,11 @@ set_target_properties(${TARGET_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITH
 set_target_properties(${TARGET_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${TUTORIAL_BINARY_DIR})
 set_target_properties(${TARGET_NAME} PROPERTIES DEBUG_POSTFIX "_d")
 set_target_properties(${TARGET_NAME} PROPERTIES RELWITHDEBINFO_POSTFIX "RelWithDebInfo")
+
+foreach(shader ${SHADER_FILES})
+    set_source_files_properties( ${shader} PROPERTIES HEADER_FILE_ONLY TRUE )
+    #add_custom_command( TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${shader} shaders/ )
+    add_custom_command( TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${shader} ${TUTORIAL_BINARY_DIR}/shaders/ )
+    message(STATUS "copy ${shader} into ${TUTORIAL_BINARY_DIR}/shaders") 
+endforeach()
+

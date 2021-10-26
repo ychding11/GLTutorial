@@ -21,6 +21,7 @@ uniform mat4 M;
 
 uniform vec3 u_light_pos;
 uniform vec3 u_viewer_pos;
+uniform float u_clip_plane_dist;
 
 void main()
 {
@@ -40,5 +41,5 @@ void main()
     vs_out.Normal = N;
         
     gl_Position = P * V * M * vec4(aPos, 1.0);
-    gl_ClipDistance[0] = dot(vec4(M * vec4(aPos, 1.0)), vec4(0,0,-1, -0.3));
+    gl_ClipDistance[0] = dot(vec4(M * vec4(aPos, 1.0)), vec4(0,0,-1, -u_clip_plane_dist));
 }

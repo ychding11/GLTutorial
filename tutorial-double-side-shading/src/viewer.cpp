@@ -309,6 +309,8 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
     shader->SetVec3("u_light_pos",  m_pointLight->GetPosition());
     shader->SetVec3("u_light_color",m_pointLight->GetColor());
 
+    shader->SetFloat("u_clip_plane_dist", m_clip_plane_distance);
+
     shader->SetInt("diffuseMap", 0);
     shader->SetInt("normalMap", 1);
     if (m_enable_normal_map) //< control from view
@@ -508,6 +510,7 @@ static void drawUI(Viewer &viewer)
                     Log("stop Image sequence.\n");
                 }
             }
+            ImGui::SliderFloat("Clip plane distance", &viewer.m_clip_plane_distance, -0.5f, 0.5f);
 
             ImGui::EndMenu();
         }
