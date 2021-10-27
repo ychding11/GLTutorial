@@ -96,3 +96,4 @@ group_files("${EXT_SOURCE_FILES}")
 ##===========================================================================##
 add_subdirectory (external)
 add_subdirectory(tutorial-double-side-shading)
+add_subdirectory(tutorial-normal-map)
