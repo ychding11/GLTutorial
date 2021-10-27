@@ -37,15 +37,12 @@ std::unique_ptr<Camera> buildCamera(const MeshType & mesh)
 
 void Viewer::Run()
 {
-    //Quad quad;
-    //Cube cube;
     m_quad = std::make_unique<Quad>();
     m_cube = std::make_unique<Cube>();
 
     m_cube->SetMaterial(&m_brickWall);
     m_quad->SetMaterial(&m_brickWall);
     m_active_simpleMesh = m_quad.get();
-    //m_active_simpleMesh = m_quad;
 
     //< second stage init
     MeshBin meshes{ m_objPath };
