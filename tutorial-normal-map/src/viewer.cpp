@@ -217,63 +217,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 
 void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
 {
-    glm::mat4 modelMatrix = glm::mat4(1.0);
-    glm::mat4 viewMatrix = m_camera.viewMatrix();
-    glm::mat4 projMatrix = m_camera.projMatrix();
-    glm::vec3 lightPos = glm::vec3(20.0f, 20.0f, 20.0f);
-
-    for (int i = 0; i < m_meshBin.size(); ++i)
-    {
-        glBindVertexArray( m_meshBin.vao(i) );
-        if(m_setting.renderMode == RenderMode::Standard)
-        {
-            m_standardShader.Active();
-            m_standardShader.SetVec3("mesh_color", m_mesh_color);
-            m_standardShader.SetVec3("lightPosition_worldspace", lightPos);
-            m_standardShader.SetMat4("M", modelMatrix);
-            m_standardShader.SetMat4("V", viewMatrix);
-            m_standardShader.SetMat4("P", projMatrix);
-            glDrawArrays( GL_TRIANGLES, 0, m_meshBin.vertex_num(i) );
-
-
-            GLenum errorCheckValue = glGetError();
-            if (errorCheckValue != GL_NO_ERROR)
-            {
-                Err("Draw: {}", gluErrorString(errorCheckValue));
-            }
-        }
-        else if(m_setting.renderMode == RenderMode::Explode)
-        {
-            m_explodeShader.Active();
-            m_explodeShader.SetFloat("frame_id", m_frame_id);
-            m_explodeShader.SetFloat("explode_frequency", m_explode_frequency);
-            m_explodeShader.SetFloat("explode_scale", m_explode_scale);
-            m_explodeShader.SetVec3("mesh_color", m_mesh_color);
-            m_explodeShader.SetMat4("M", modelMatrix);
-            m_explodeShader.SetMat4("V", viewMatrix);
-            m_explodeShader.SetMat4("P", projMatrix);
-            glDrawArrays( GL_TRIANGLES, 0, m_meshBin.vertex_num(i) );
-        }
-        else if(m_setting.renderMode == RenderMode::Particle)
-        {
-            auto& modelCenter = m_meshBin.Center();
-
-            m_particleShader.Active();
-            m_particleShader.SetFloat("tessellationLevelInner", m_setting.innerTessLevel.x);
-            m_particleShader.SetFloat("tessellationLevelOuter", m_setting.outerTessLevel.x);
-            m_particleShader.SetFloat("u_explode_scale", m_explode_scale);
-            m_particleShader.SetVec3("mesh_color", m_mesh_color);
-            m_particleShader.SetVec3("u_model_center", modelCenter);
-            m_particleShader.SetMat4("M", modelMatrix);
-            m_particleShader.SetMat4("V", viewMatrix);
-            m_particleShader.SetMat4("P", projMatrix);
-            glDrawArrays(GL_PATCHES, 0, m_meshBin.vertex_num(i) );
-        }
-        else
-        {
-            assert(0);
-        }
-    }
 }
 
 void Viewer::renderLight(Light& light, const Camera& camera)
