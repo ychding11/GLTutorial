@@ -294,7 +294,7 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
 
 void Viewer::initOpenGLShaders()
 {
-    m_standardShader.Init("shaders/Standard.vert.glsl", "shaders/Standard.frag.glsl");
+    m_standardShader.Init("shaders/SolidWireframe.vs.glsl", "shaders/SolidWireframe.fs.glsl");
 }
 
 void Viewer::initMaterials(void)
@@ -524,14 +524,8 @@ static void drawUI(Viewer &viewer)
             render_model_changed += ImGui::RadioButton("Explode",  (int*)&setting.renderMode, RenderMode::Explode);
             render_model_changed += ImGui::RadioButton("Particle", (int*)&setting.renderMode, RenderMode::Particle);
             ImGui::Separator();
-            ImGui::Checkbox("Enable Tessellation",  &setting.enableTess);
-            ImGui::SliderFloat("Inner Level", &setting.innerTessLevel.x, 1.f, 64.f);
-            ImGui::SliderFloat3("Outer Level", &setting.outerTessLevel.x, 1.f, 64.f);
-            ImGui::Separator();
             ImGui::ColorEdit3("Mesh Color", &viewer.m_mesh_color.x);
             ImGui::Separator();
-            ImGui::SliderFloat("Explode Scale", &viewer.m_explode_scale, 1.f, 100.f);
-            ImGui::SliderFloat("Explode Frequency", &viewer.m_explode_frequency, 0.001f, 1.f);
             if (render_model_changed)
             {
                 viewer.m_frame_id = 0;
