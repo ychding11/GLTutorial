@@ -50,6 +50,7 @@ public:
         const char* gs_file_path = nullptr)
     {
         m_programID = LoadShaders(vs_file_path, fs_file_path, tcs_file_path, tes_file_path, gs_file_path);
+        Log("Link shader done.");
         m_initialized = true;
     }
 

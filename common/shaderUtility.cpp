@@ -210,7 +210,7 @@ GLuint LoadShaders(const char* vs_file_path, const char* fs_file_path, const cha
 		glAttachShader(m_particlProgramID, geoShaderID);
 	}
 
-    Log("Linking Shader...");
+    Log("Linking Shader... ");
 	glLinkProgram(m_particlProgramID);
 
     GLint result = GL_FALSE;
@@ -220,9 +220,10 @@ GLuint LoadShaders(const char* vs_file_path, const char* fs_file_path, const cha
 	glGetProgramiv(m_particlProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
 	if(infoLogLength > 0)
     {
-		std::vector<char> tessProgramErrMsg(infoLogLength + 1U);
+		std::vector<char> tessProgramErrMsg(infoLogLength + 1);
 		glGetProgramInfoLog(m_particlProgramID, infoLogLength, NULL, &tessProgramErrMsg[0]);
-		printf("%s\n", &tessProgramErrMsg[0]);
+		//printf("%s\n", &tessProgramErrMsg[0]);
+		Err("{}", &tessProgramErrMsg[0]);
 	}
 
 	glDetachShader(m_particlProgramID, vertShaderID);

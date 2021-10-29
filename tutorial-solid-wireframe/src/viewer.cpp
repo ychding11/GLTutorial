@@ -222,6 +222,7 @@ void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
     m_standardShader.SetMat4("M", modelMatrix);
     m_standardShader.SetMat4("V", viewMatrix);
     m_standardShader.SetMat4("P", projMatrix);
+    m_standardShader.SetVec2("u_window_size", {m_window_width, m_window_height});
     m_standardShader.SetVec3("u_mesh_color", m_mesh_color);
     m_standardShader.SetVec3("u_eye_position", m_camera.eye());
     for (int i = 0; i < m_meshBin.size(); ++i)
@@ -294,7 +295,12 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
 
 void Viewer::initOpenGLShaders()
 {
-    m_standardShader.Init("shaders/SolidWireframe.vs.glsl", "shaders/SolidWireframe.fs.glsl");
+    m_standardShader.Init("shaders/SolidWireframe.vs.glsl",
+        "shaders/SolidWireframe.fs.glsl",
+        nullptr,
+        nullptr,
+        "shaders/SolidWireframe.gs.glsl"
+        );
 }
 
 void Viewer::initMaterials(void)
