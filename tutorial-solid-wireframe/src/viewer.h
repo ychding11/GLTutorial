@@ -54,9 +54,6 @@ private:
     int  m_animation_mode{ 0 }; //< animation
     int  m_frame_id{ 0 };
 
-    float m_explode_scale{0.0001f};
-    float m_explode_frequency{0.05f}; //< this is ok on my computer
-
     float m_clip_plane_distance{0.0f};
 
     glm::vec3 m_mesh_color{1.0, 1., 1.};

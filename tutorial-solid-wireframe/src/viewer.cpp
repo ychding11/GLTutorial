@@ -97,15 +97,7 @@ void Viewer::evaluateDirtyValue()
 
 void Viewer::animateExplode()
 {
-    //if (m_frame_id % 10 == 0)
-    {
-        static float speed = 0.002f;
-        m_explode_scale = speed * (m_frame_id % 500);
-        if (speed > 0.001f)
-            speed -= 0.0002f;
-        if (m_explode_scale >= 0.50f)
-            m_explode_scale = 0.000f;
-    }
+    
 }
 
 void Viewer::animateCamera(Camera &camera)
