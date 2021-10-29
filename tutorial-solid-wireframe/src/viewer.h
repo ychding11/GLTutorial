@@ -45,7 +45,6 @@ private:
     bool m_save_image_sequence{false};
     bool m_enable_vsync{false};
     bool m_enable_normal_map{true};
-    bool m_show_back_face{false};
     bool m_enable_displace_map{false};
     bool m_simple_mesh_mode{false}; //< two modes : simple mesh mode, obj mesh mode
     bool m_double_side_lighting{false}; //< two modes : simple mesh mode, obj mesh mode

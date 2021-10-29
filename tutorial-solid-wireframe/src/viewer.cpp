@@ -147,6 +147,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
+    glFrontFace(GL_CCW);
 
     if (m_double_side_lighting)
     {
@@ -160,10 +161,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
         glDisable(GL_CLIP_DISTANCE0);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-        if (m_show_back_face)
-            glFrontFace(GL_CW);
-        else  
-            glFrontFace(GL_CCW);
     }
 
     if(m_option.wireframe)
@@ -362,18 +359,18 @@ void Viewer::SaveScreen(const std::string filename)
      * https://www.khronos.org/opengl/wiki/Framebuffer#Read_color_buffer
      *
      **/
-
     const int kSize = m_window_height * m_window_width;
     std::vector<GLfloat> pixels((size_t)kSize * 3);
     glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
     GLenum errorCheckValue = glGetError();
     if (errorCheckValue != GL_NO_ERROR)
     {
-        fprintf(stderr, "Error: Could not read color buffer: %s\n", gluErrorString(errorCheckValue));
+        //fprintf(stderr, "Error: Could not read color buffer: %s\n", gluErrorString(errorCheckValue));
+        Err("Could not read color buffer: {}", gluErrorString(errorCheckValue));
     }
 
     stbi_write_tga(filename.c_str(), m_window_width, m_window_height, 3, pixels.data()); //< only 3 channels
-    printf("save color buffer into : %s \n", filename.c_str());
+    Log("save color buffer into : {}", filename);
 }
 
 void Viewer::SaveImageSequence(const std::string dir)
@@ -476,7 +473,6 @@ static void drawUI(Viewer &viewer)
             ImGui::Checkbox("ShowHelp", &setting.showHelpTip);
             ImGui::Checkbox("Wireframe", &displayOption.wireframe);
             ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);
-            ImGui::Checkbox("BackFace", &viewer.m_show_back_face);
             ImGui::Checkbox("SimpleMesh", &viewer.m_simple_mesh_mode);
             if (viewer.m_simple_mesh_mode)
             {

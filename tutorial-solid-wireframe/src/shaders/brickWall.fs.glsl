@@ -14,8 +14,6 @@ in VS_OUT
 uniform sampler2D diffuseMap;
 uniform sampler2D normalMap;
 
-//uniform vec3 lightPos;
-//uniform vec3 viewPos;
 uniform vec3 u_light_color;
 uniform int  use_normal_map;
 
