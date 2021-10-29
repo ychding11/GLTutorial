@@ -472,58 +472,17 @@ static void drawUI(Viewer &viewer)
             ImGui::Checkbox("ShowUI", &displayOption.showUI);
             ImGui::Checkbox("ShowHelp", &setting.showHelpTip);
             ImGui::Checkbox("Wireframe", &displayOption.wireframe);
-            ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);
-            ImGui::Checkbox("SimpleMesh", &viewer.m_simple_mesh_mode);
-            if (viewer.m_simple_mesh_mode)
-            {
-                auto picked = drawTextureDropList("Mesh type : ",
-                    viewer.m_simpleMesh_types,
-                    viewer.m_picked_mesh_name);
-                if (picked)
-                {
-                }
-            }
             ImGui::Separator();
-            ImGui::Checkbox("Normal Map", &viewer.m_enable_normal_map);
-            ImGui::Separator();
-            if (viewer.m_enable_normal_map)
-            {
-                {
-                    auto picked = drawTextureDropList("Diffuse map : ",
-                        GetTextureCache().DiffuseMapTextureNames(),
-                        viewer.m_brickWall.m_diffuseTexName);
-                    if (picked)
-                        viewer.m_brickWall.m_dirty = true;
-                }
-                {
-                    auto picked = drawTextureDropList("Normal map : ",
-                        GetTextureCache().NormalMapTextureNames(),
-                        viewer.m_brickWall.m_normalTexName);
-                    if (picked)
-                        viewer.m_brickWall.m_dirty = true;
-                }
-                if (ImGui::Button("Apply"))
-                {
-                    viewer.m_brickWall.m_reevaluate = true;
-                }
-            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu(ICON_FA_WINDOWS " Settings"))
         {
-            int render_model_changed = 0;
             ImGui::Checkbox("VSync", &viewer.m_enable_vsync);
             ImGui::Separator();
-            render_model_changed += ImGui::RadioButton("Standard", (int*)&setting.renderMode, RenderMode::Standard);
-            render_model_changed += ImGui::RadioButton("Explode",  (int*)&setting.renderMode, RenderMode::Explode);
-            render_model_changed += ImGui::RadioButton("Particle", (int*)&setting.renderMode, RenderMode::Particle);
+            ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);
             ImGui::Separator();
             ImGui::ColorEdit3("Mesh Color", &viewer.m_mesh_color.x);
             ImGui::Separator();
-            if (render_model_changed)
-            {
-                viewer.m_frame_id = 0;
-            }
             
             ImGui::EndMenu();
         }
