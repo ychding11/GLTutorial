@@ -40,12 +40,11 @@ private:
     int m_window_height = 720;
     GLFWwindow *m_window{nullptr};
 
-    std::string m_window_title{ "Particles by Geometry Shader" };
+    std::string m_window_title{ "Double side shading" };
     bool m_capture_colorbuffer{false};
     bool m_save_image_sequence{false};
     bool m_enable_vsync{false};
     bool m_enable_normal_map{true};
-    bool m_show_back_face{false};
     bool m_enable_displace_map{false};
     bool m_simple_mesh_mode{true}; //< two modes : simple mesh mode, obj mesh mode
     bool m_double_side_lighting{true}; //< two modes : simple mesh mode, obj mesh mode
@@ -54,11 +53,9 @@ private:
     int  m_animation_mode{ 0 }; //< animation
     int  m_frame_id{ 0 };
 
-    float m_explode_scale{0.0001f};
-    float m_explode_frequency{0.05f}; //< this is ok on my computer
     float m_clip_plane_distance{0.0f};
 
-    glm::vec3 m_mesh_color{1.0, 1., 1.};
+    glm::vec3 m_mesh_color{0.6, 0.5, 0.4};
 
     RenderSetting &m_setting;
     DisplayOption &m_option;

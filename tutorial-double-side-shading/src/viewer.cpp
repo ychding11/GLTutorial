@@ -97,15 +97,6 @@ void Viewer::evaluateDirtyValue()
 
 void Viewer::animateExplode()
 {
-    //if (m_frame_id % 10 == 0)
-    {
-        static float speed = 0.002f;
-        m_explode_scale = speed * (m_frame_id % 500);
-        if (speed > 0.001f)
-            speed -= 0.0002f;
-        if (m_explode_scale >= 0.50f)
-            m_explode_scale = 0.000f;
-    }
 }
 
 void Viewer::animateCamera(Camera &camera)
@@ -156,6 +147,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     glDepthFunc(GL_LESS);
 
 
+    glFrontFace(GL_CCW);
     if (m_double_side_lighting)
     {
         /* This case, keep both front & back face triangle */
@@ -168,10 +160,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
         glDisable(GL_CLIP_DISTANCE0);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-        if (m_show_back_face)
-            glFrontFace(GL_CW);
-        else  
-            glFrontFace(GL_CCW);
     }
 
     if(m_option.wireframe)
@@ -267,7 +255,7 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
         //Err("Draw: {}", gluErrorString(errorCheckValue));
     }
 
-    renderLight(*m_pointLight, camera);
+    //renderLight(*m_pointLight, camera);
 }
 
 void Viewer::initOpenGLShaders()
@@ -457,11 +445,13 @@ static void drawUI(Viewer &viewer)
         if (ImGui::BeginMenu(ICON_FA_EYE " View"))
         {
             ImGui::Checkbox("ShowUI", &displayOption.showUI);
+            ImGui::Separator();
             ImGui::Checkbox("ShowHelp", &setting.showHelpTip);
+            ImGui::Separator();
             ImGui::Checkbox("Wireframe", &displayOption.wireframe);
-            ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);
-            ImGui::Checkbox("BackFace", &viewer.m_show_back_face);
+            ImGui::Separator();
             ImGui::Checkbox("SimpleMesh", &viewer.m_simple_mesh_mode);
+            ImGui::Separator();
             if (viewer.m_simple_mesh_mode)
             {
                 auto picked = drawTextureDropList("Mesh type : ",
@@ -511,9 +501,6 @@ static void drawUI(Viewer &viewer)
             ImGui::SliderFloat3("Outer Level", &setting.outerTessLevel.x, 1.f, 64.f);
             ImGui::Separator();
             ImGui::ColorEdit3("Mesh Color", &viewer.m_mesh_color.x);
-            ImGui::Separator();
-            ImGui::SliderFloat("Explode Scale", &viewer.m_explode_scale, 1.f, 100.f);
-            ImGui::SliderFloat("Explode Frequency", &viewer.m_explode_frequency, 0.001f, 1.f);
             if (render_model_changed)
             {
                 viewer.m_frame_id = 0;
