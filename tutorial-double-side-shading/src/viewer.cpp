@@ -488,14 +488,6 @@ static void drawUI(Viewer &viewer)
             int render_model_changed = 0;
             ImGui::Checkbox("VSync", &viewer.m_enable_vsync);
             ImGui::Separator();
-            render_model_changed += ImGui::RadioButton("Standard", (int*)&setting.renderMode, RenderMode::Standard);
-            render_model_changed += ImGui::RadioButton("Explode",  (int*)&setting.renderMode, RenderMode::Explode);
-            render_model_changed += ImGui::RadioButton("Particle", (int*)&setting.renderMode, RenderMode::Particle);
-            ImGui::Separator();
-            ImGui::Checkbox("Enable Tessellation",  &setting.enableTess);
-            ImGui::SliderFloat("Inner Level", &setting.innerTessLevel.x, 1.f, 64.f);
-            ImGui::SliderFloat3("Outer Level", &setting.outerTessLevel.x, 1.f, 64.f);
-            ImGui::Separator();
             ImGui::ColorEdit3("Mesh Color", &viewer.m_mesh_color.x);
             if (render_model_changed)
             {
