@@ -68,10 +68,6 @@ private:
 
 private:
 
-    Shader m_particleShader{"geometryParticle"};
-    Shader m_standardShader{"standard"};
-    Shader m_explodeShader{"geometryExplode"};
-
     Material m_brickWall{"brickwall"};
     Material m_light_material{"emissive"};
 
