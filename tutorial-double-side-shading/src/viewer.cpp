@@ -260,11 +260,6 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
 
 void Viewer::initOpenGLShaders()
 {
-    m_particleShader.Init("shaders/Tessellation.vs.glsl",
-        "shaders/Tessellation.fs.glsl", "shaders/Tessellation.tc.glsl",
-        "shaders/Tessellation.te.glsl", "shaders/Tessellation.gs.glsl");
-    m_standardShader.Init("shaders/Standard.vert.glsl", "shaders/Standard.frag.glsl");
-    m_explodeShader.Init("shaders/Explode.vs.glsl", "shaders/Explode.fs.glsl",nullptr, nullptr, "shaders/Explode.gs.glsl");
 }
 
 void Viewer::initMaterials(void)
@@ -438,6 +433,7 @@ static void drawUI(Viewer &viewer)
                     Log("stop Image sequence.\n");
                 }
             }
+            ImGui::Separator();
             ImGui::SliderFloat("Clip plane distance", &viewer.m_clip_plane_distance, -0.5f, 0.5f);
 
             ImGui::EndMenu();
@@ -549,11 +545,6 @@ static void drawHelp(RenderSetting &setting)
         | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
         ImGui::Text("Help    : ");
-        ImGui::Text("Key stroke  : ");
-        ImGui::Text("         'T' : toggle tesselation ");
-        ImGui::Text("         ']' : increase tessellate level when enable tesselation ");
-        ImGui::Text("         '[' : decrease tessellate level when enable tesselation ");
-        ImGui::Text("         ' ' : loop animation mode ");
         ImGui::End();
     }
     ImGui::PopStyleColor();
