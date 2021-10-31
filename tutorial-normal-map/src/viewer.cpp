@@ -566,10 +566,6 @@ static void drawHelp(RenderSetting &setting)
     {
         ImGui::Text("Help    : ");
         ImGui::Text("Key stroke  : ");
-        ImGui::Text("         'T' : toggle tesselation ");
-        ImGui::Text("         ']' : increase tessellate level when enable tesselation ");
-        ImGui::Text("         '[' : decrease tessellate level when enable tesselation ");
-        ImGui::Text("         ' ' : loop animation mode ");
         ImGui::End();
     }
     ImGui::PopStyleColor();
