@@ -200,8 +200,29 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     m_frame_id++;
 }
 
-void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
+void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
 {
+    glm::mat4 modelMatrix = glm::mat4(1.0);
+
+    m_instanceShader.Active();
+    m_instanceShader.SetMat4("M", modelMatrix);
+    m_instanceShader.SetMat4("V", camera.viewMatrix());
+    m_instanceShader.SetMat4("P", camera.projMatrix());
+    m_instanceShader.SetVec3("u_eye_position", camera.eye());
+
+    m_instanceShader.SetVec3("u_mesh_color", m_mesh_color);
+    for (int i = 0; i < meshBin.size(); ++i)
+    {
+        glBindVertexArray( meshBin.vao(i) );
+        glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) );
+        {
+            GLenum errorCheckValue = glGetError();
+            if (errorCheckValue != GL_NO_ERROR)
+            {
+                Err("glDrawArrays: {}", gluErrorString(errorCheckValue));
+            }
+        }
+    }
 }
 
 void Viewer::renderLight(Light& light, const Camera& camera)
@@ -260,6 +281,13 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
 
 void Viewer::initOpenGLShaders()
 {
+    m_instanceShader.Init(
+        "shaders/instanceDraw.vs.glsl",
+        "shaders/instanceDraw.fs.glsl",
+        nullptr,
+        nullptr,
+        nullptr 
+        );
 }
 
 void Viewer::initMaterials(void)
