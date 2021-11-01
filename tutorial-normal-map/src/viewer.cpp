@@ -217,6 +217,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 
 void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
 {
+
 }
 
 void Viewer::renderLight(Light& light, const Camera& camera)
