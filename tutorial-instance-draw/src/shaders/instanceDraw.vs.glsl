@@ -7,8 +7,9 @@ struct V2F
     vec4 color;
 };
 
-layout(location = 0) in vec3 aPosition; //vertex attribute
-layout(location = 1) in vec3 aNormal;  //vertex attribute
+layout(location = 0) in vec3 aPosition; // vertex attribute
+layout(location = 1) in vec3 aNormal;   // vertex attribute
+layout(location = 2) in vec3 aInstanceOffset; // instance attribute 
 
 out V2F  vdata;
 
@@ -20,9 +21,9 @@ uniform vec3 u_mesh_color;
 //< Lighting in Pixel shader, World Space.
 void main()
 {
-    gl_Position = P * V * M * vec4(aPosition, 1.f);
+    gl_Position = P * V * M * vec4(aPosition + aInstanceOffset, 1.f);
 
-    vec3 positionWorld = (V * M * vec4(aPosition, 1.f)).xyz;
+    vec3 positionWorld = (V * M * vec4(aPosition + aInstanceOffset, 1.f)).xyz;
 
     vdata.positionWorld = positionWorld;
     vdata.normalWorld   = mat3(transpose(inverse(M))) * aNormal;

@@ -15,15 +15,14 @@
 
 struct SimpleVertex
 {
-    glm::vec3 position, normal;
+    glm::vec3 position;
+    glm::vec3 normal;
 };
 
 struct Mesh
 {
     std::vector<SimpleVertex> vertices;
-
 };
-
 
 class MeshBin
 {
@@ -35,7 +34,7 @@ private:
     std::vector<GLuint> m_vbo_id{m_max_object_num, 0};
     std::vector<size_t> m_vb_size{m_max_object_num, 0};
     std::vector<size_t> m_vertex_num{m_max_object_num, 0};
-
+    GLuint m_instanceVBO{0};
     std::vector<Mesh> m_meshes; //< binned meshes
 
     AABB m_aabb;
@@ -52,6 +51,7 @@ public:
             glDeleteBuffers(1, &m_vbo_id[i]);
             glDeleteVertexArrays(1, &m_vao_id[i]);
         }
+       glDeleteBuffers(1, &m_instanceVBO);
     }
 
     glm::vec3 Center() const
@@ -63,6 +63,8 @@ public:
     {
         return m_aabb.LongestEdge();
     }
+
+    void Init_instace_buffer();
 
     size_t size() const
     {

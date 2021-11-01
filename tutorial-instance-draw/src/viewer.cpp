@@ -209,12 +209,12 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     m_instanceShader.SetMat4("V", camera.viewMatrix());
     m_instanceShader.SetMat4("P", camera.projMatrix());
     m_instanceShader.SetVec3("u_eye_position", camera.eye());
-
     m_instanceShader.SetVec3("u_mesh_color", m_mesh_color);
     for (int i = 0; i < meshBin.size(); ++i)
     {
         glBindVertexArray( meshBin.vao(i) );
-        glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) );
+        //glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) );
+        glDrawArraysInstanced( GL_TRIANGLES, 0, meshBin.vertex_num(i), 100 );
         {
             GLenum errorCheckValue = glGetError();
             if (errorCheckValue != GL_NO_ERROR)

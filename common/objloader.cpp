@@ -141,6 +141,7 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
         {
             Log("mesh AABB Center is {}", glm::to_string(m_aabb.Center()));
         }
+        Init_instace_buffer();
         create_vaos();
     }
 
@@ -148,9 +149,8 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
     {
         for (int i = 0; i < m_meshes.size(); ++i)
         {
-            GLenum errorCheckValue = glGetError();
 
-            m_vb_size[m_object_num] = m_meshes[i].vertices.size() * sizeof(SimpleVertex);
+            m_vb_size[m_object_num]    = m_meshes[i].vertices.size() * sizeof(SimpleVertex);
             m_vertex_num[m_object_num] = m_meshes[i].vertices.size();
 
             const size_t vertexStride = sizeof(SimpleVertex);
@@ -169,13 +169,43 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
 
+            glEnableVertexAttribArray(2);
+            glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO); // this attribute comes from a different vertex buffer
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glVertexAttribDivisor(2, 1);
+
             glBindVertexArray(0);
 
-            errorCheckValue = glGetError();
+            GLenum errorCheckValue = glGetError();
             if (errorCheckValue != GL_NO_ERROR)
             {
                 fprintf(stderr, "Error: Could not create a VBO: %s\n", gluErrorString(errorCheckValue));
             }
             m_object_num++;
         }
+    }
+
+    void MeshBin::Init_instace_buffer()
+    {
+        glm::vec3 translations[100];
+        int index = 0;
+        float offset = 0.1f;
+        for (int y = -10; y < 10; y += 2)
+        {
+            for (int x = -10; x < 10; x += 2)
+            {
+                glm::vec3 translation;
+                translation.x = (float)x / 10.0f + offset;
+                translation.y = (float)y / 10.0f + offset;
+                translation.z = 0.f;
+                translations[index++] = translation;
+            }
+        }
+        glGenBuffers(1, &m_instanceVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, &translations[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
     }
