@@ -68,6 +68,10 @@ public:
         return m_aabb.LongestEdge();
     }
 
+    int instance_count() const
+    {
+        return m_instance_count;
+    }
 
     size_t size() const
     {

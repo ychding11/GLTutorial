@@ -213,8 +213,16 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     for (int i = 0; i < meshBin.size(); ++i)
     {
         glBindVertexArray( meshBin.vao(i) );
-        //glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) );
-        GL_API_CHECK( glDrawArraysInstanced( GL_TRIANGLES, 0, meshBin.vertex_num(i), 100 ) );
+        if (m_instance_draw)
+        {
+            glEnableVertexAttribArray(2);
+            GL_API_CHECK( glDrawArraysInstanced( GL_TRIANGLES, 0, meshBin.vertex_num(i), meshBin.instance_count() ) );
+        }
+        else
+        {
+            glDisableVertexAttribArray(2);
+            GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
+        }
     }
 }
 
@@ -456,6 +464,8 @@ static void drawUI(Viewer &viewer)
             }
             ImGui::Separator();
             ImGui::SliderFloat("Clip plane distance", &viewer.m_clip_plane_distance, -0.5f, 0.5f);
+            ImGui::Separator();
+            ImGui::Checkbox("Instance draw", &viewer.m_instance_draw);
 
             ImGui::EndMenu();
         }

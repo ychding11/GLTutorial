@@ -48,6 +48,7 @@ private:
     bool m_enable_displace_map{false};
     bool m_simple_mesh_mode{false}; //< two modes : simple mesh mode, obj mesh mode
     bool m_double_side_lighting{false}; //< two modes : simple mesh mode, obj mesh mode
+    bool m_instance_draw{true};
 
     int  m_sequence_count{ 0 }; //< animation
     int  m_animation_mode{ 0 }; //< animation
