@@ -141,7 +141,7 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
         {
             Log("mesh AABB Center is {}", glm::to_string(m_aabb.Center()));
         }
-        Init_instace_buffer();
+        init_instace_buffer();
         create_vaos();
     }
 
@@ -186,7 +186,7 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
         }
     }
 
-    void MeshBin::Init_instace_buffer()
+    void MeshBin::init_instace_buffer()
     {
         glm::vec3 translations[100];
         int index = 0;

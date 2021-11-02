@@ -214,14 +214,7 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     {
         glBindVertexArray( meshBin.vao(i) );
         //glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) );
-        glDrawArraysInstanced( GL_TRIANGLES, 0, meshBin.vertex_num(i), 100 );
-        {
-            GLenum errorCheckValue = glGetError();
-            if (errorCheckValue != GL_NO_ERROR)
-            {
-                Err("glDrawArrays: {}", gluErrorString(errorCheckValue));
-            }
-        }
+        GL_API_CHECK( glDrawArraysInstanced( GL_TRIANGLES, 0, meshBin.vertex_num(i), 100 ) );
     }
 }
 

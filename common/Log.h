@@ -23,4 +23,26 @@ namespace Logging
 #define Warn(...) Logging::Logger()->warn(__VA_ARGS__); 
 #define Err(...)  Logging::Logger()->error(__VA_ARGS__); 
 
+#include <GL/glew.h>
+
+inline void CheckOpenGLError(const char* stmt, const char* fname, int line)
+{
+	GLenum err = glGetError();
+	while (err != GL_NO_ERROR)
+	{
+		//printf("OpenGL error %08x, at %s:%i - for %s\n", err, fname, line, stmt);
+		Err("OpenGL error: {}, at {}:{} - {}", gluErrorString(err), fname, line, stmt);
+		err = glGetError();
+	}
+}
+
+#ifdef _DEBUG
+#define GL_API_CHECK(stmt) do {                          \
+            stmt;                                        \
+            CheckOpenGLError(#stmt, __FILE__, __LINE__); \
+        } while (0)
+#else
+#define GL_API_CHECK(stmt) stmt
+#endif
+
 #endif

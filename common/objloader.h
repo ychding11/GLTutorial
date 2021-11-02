@@ -64,7 +64,6 @@ public:
         return m_aabb.LongestEdge();
     }
 
-    void Init_instace_buffer();
 
     size_t size() const
     {
@@ -84,6 +83,7 @@ public:
 private:
 
     void create_vaos();
+    void init_instace_buffer();
 };
 
 
