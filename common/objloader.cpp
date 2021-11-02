@@ -169,19 +169,14 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
 
+            glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO); 
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, m_instance_stride, (void*)0);
             glEnableVertexAttribArray(2);
-            glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO); // this attribute comes from a different vertex buffer
-            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+            glVertexAttribDivisor(2, 1); //< vertex attribute 2 advances once per instance
             glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glVertexAttribDivisor(2, 1);
 
             glBindVertexArray(0);
 
-            GLenum errorCheckValue = glGetError();
-            if (errorCheckValue != GL_NO_ERROR)
-            {
-                fprintf(stderr, "Error: Could not create a VBO: %s\n", gluErrorString(errorCheckValue));
-            }
             m_object_num++;
         }
     }
@@ -189,7 +184,8 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
     void MeshBin::init_instace_buffer()
     {
         glm::vec3 translations[100];
-        int index = 0;
+        m_instance_stride = sizeof(glm::vec3);
+        m_instance_count = 0;
         float offset = 0.1f;
         for (int z = -10; z < 10; z += 2)
         {
@@ -199,13 +195,13 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
                 translation.x = (float)x / 10.0f + offset;
                 translation.z = (float)z / 10.0f + offset;
                 translation.y = 0.f;
-                translations[index++] = translation;
+                translations[m_instance_count++] = translation;
             }
         }
+        m_instance_buffer_byte_size = m_instance_stride * m_instance_count ;
+
         glGenBuffers(1, &m_instanceVBO);
         glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 100, &translations[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, m_instance_buffer_byte_size, &translations[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-
     }

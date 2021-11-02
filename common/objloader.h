@@ -39,6 +39,10 @@ private:
 
     AABB m_aabb;
 
+    int m_instance_stride{0};
+    int m_instance_count{0};
+    int m_instance_buffer_byte_size{0};
+
 public:
     MeshBin() = delete;
 
