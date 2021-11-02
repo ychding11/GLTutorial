@@ -71,16 +71,8 @@ private:
 
     Shader m_instanceShader{ "instaceDraw" };
 
-    Material m_brickWall{"brickwall"};
     Material m_light_material{"emissive"};
 
-    std::unique_ptr<Quad> m_quad;
-    std::unique_ptr<Cube> m_cube;
-    SimpleMesh* m_active_simpleMesh{nullptr};
-    std::string m_picked_mesh_name{"Cube"};
-    std::vector<std::string> m_simpleMesh_types{"Quad", "Cube"};
-
-    std::unique_ptr<PointLight> m_pointLight;
     std::unique_ptr<Camera>     m_camera;
 
 public:
