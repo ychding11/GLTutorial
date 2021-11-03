@@ -185,14 +185,7 @@ void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
     for (int i = 0; i < m_meshBin.size(); ++i)
     {
         glBindVertexArray( m_meshBin.vao(i) );
-        glDrawArrays( GL_TRIANGLES, 0, m_meshBin.vertex_num(i) );
-        {
-            GLenum errorCheckValue = glGetError();
-            if (errorCheckValue != GL_NO_ERROR)
-            {
-                Err("Draw: {}", gluErrorString(errorCheckValue));
-            }
-        }
+        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, m_meshBin.vertex_num(i) ) );
     }
     glBindVertexArray(0);
     glUseProgram(0);
@@ -200,22 +193,6 @@ void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
 
 void Viewer::renderLight(Light& light, const Camera& camera)
 {
-    glm::mat4 modelMatrix = light.GetWorldMatrix();
-    glm::mat4 viewMatrix = camera.viewMatrix();
-    glm::mat4 projMatrix = camera.projMatrix();
-
-    auto* shader = light.GetMaterial()->GetShader();
-    shader->Active();
-    shader->SetMat4("M", modelMatrix);
-    shader->SetMat4("V", viewMatrix);
-    shader->SetMat4("P", projMatrix);
-    shader->SetVec3("u_viewer_pos", camera.eye());
-
-    shader->SetVec3("u_light_pos", light.GetPosition());
-    shader->SetVec3("u_light_color", light.GetColor());
-
-    glBindVertexArray( light.GetMesh()->vao() );
-    glDrawArrays( GL_TRIANGLES, 0, light.GetMesh()->vertex_num() );
 }
 
 void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
