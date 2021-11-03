@@ -147,8 +147,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 
     renderMeshBin(meshBin, camera);
     
-    glBindVertexArray(0);
-    glUseProgram(0);
 
     //< shall capture color buffer here
     if (m_capture_colorbuffer)
@@ -196,6 +194,8 @@ void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
             }
         }
     }
+    glBindVertexArray(0);
+    glUseProgram(0);
 }
 
 void Viewer::renderLight(Light& light, const Camera& camera)
