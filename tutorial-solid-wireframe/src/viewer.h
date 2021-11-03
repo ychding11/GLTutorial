@@ -51,6 +51,7 @@ private:
     int  m_frame_id{ 0 };
 
     float m_clip_plane_distance{0.0f};
+    float m_normal_visualize_scale{0.2f};
 
     glm::vec3 m_mesh_color{1.0, 1., 1.};
 

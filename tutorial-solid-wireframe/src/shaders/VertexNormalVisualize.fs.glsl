@@ -1,13 +1,9 @@
 #version 440 core
 
-in  vec4 color;
-
 out vec4 fragColor;
-
-uniform vec3 u_eye_position;
 
 //< Lighting in Pixel shader, World Space.
 void main()
 {
-    fragColor = color;
+    fragColor = vec4(0,0.8,0.8,1.f);
 }
