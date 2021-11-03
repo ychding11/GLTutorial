@@ -44,9 +44,6 @@ private:
     bool m_capture_colorbuffer{false};
     bool m_save_image_sequence{false};
     bool m_enable_vsync{false};
-    bool m_enable_normal_map{true};
-    bool m_enable_displace_map{false};
-    bool m_simple_mesh_mode{false}; //< two modes : simple mesh mode, obj mesh mode
     bool m_double_side_lighting{false}; //< two modes : simple mesh mode, obj mesh mode
 
     int  m_sequence_count{ 0 }; //< animation
@@ -68,20 +65,8 @@ private:
 
 private:
 
-    Shader m_particleShader{"geometryParticle"};
     Shader m_standardShader{"standard"};
-    Shader m_explodeShader{"geometryExplode"};
 
-    Material m_brickWall{"brickwall"};
-    Material m_light_material{"emissive"};
-
-    std::unique_ptr<Quad> m_quad;
-    std::unique_ptr<Cube> m_cube;
-    SimpleMesh* m_active_simpleMesh{nullptr};
-    std::string m_picked_mesh_name{"Cube"};
-    std::vector<std::string> m_simpleMesh_types{"Quad", "Cube"};
-
-    std::unique_ptr<PointLight> m_pointLight;
     std::unique_ptr<Camera>     m_camera;
 
 public:

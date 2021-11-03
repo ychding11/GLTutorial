@@ -44,10 +44,6 @@ void Viewer::Run()
     glm::vec3 cameraTarget;
     float cameraDistance;
 
-    if (m_simple_mesh_mode)
-    {
-    }
-    else
     {
         m_camera = buildCamera(meshes);
     }
@@ -149,10 +145,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    if (m_simple_mesh_mode)
-        renderSimpleMesh(simplemesh, camera);
-    else
-        renderMeshBin(meshBin, camera);
+    renderMeshBin(meshBin, camera);
     
     glBindVertexArray(0);
     glUseProgram(0);
