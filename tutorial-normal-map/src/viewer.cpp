@@ -276,11 +276,6 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
 
 void Viewer::initOpenGLShaders()
 {
-    m_particleShader.Init("shaders/Tessellation.vs.glsl",
-        "shaders/Tessellation.fs.glsl", "shaders/Tessellation.tc.glsl",
-        "shaders/Tessellation.te.glsl", "shaders/Tessellation.gs.glsl");
-    m_standardShader.Init("shaders/Standard.vert.glsl", "shaders/Standard.frag.glsl");
-    m_explodeShader.Init("shaders/Explode.vs.glsl", "shaders/Explode.fs.glsl",nullptr, nullptr, "shaders/Explode.gs.glsl");
 }
 
 void Viewer::initMaterials(void)
