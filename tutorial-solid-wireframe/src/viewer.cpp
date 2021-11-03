@@ -169,11 +169,11 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     m_frame_id++;
 }
 
-void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
+void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
 {
     glm::mat4 modelMatrix = glm::mat4(1.0);
-    glm::mat4 viewMatrix = m_camera.viewMatrix();
-    glm::mat4 projMatrix = m_camera.projMatrix();
+    glm::mat4 viewMatrix = camera.viewMatrix();
+    glm::mat4 projMatrix = camera.projMatrix();
 
     m_standardShader.Active();
     m_standardShader.SetMat4("M", modelMatrix);
@@ -181,22 +181,37 @@ void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
     m_standardShader.SetMat4("P", projMatrix);
     m_standardShader.SetVec2("u_window_size", {m_window_width, m_window_height});
     m_standardShader.SetVec3("u_mesh_color", m_mesh_color);
-    m_standardShader.SetVec3("u_eye_position", m_camera.eye());
-    for (int i = 0; i < m_meshBin.size(); ++i)
+    m_standardShader.SetVec3("u_eye_position", camera.eye());
+    for (int i = 0; i < meshBin.size(); ++i)
     {
-        glBindVertexArray( m_meshBin.vao(i) );
-        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, m_meshBin.vertex_num(i) ) );
+        glBindVertexArray( meshBin.vao(i) );
+        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
     }
+
+    glBindVertexArray(0);
+    glUseProgram(0);
+
+    if (m_visualize_normal)
+    {
+        visualizeVertexNormal(meshBin, camera);
+    }
+}
+
+void Viewer::visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera)
+{
+    glm::mat4 modelMatrix = glm::mat4(1.0);
+    glm::mat4 viewMatrix = camera.viewMatrix();
+    glm::mat4 projMatrix = camera.projMatrix();
 
     m_vertex_normal_visualize.Active();
     m_vertex_normal_visualize.SetMat4("M", modelMatrix);
     m_vertex_normal_visualize.SetMat4("V", viewMatrix);
     m_vertex_normal_visualize.SetMat4("P", projMatrix);
     m_vertex_normal_visualize.SetFloat("u_normal_visualize_scale", m_normal_visualize_scale);
-    for (int i = 0; i < m_meshBin.size(); ++i)
+    for (int i = 0; i < meshBin.size(); ++i)
     {
-        glBindVertexArray( m_meshBin.vao(i) );
-        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, m_meshBin.vertex_num(i) ) );
+        glBindVertexArray( meshBin.vao(i) );
+        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
     }
 
     glBindVertexArray(0);
@@ -207,9 +222,6 @@ void Viewer::renderLight(Light& light, const Camera& camera)
 {
 }
 
-void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
-{
-}
 
 void Viewer::initOpenGLShaders()
 {
@@ -233,12 +245,6 @@ void Viewer::initOpenGLShaders()
 
 void Viewer::initMaterials(void)
 {
-    GetTextureCache().Add("textures/brickwall_diffuse.jpg");
-    GetTextureCache().Add("textures/brickwall_normal.jpg");
-
-    GetTextureCache().Add("textures/bricks2_diffuse.jpg");
-    GetTextureCache().Add("textures/bricks2_normal.jpg");
-    GetTextureCache().Add("textures/bricks2_disp.jpg");
 }
 
 int Viewer::initWindow()
@@ -396,6 +402,8 @@ static void drawUI(Viewer &viewer)
             ImGui::SliderFloat("Clip plane distance", &viewer.m_clip_plane_distance, -0.5f, 0.5f);
             ImGui::Separator();
             ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);
+            ImGui::Separator();
+            ImGui::Checkbox("Visualize normal", &viewer.m_visualize_normal);
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu(ICON_FA_EYE " View"))

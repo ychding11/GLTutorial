@@ -44,7 +44,8 @@ private:
     bool m_capture_colorbuffer{false};
     bool m_save_image_sequence{false};
     bool m_enable_vsync{false};
-    bool m_double_side_lighting{false}; //< two modes : simple mesh mode, obj mesh mode
+    bool m_double_side_lighting{false}; //
+    bool m_visualize_normal{false}; 
 
     int  m_sequence_count{ 0 }; //< animation
     int  m_animation_mode{ 0 }; //< animation
@@ -110,6 +111,6 @@ private:
     void animateExplode();
     void evaluateDirtyValue();
     void renderMeshBin(const MeshBin& meshBin, const Camera& camera);
-    void renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera);
+    void visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera);
     void renderLight(Light& light, const Camera& camera);
 };
