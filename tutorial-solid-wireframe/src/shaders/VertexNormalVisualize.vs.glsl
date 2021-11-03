@@ -1,14 +1,9 @@
 #version 440 core
 
-struct VertexOut
-{
-    vec3 normalView;
-};
-
 layout(location = 0) in vec3 aPosition; //vertex attribute
-layout(location = 1) in vec3 aNormal;  //vertex attribute
+layout(location = 1) in vec3 aNormal;   //vertex attribute
 
-out VertexOut  vdata;
+out vec3 normalView;
 
 uniform mat4 M;
 uniform mat4 V;
@@ -21,5 +16,5 @@ void main()
 {
     gl_Position = V * M * vec4(aPosition, 1.f);
     mat3 normalMatrix = mat3(transpose(inverse(V * M)));
-    vdata.normalView   = normalize(vec3(vec4(normalMatrix * aNormal, 0.0)));;
+    normalView   = normalize(vec3(vec4(normalMatrix * aNormal, 0.0)));;
 }

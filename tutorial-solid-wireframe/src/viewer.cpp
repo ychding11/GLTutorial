@@ -188,8 +188,6 @@ void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
         GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, m_meshBin.vertex_num(i) ) );
     }
 
-    //glDisable(GL_DEPTH_TEST);
-
     m_vertex_normal_visualize.Active();
     m_vertex_normal_visualize.SetMat4("M", modelMatrix);
     m_vertex_normal_visualize.SetMat4("V", viewMatrix);
@@ -407,7 +405,7 @@ static void drawUI(Viewer &viewer)
             ImGui::Separator();
             ImGui::Checkbox("Wireframe", &displayOption.wireframe);
             ImGui::Separator();
-            ImGui::SliderFloat("Normal Visualize Scale", &viewer.m_normal_visualize_scale, 0.f, 0.5f);
+            ImGui::SliderFloat("Normal Visualize Scale", &viewer.m_normal_visualize_scale, 0.f, 0.1f);
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu(ICON_FA_WINDOWS " Settings"))

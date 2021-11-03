@@ -1,23 +1,16 @@
 #version 440 core
 
-struct VertexOut
-{
-    vec3 normalView;
-};
-
 layout(triangles) in;
 layout (line_strip, max_vertices = 6) out;  //< 3 lines
 
-//< implicit array
-in VertexOut vdata[];
+// implicit array as input for geometry shader
+// same varaible name, type for link between shader stage
+in  vec3 normalView[];
 
 uniform float u_normal_visualize_scale;
 
-uniform mat4 M;
-uniform mat4 V;
 uniform mat4 P;
 
-//< 
 //< 
 //< 
 void LineFromVertex(int index)
@@ -25,7 +18,7 @@ void LineFromVertex(int index)
     gl_Position = P * gl_in[index].gl_Position;
     EmitVertex();
     gl_Position = P * ( gl_in[index].gl_Position +
-                        vec4(vdata[index].normalView, 0.f) * u_normal_visualize_scale
+                        vec4(normalView[index], 0.f) * u_normal_visualize_scale
                        );
     EmitVertex();
     EndPrimitive();
