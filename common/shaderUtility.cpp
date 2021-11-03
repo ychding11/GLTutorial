@@ -236,16 +236,11 @@ GLuint LoadShaders(const char* vs_file_path, const char* fs_file_path, const cha
 	// https://khronos.org/registry/OpenGL-Refpages/gl4/html/glDeleteShader.xhtml
 	// A value of 0 for shader will be silently ignored
 	//
-	glDeleteShader(vertShaderID);
-	glDeleteShader(ctrlShaderID);
-	glDeleteShader(evalShaderID);
-	glDeleteShader(fragShaderID);
-	glDeleteShader(geoShaderID);
+	GL_API_CHECK( glDeleteShader(vertShaderID) );
+	GL_API_CHECK( glDeleteShader(ctrlShaderID) );
+	GL_API_CHECK( glDeleteShader(evalShaderID) );
+	GL_API_CHECK( glDeleteShader(fragShaderID) );
+	GL_API_CHECK( glDeleteShader(geoShaderID) );
 
-    GLenum errorCheckValue = glGetError();
-    if (errorCheckValue != GL_NO_ERROR)
-    {
-        Err("Load Shader: {}", gluErrorString(errorCheckValue));
-    }
 	return m_particlProgramID;
 }
