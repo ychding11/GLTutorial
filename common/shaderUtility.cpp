@@ -183,8 +183,11 @@ GLuint LoadShaders(const char* vs_file_path, const char* fs_file_path, const cha
 	GLuint fragShaderID = 0;
 	GLuint geoShaderID  = 0; 
 
-	vertShaderID = createShaderFromFile(GL_VERTEX_SHADER, vs_file_path);
-	glAttachShader(m_particlProgramID, vertShaderID);
+	if (vs_file_path)
+	{
+		vertShaderID = createShaderFromFile(GL_VERTEX_SHADER, vs_file_path);
+		glAttachShader(m_particlProgramID, vertShaderID);
+	}
 
 	if (fs_file_path)
 	{
@@ -226,7 +229,7 @@ GLuint LoadShaders(const char* vs_file_path, const char* fs_file_path, const cha
 		Err("{}", &tessProgramErrMsg[0]);
 	}
 
-	glDetachShader(m_particlProgramID, vertShaderID);
+	if (vs_file_path)  glDetachShader(m_particlProgramID, vertShaderID);
 	if (tcs_file_path) glDetachShader(m_particlProgramID, ctrlShaderID);
 	if (tes_file_path) glDetachShader(m_particlProgramID, evalShaderID);
 	if (gs_file_path)  glDetachShader(m_particlProgramID, geoShaderID);
