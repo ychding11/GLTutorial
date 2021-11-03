@@ -2,9 +2,7 @@
 
 struct VertexOut
 {
-    vec3 positionWorld;
-    vec3 normalWorld;
-    vec4 color;
+    vec3 normalView;
 };
 
 layout(location = 0) in vec3 aPosition; //vertex attribute
@@ -13,14 +11,15 @@ layout(location = 1) in vec3 aNormal;  //vertex attribute
 out VertexOut  vdata;
 
 uniform mat4 M;
-uniform vec3 u_mesh_color;
+uniform mat4 V;
 
-//< Lighting in Pixel shader, World Space.
+//< 
+//< normal is affected by scale and rotation
+//< transform it into view space
+//< 
 void main()
 {
-    gl_Position =  M * vec4(aPosition, 1.f);
-
-    vdata.positionWorld = (M * vec4(aPosition, 1.f)).xyz;;
-    vdata.normalWorld   = mat3(transpose(inverse(M))) * aNormal;
-    vdata.color = vec4(u_mesh_color, 1.0f);
+    gl_Position = V * M * vec4(aPosition, 1.f);
+    mat3 normalMatrix = mat3(transpose(inverse(V * M)));
+    vdata.normalView   = normalize(vec3(vec4(normalMatrix * aNormal, 0.0)));;
 }
