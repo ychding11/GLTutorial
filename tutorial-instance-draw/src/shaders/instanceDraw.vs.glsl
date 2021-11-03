@@ -23,7 +23,7 @@ void main()
 {
     gl_Position = P * V * M * vec4(aPosition + aInstanceOffset, 1.f);
 
-    vec3 positionWorld = (V * M * vec4(aPosition + aInstanceOffset, 1.f)).xyz;
+    vec3 positionWorld = (M * vec4(aPosition + aInstanceOffset, 1.f)).xyz;
 
     vdata.positionWorld = positionWorld;
     vdata.normalWorld   = mat3(transpose(inverse(M))) * aNormal;
