@@ -66,6 +66,7 @@ private:
 private:
 
     Shader m_standardShader{"standard"};
+    Shader m_vertex_normal_visualize{"vertex_normal_visualize"};
 
     std::unique_ptr<Camera>     m_camera;
 

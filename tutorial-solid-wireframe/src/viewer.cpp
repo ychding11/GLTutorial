@@ -201,12 +201,22 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
 
 void Viewer::initOpenGLShaders()
 {
-    m_standardShader.Init("shaders/SolidWireframe.vs.glsl",
+    m_standardShader.Init(
+        "shaders/SolidWireframe.vs.glsl",
         "shaders/SolidWireframe.fs.glsl",
         nullptr,
         nullptr,
         "shaders/SolidWireframe.gs.glsl"
         );
+
+    m_vertex_normal_visualize.Init(
+        "shaders/VertexNormalVisualize.vs.glsl",
+        "shaders/VertexNormalVisualize.fs.glsl",
+        nullptr,
+        nullptr,
+        "shaders/VertexNormalVisualize.gs.glsl"
+        );
+
 }
 
 void Viewer::initMaterials(void)
