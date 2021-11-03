@@ -188,12 +188,12 @@ void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
         GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, m_meshBin.vertex_num(i) ) );
     }
 
-    glDisable(GL_DEPTH_TEST);
+    //glDisable(GL_DEPTH_TEST);
+
     m_vertex_normal_visualize.Active();
     m_vertex_normal_visualize.SetMat4("M", modelMatrix);
     m_vertex_normal_visualize.SetMat4("V", viewMatrix);
     m_vertex_normal_visualize.SetMat4("P", projMatrix);
-    m_vertex_normal_visualize.SetVec3("u_mesh_color", m_mesh_color);
     m_vertex_normal_visualize.SetFloat("u_normal_visualize_scale", m_normal_visualize_scale);
     for (int i = 0; i < m_meshBin.size(); ++i)
     {
