@@ -15,6 +15,7 @@
 #include "shader.h"
 #include "material.h"
 #include "simpleMesh.h"
+#include "framebuffer.h"
 #include "config.h"
 
 class MeshBin;
@@ -67,6 +68,7 @@ private:
 
 private:
 
+    Framebuffer m_framebuffer;
     Shader m_standardShader{"standard"};
     Shader m_vertex_normal_visualize{"vertex_normal_visualize"};
 

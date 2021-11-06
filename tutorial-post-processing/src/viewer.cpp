@@ -115,6 +115,7 @@ void Viewer::animateCamera(Camera &camera)
 
 void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camera &camera)
 {
+    m_framebuffer.Active();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
@@ -146,7 +147,11 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     }
 
     renderMeshBin(meshBin, camera);
-    
+    if (m_visualize_normal)
+    {
+        visualizeVertexNormal(meshBin, camera);
+    }
+    m_framebuffer.DeActive(); //< switch to defautl frame buffer
 
     //< shall capture color buffer here
     if (m_capture_colorbuffer)
@@ -187,14 +192,8 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
         glBindVertexArray( meshBin.vao(i) );
         GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
     }
-
     glBindVertexArray(0);
     glUseProgram(0);
-
-    if (m_visualize_normal)
-    {
-        visualizeVertexNormal(meshBin, camera);
-    }
 }
 
 void Viewer::visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera)
@@ -283,6 +282,7 @@ int Viewer::initWindow()
         throw std::runtime_error("Failed to initialize GLEW !");
         return -1;
     }
+    m_framebuffer.Init(m_window_width, m_window_height);
     return 0;
 }
 
