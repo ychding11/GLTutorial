@@ -153,9 +153,13 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     }
     m_framebuffer.DeActive(); //< switch to defautl frame buffer
 
+
+    //< 
+    //< The following draw to default frame buffer 
+    //< 
     renderFullScreen();
 
-    //< shall capture color buffer here
+    //< capture color buffer here
     if (m_capture_colorbuffer)
     {
         SaveScreen();
@@ -177,16 +181,18 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 }
 
 
+//< each draw maintains its own state
 void Viewer::renderFullScreen()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);  //< disable z depth
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture());
 
     m_full_screen_Shader.Active();
     m_standardShader.SetInt("u_tex_color_map", 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture());
 
     glBindVertexArray(m_empty_vao);
     GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
