@@ -180,13 +180,16 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 void Viewer::renderFullScreen()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    m_full_screen_Shader.Active();
+    m_standardShader.SetInt("u_tex_color_map", 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture());
 
-    glBindVertexArray( 0 );
-    m_full_screen_Shader.Active();
-    m_standardShader.SetInt("u_tex_color_map", 0);
+    glBindVertexArray(m_empty_vao);
     GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
+    glBindVertexArray(0);
+    glUseProgram(0);
 }
 
 void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
@@ -303,6 +306,9 @@ int Viewer::initWindow()
         return -1;
     }
     m_framebuffer.Init(m_window_width, m_window_height);
+
+    glGenVertexArrays(1, &m_empty_vao);
+
     return 0;
 }
 

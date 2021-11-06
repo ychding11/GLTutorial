@@ -64,6 +64,8 @@ private:
     TextureID m_normal_TexID{ INVALIDE_TEXTURE_ID };
     TextureID m_displace_TexID{ INVALIDE_TEXTURE_ID };
 
+    GLuint m_empty_vao{0};
+
     friend void drawUI(Viewer &viewer);
 
 private:
@@ -79,6 +81,7 @@ public:
     Viewer() = delete;
     ~Viewer()
     {
+        glDeleteVertexArrays(1, &m_empty_vao);
         glfwTerminate();
     }
 
