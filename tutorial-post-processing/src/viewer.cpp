@@ -228,11 +228,11 @@ void Viewer::visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera)
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
 
-    m_vertex_normal_visualize.Active();
-    m_vertex_normal_visualize.SetMat4("M", modelMatrix);
-    m_vertex_normal_visualize.SetMat4("V", viewMatrix);
-    m_vertex_normal_visualize.SetMat4("P", projMatrix);
-    m_vertex_normal_visualize.SetFloat("u_normal_visualize_scale", m_normal_visualize_scale);
+    m_vertex_normal_visualize_shader.Active();
+    m_vertex_normal_visualize_shader.SetMat4("M", modelMatrix);
+    m_vertex_normal_visualize_shader.SetMat4("V", viewMatrix);
+    m_vertex_normal_visualize_shader.SetMat4("P", projMatrix);
+    m_vertex_normal_visualize_shader.SetFloat("u_normal_visualize_scale", m_normal_visualize_scale);
     for (int i = 0; i < meshBin.size(); ++i)
     {
         glBindVertexArray( meshBin.vao(i) );
@@ -258,7 +258,7 @@ void Viewer::initOpenGLShaders()
         "shaders/SolidWireframe.gs.glsl"
         );
 
-    m_vertex_normal_visualize.Init(
+    m_vertex_normal_visualize_shader.Init(
         "shaders/VertexNormalVisualize.vs.glsl",
         "shaders/VertexNormalVisualize.fs.glsl",
         nullptr,
