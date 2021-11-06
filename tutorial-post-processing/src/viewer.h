@@ -70,6 +70,7 @@ private:
 
     Framebuffer m_framebuffer;
     Shader m_standardShader{"standard"};
+    Shader m_full_screen_Shader{"full_screen"};
     Shader m_vertex_normal_visualize{"vertex_normal_visualize"};
 
     std::unique_ptr<Camera>     m_camera;
@@ -115,4 +116,5 @@ private:
     void renderMeshBin(const MeshBin& meshBin, const Camera& camera);
     void visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera);
     void renderLight(Light& light, const Camera& camera);
+    void renderFullScreen();
 };
