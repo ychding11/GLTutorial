@@ -180,6 +180,8 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 void Viewer::renderFullScreen()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDisable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     m_full_screen_Shader.Active();
     m_standardShader.SetInt("u_tex_color_map", 0);
