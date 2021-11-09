@@ -99,6 +99,7 @@ public:
     void Run();
 
     void SaveScreen(const std::string filename = "pic.tga");
+    void SavePng(const std::string filename="temp.png");
     void SaveImageSequence(const std::string dir = "imageseq");
 
 private:

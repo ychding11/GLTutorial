@@ -289,6 +289,21 @@ int Viewer::initWindow()
 #define STB_IMAGE_WRITE_IMPLEMENTATION 
 #include "stb_image_write.h" 
 
+void Viewer::SavePng(const std::string filename)
+{
+    /**
+     * https://www.khronos.org/opengl/wiki/Framebuffer#Read_color_buffer
+     *
+     **/
+
+    const int kSize = m_window_height * m_window_width;
+    std::vector<GLfloat> pixels((size_t)kSize * 3);
+    GL_API_CHECK(glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data()));
+
+    stbi_write_png(filename.c_str(), m_window_width, m_window_height, 3, pixels.data(), m_window_width * 3); //< only 3 channels
+    Log("save color buffer into : {}", filename.c_str());
+}
+
 void Viewer::SaveScreen(const std::string filename)
 {
     /**
@@ -399,6 +414,13 @@ static void drawUI(Viewer &viewer)
                     Log("stop Image sequence.\n");
                 }
             }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Capture"))
+            {
+                Log("Capture screen.");
+                viewer.SavePng(SCREEN_CAPTURE_IMAGE);
+            }
+            ImGui::Separator();
             ImGui::SliderFloat("Clip plane distance", &viewer.m_clip_plane_distance, -0.5f, 0.5f);
             ImGui::Separator();
             ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);
