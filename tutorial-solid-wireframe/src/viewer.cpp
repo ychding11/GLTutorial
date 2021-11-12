@@ -299,7 +299,7 @@ void Viewer::SavePng(const std::string filename)
     const int kSize = m_window_height * m_window_width;
     std::vector<GLfloat> pixels((size_t)kSize * 3);
     GL_API_CHECK(glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data()));
-
+    stbi_flip_vertically_on_write(1);
     stbi_write_png(filename.c_str(), m_window_width, m_window_height, 3, pixels.data(), m_window_width * 3); //< only 3 channels
     Log("save color buffer into : {}", filename.c_str());
 }
