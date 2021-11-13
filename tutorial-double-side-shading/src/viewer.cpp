@@ -448,6 +448,12 @@ static void drawUI(Viewer &viewer)
                 }
             }
             ImGui::Separator();
+            if (ImGui::MenuItem(ICON_FA_FILM "Capture"))
+            {
+                Log("Capture screen.");
+                viewer.SavePng(SCREEN_CAPTURE_IMAGE);
+            }
+            ImGui::Separator();
             ImGui::SliderFloat("Clip plane distance", &viewer.m_clip_plane_distance, -0.5f, 0.5f);
 
             ImGui::EndMenu();
