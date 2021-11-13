@@ -6,7 +6,7 @@ It is a collection of OpenGL tutorials.
 
 ---
 
-- [solid wireframe in one pass](.\tutorial-solid-wireframe\readme.md)
+- [solid wireframe in one pass](./tutorial-solid-wireframe/readme.md)
 
 ## Features of basic framework
 - [x] Implement PN Triangle Tessellation
