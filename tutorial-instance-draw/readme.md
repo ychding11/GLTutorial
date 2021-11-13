@@ -42,6 +42,14 @@ void glDrawArraysInstancedBaseInstance( GLenum mode, GLint first,
    GLenum type, const void *indices, GLsizei instancecount, GLuint baseinstance );
 ```
 
+Next plan is :
+
+- [ ] Update instance buffer dynamically
+
+## Screen Shot
+
+![instance draw screen shot](..\screen\instance-draw.png)
+
 ## Reference
 
 - [OpenGL wiki](https://www.khronos.org/opengl/wiki/Vertex_Rendering#Instancing)
