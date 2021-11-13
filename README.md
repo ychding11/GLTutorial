@@ -6,7 +6,7 @@ It is a collection of OpenGL tutorials.
 
 ---
 
-
+- [solid wireframe in one pass](.\tutorial-solid-wireframe\readme.md)
 
 ## Features of basic framework
 - [x] Implement PN Triangle Tessellation
@@ -17,11 +17,12 @@ It is a collection of OpenGL tutorials.
 
 ## Plans
 - [x] snap & save to file
+- [x] screen capture
 - [ ] animation support 
-- [ ] surface normal visualizer
+- [x] surface normal visualizer
 - [ ] bounding box visualizer
 
-## Screen 
+## Screen Shot
 - waiting for update
 
 ## Credits
