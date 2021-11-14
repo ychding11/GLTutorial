@@ -440,13 +440,20 @@ static void drawUI(Viewer &viewer)
                 viewer.m_sequence_count = 0;
                 if (viewer.m_save_image_sequence)
                 {
-                    Log("start Image sequence.\n");
+                    Log("start Image sequence.");
                 }
                 else
                 {
-                    Log("stop Image sequence.\n");
+                    Log("stop Image sequence.");
                 }
             }
+            ImGui::Separator();
+            if (ImGui::MenuItem(ICON_FA_FILM "Capture"))
+            {
+                Log("Capture screen.");
+                viewer.SavePng(SCREEN_CAPTURE_IMAGE);
+            }
+            ImGui::Separator();
             ImGui::SliderFloat("Clip plane distance", &viewer.m_clip_plane_distance, -0.5f, 0.5f);
             ImGui::Separator();
             ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);

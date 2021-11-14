@@ -6,7 +6,7 @@ in vec2 texCoord;
 
 uniform sampler2D u_tex_color_map;
 
-const float offset = 1.0 / 300.0;  
+const float offset = 1.0 / 700.0;  
 
 void main()
 { 
