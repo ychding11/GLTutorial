@@ -472,17 +472,21 @@ static void drawUI(Viewer &viewer)
             ImGui::Separator();
             ImGui::SliderFloat("Clip plane distance", &viewer.m_clip_plane_distance, -0.5f, 0.5f);
             ImGui::Separator();
+            ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);
+            ImGui::Separator();
+            ImGui::Checkbox("BackFace", &viewer.m_show_back_face);
+            ImGui::Separator();
 
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu(ICON_FA_EYE " View"))
         {
             ImGui::Checkbox("ShowUI", &displayOption.showUI);
+            ImGui::Separator();
             ImGui::Checkbox("ShowHelp", &setting.showHelpTip);
+            ImGui::Separator();
             ImGui::Checkbox("Wireframe", &displayOption.wireframe);
-            ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);
-            ImGui::Checkbox("BackFace", &viewer.m_show_back_face);
-            ImGui::Checkbox("SimpleMesh", &viewer.m_simple_mesh_mode);
+            ImGui::Separator();
             if (viewer.m_simple_mesh_mode)
             {
                 auto picked = drawTextureDropList("Mesh type : ",
@@ -516,6 +520,7 @@ static void drawUI(Viewer &viewer)
                     viewer.m_brickWall.m_reevaluate = true;
                 }
             }
+            ImGui::Separator();
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu(ICON_FA_WINDOWS " Settings"))
@@ -523,23 +528,8 @@ static void drawUI(Viewer &viewer)
             int render_model_changed = 0;
             ImGui::Checkbox("VSync", &viewer.m_enable_vsync);
             ImGui::Separator();
-            render_model_changed += ImGui::RadioButton("Standard", (int*)&setting.renderMode, RenderMode::Standard);
-            render_model_changed += ImGui::RadioButton("Explode",  (int*)&setting.renderMode, RenderMode::Explode);
-            render_model_changed += ImGui::RadioButton("Particle", (int*)&setting.renderMode, RenderMode::Particle);
-            ImGui::Separator();
-            ImGui::Checkbox("Enable Tessellation",  &setting.enableTess);
-            ImGui::SliderFloat("Inner Level", &setting.innerTessLevel.x, 1.f, 64.f);
-            ImGui::SliderFloat3("Outer Level", &setting.outerTessLevel.x, 1.f, 64.f);
-            ImGui::Separator();
             ImGui::ColorEdit3("Mesh Color", &viewer.m_mesh_color.x);
             ImGui::Separator();
-            ImGui::SliderFloat("Explode Scale", &viewer.m_explode_scale, 1.f, 100.f);
-            ImGui::SliderFloat("Explode Frequency", &viewer.m_explode_frequency, 0.001f, 1.f);
-            if (render_model_changed)
-            {
-                viewer.m_frame_id = 0;
-            }
-            
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
