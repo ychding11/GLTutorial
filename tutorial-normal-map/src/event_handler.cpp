@@ -141,6 +141,9 @@ static void mouseDragRight(GLFWwindow *window, const glm::ivec2  &where, const g
 /*! callback for _moving_ the mouse to a new position */
 void glfwindow_mouseMotion_cb(GLFWwindow *window, double x, double y)
 {
+    //ImGuiIO& io = ImGui::GetIO();
+    //if (!io.WantCaptureMouse)
+
     glm::ivec2 newMousePosition{ (int)x, (int)y };
     if (lastMousePosition != glm::ivec2(-1))
     {
