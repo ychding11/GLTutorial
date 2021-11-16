@@ -562,6 +562,10 @@ static void drawOverlay(RenderSetting &setting)
     ImGui::PopStyleColor();
 }
 
+static std::string gHelp =
+"Hlep     : \n"
+"This tutorial is to demostrate normal map rendering\n"
+;
 static void drawHelp(RenderSetting &setting)
 {
     if (!setting.showHelpTip) return;
@@ -572,8 +576,7 @@ static void drawHelp(RenderSetting &setting)
         | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
-        ImGui::Text("Help    : ");
-        ImGui::Text("Key stroke  : ");
+        ImGui::Text(gHelp.c_str());
         ImGui::End();
     }
     ImGui::PopStyleColor();
