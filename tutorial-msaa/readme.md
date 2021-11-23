@@ -1,5 +1,33 @@
 ## Overview
-It is to demonstrate msaa.
+It is to demonstrate MSAA.
+
+Render scene into a MSAA capable render target. First, create a multiple sample capable render texture or render buffer object.
+
+1. Create multiple sample 2D texture.
+
+    ```c++
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, tex); 
+    glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGB, width, height, GL_TRUE); 
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0); 
+    ```
+
+2. Attach it to frame buffer object's attach point
+
+   ```c++
+   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, tex, 0); 
+   ```
+   
+3. draw() as usual
+
+4. resolve MSAA render target : set source fbo, set dst fbo, blit
+   
+    ```c++
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, multisampledFBO); // read from msaa render target
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // default frame buffer as dst frame buffer 
+    glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST); // only color attachment resolved
+    ```
+
+### GLSL built in variables 
 
 - `in int gl_SampleMaskIn[]`  read only. A sample bit set if and only if the sample is considered **covered**  for current fragment shader invocation.
   In most case, gl_SampleMaskIn[0] is enough, 32X MSAA is enough.
@@ -14,5 +42,6 @@ It is to demonstrate msaa.
 
 ## Reference
 
-- 
+- [Renderbuffer Object - OpenGL Wiki (khronos.org)](https://www.khronos.org/opengl/wiki/Renderbuffer_Object)
+- [glBlitFramebuffer - OpenGL 4 Reference Pages (khronos.org)](https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBlitFramebuffer.xhtml)
 
