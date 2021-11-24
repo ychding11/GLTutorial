@@ -53,7 +53,22 @@ Main steps from [FXAA_WhitePaper.pdf](https://developer.download.nvidia.cn/asset
 
 - Sub-pixel
 
-- Select pixel
+- Select pixel Vertical / Horizon
+
+  ```glsl
+  //< 3x3 kernel, like edge detection
+  float edgeVert = 
+   abs((0.25 * lumaNW) + (-0.5 * lumaN) + (0.25 * lumaNE)) +
+   abs((0.50 * lumaW ) + (-1.0 * lumaM) + (0.50 * lumaE )) +
+   abs((0.25 * lumaSW) + (-0.5 * lumaS) + (0.25 * lumaSE));
+  float edgeHorz = 
+   abs((0.25 * lumaNW) + (-0.5 * lumaW) + (0.25 * lumaSW)) +
+   abs((0.50 * lumaN ) + (-1.0 * lumaM) + (0.50 * lumaS )) +
+   abs((0.25 * lumaNE) + (-0.5 * lumaE) + (0.25 * lumaSE));
+  bool horzSpan = edgeHorz >= edgeVert;
+  ```
+
+  
 
 - Search end-of-edge
 
