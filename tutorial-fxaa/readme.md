@@ -1,5 +1,5 @@
 ## Overview
-It is to demonstrate how fxaa work. FXAA is a single-pass, screen-space, anti-aliasing technique. It is easy to integration.
+It is to demonstrate how FXAA work. FXAA is a single-pass, screen-space, anti-aliasing technique. It is easy to integration.
 
 Main steps from [FXAA_WhitePaper.pdf](https://developer.download.nvidia.cn/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf) :
 
