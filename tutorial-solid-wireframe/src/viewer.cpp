@@ -167,14 +167,14 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
 
-    m_standardShader.Active();
-    m_standardShader.SetMat4("M", modelMatrix);
-    m_standardShader.SetMat4("V", viewMatrix);
-    m_standardShader.SetMat4("P", projMatrix);
-    m_standardShader.SetVec2("u_window_size", {m_window_width, m_window_height});
-    m_standardShader.SetVec3("u_mesh_color", m_mesh_color);
-    m_standardShader.SetVec3("u_eye_position", camera.eye());
-    m_standardShader.SetBool("u_show_wireframe", m_show_wireframe); // use int in glsl
+    m_solidWireframeShader.Active();
+    m_solidWireframeShader.SetMat4("M", modelMatrix);
+    m_solidWireframeShader.SetMat4("V", viewMatrix);
+    m_solidWireframeShader.SetMat4("P", projMatrix);
+    m_solidWireframeShader.SetVec2("u_window_size", {m_window_width, m_window_height});
+    m_solidWireframeShader.SetVec3("u_mesh_color", m_mesh_color);
+    m_solidWireframeShader.SetVec3("u_eye_position", camera.eye());
+    m_solidWireframeShader.SetBool("u_show_wireframe", m_show_wireframe); // use int in glsl
     for (int i = 0; i < meshBin.size(); ++i)
     {
         glBindVertexArray( meshBin.vao(i) );
@@ -218,7 +218,7 @@ void Viewer::renderLight(Light& light, const Camera& camera)
 
 void Viewer::initOpenGLShaders()
 {
-    m_standardShader.Init(
+    m_solidWireframeShader.Init(
         "shaders/SolidWireframe.vs.glsl",
         "shaders/SolidWireframe.fs.glsl",
         nullptr,
