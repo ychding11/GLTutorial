@@ -37,16 +37,8 @@ std::unique_ptr<Camera> buildCamera(const MeshType & mesh)
 
 void Viewer::Run()
 {
-    //< second stage init
     MeshBin meshes{ m_objPath };
-
-
-    glm::vec3 cameraTarget;
-    float cameraDistance;
-
-    {
-        m_camera = buildCamera(meshes);
-    }
+    m_camera = buildCamera(meshes);
 
     glfwCallbackData cb{ m_camera.get(), m_animation_mode, GetRenderSetting(), GetDisplayOption()};
     glfwSetWindowUserPointer(m_window, &cb);
