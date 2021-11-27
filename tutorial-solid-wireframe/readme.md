@@ -9,7 +9,7 @@ The above is the main idea. The advantage of this method is :
 - view independent
 - draw wireframe on shaded surface in one pass
 
-But it requires the GPU is capable of Geometry Shader.
+It requires the GPU is capable of Geometry Shader.
 
 ## Screen Shot
 
