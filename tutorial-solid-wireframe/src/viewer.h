@@ -80,7 +80,7 @@ public:
         glfwTerminate();
     }
 
-    Viewer(std::string title, int width, int height)
+    Viewer(std::string title = "Solid Wireframe", int width = 1280, int height = 720)
         : m_window_title(title)
         , m_window_width(width)
         , m_window_height(height)
