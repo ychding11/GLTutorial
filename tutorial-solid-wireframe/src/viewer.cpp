@@ -174,6 +174,7 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     m_standardShader.SetVec2("u_window_size", {m_window_width, m_window_height});
     m_standardShader.SetVec3("u_mesh_color", m_mesh_color);
     m_standardShader.SetVec3("u_eye_position", camera.eye());
+    m_standardShader.SetBool("u_show_wireframe", m_show_wireframe); // 
     for (int i = 0; i < meshBin.size(); ++i)
     {
         glBindVertexArray( meshBin.vao(i) );
@@ -435,6 +436,8 @@ static void drawUI(Viewer &viewer)
             ImGui::Checkbox("VSync", &viewer.m_enable_vsync);
             ImGui::Separator();
             ImGui::ColorEdit3("Mesh Color", &viewer.m_mesh_color.x);
+            ImGui::Separator();
+            ImGui::Checkbox("Wireframe on Shaded", &viewer.m_show_wireframe);
             ImGui::Separator();
             
             ImGui::EndMenu();

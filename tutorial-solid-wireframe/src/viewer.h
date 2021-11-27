@@ -46,6 +46,7 @@ private:
     bool m_enable_vsync{false};
     bool m_double_side_lighting{false}; //
     bool m_visualize_normal{false}; 
+    bool m_show_wireframe{true};
 
     int  m_sequence_count{ 0 }; //< animation
     int  m_animation_mode{ 0 }; //< animation

@@ -8,6 +8,7 @@ in vec4 color;
 out vec4 fragColor;
 
 uniform vec3 u_eye_position;
+uniform int u_show_wireframe;
 
 //< Lighting in Pixel shader, World Space.
 void main()
@@ -15,6 +16,8 @@ void main()
     //float minHeight = min(height);
     float minHeight = min(min(height[0],height[1]),height[2]);
     float edgeIntensity = exp2(-1.0*minHeight*minHeight);
+    if (u_show_wireframe == 0)
+        edgeIntensity  = 0.f;
 
     vec3 lightColor = vec3(1.f);
     vec3 diffuseColor = color.rgb;
