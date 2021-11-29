@@ -52,21 +52,11 @@ void Viewer::Run()
     GUI::Setup(m_window, "#version 130");
     do
     {
-        evaluateDirtyValue();
-        animateExplode();
         animateCamera(*m_camera);
         render(meshes, SimpleMesh{}, *m_camera);
     } while(glfwGetKey(m_window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(m_window) == 0);
 
     GUI::CleanUp();
-}
-
-void Viewer::evaluateDirtyValue()
-{
-}
-
-void Viewer::animateExplode()
-{
 }
 
 void Viewer::animateCamera(Camera &camera)
