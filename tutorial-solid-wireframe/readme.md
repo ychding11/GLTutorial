@@ -1,5 +1,5 @@
 ## Overview
-It is to demonstrate how to draw wireframe on shaded surface in one pass. The key is to tell which pixel  is in edge in pixel shader. In order to achieve this goal, take advantage of vertex attribute interpolation in GPU.
+It is to demonstrate how to draw wireframe on shaded surface in one pass. The most important step is to tell whether a pixel is on edge of triangle or inside of a triangle. In order to achieve this goal, it can take advantage of vertex attribute interpolation in GPU. The detailed steps is as follow.
 
 - in **geometry shader** stage, add a **none perspective attribute** which represents vertex distance to each edge in screen space. 
 - for pixel in edge, there is one height  is 0. 
