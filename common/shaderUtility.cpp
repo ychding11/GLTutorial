@@ -164,9 +164,7 @@ static GLuint createShaderFromFile(GLenum type, std::string path)
 	//< Compiles the given shader
     glCompileShader(shaderID);
 
-    GLint result = false;
 	GLint success = 0;
-    int infoLogLength;
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
 	if (success == GL_FALSE) //< the most recent compilation failed
 	{
@@ -185,7 +183,7 @@ static GLuint createShaderFromFile(GLenum type, std::string path)
 GLuint LoadShaders(const char* vs_file_path, const char* fs_file_path, const char* tcs_file_path, const char* tes_file_path,
     const char* gs_file_path)
 {
-	GLuint m_particlProgramID = glCreateProgram();
+	GLuint programID = glCreateProgram();
 
 	GLuint vertShaderID = 0;
 	GLuint ctrlShaderID = 0;
@@ -196,64 +194,78 @@ GLuint LoadShaders(const char* vs_file_path, const char* fs_file_path, const cha
 	if (vs_file_path)
 	{
 		vertShaderID = createShaderFromFile(GL_VERTEX_SHADER, vs_file_path);
-		glAttachShader(m_particlProgramID, vertShaderID);
+		glAttachShader(programID, vertShaderID);
 	}
 
 	if (fs_file_path)
 	{
 		fragShaderID = createShaderFromFile(GL_FRAGMENT_SHADER, fs_file_path);
-		glAttachShader(m_particlProgramID, fragShaderID);
+		glAttachShader(programID, fragShaderID);
 	}
 
 	if (tcs_file_path)
 	{
 		ctrlShaderID = createShaderFromFile(GL_TESS_CONTROL_SHADER, tcs_file_path);
-		glAttachShader(m_particlProgramID, ctrlShaderID);
+		glAttachShader(programID, ctrlShaderID);
 	}
 
 	if (tes_file_path)
 	{
 		evalShaderID = createShaderFromFile(GL_TESS_EVALUATION_SHADER, tes_file_path);
-		glAttachShader(m_particlProgramID, evalShaderID);
+		glAttachShader(programID, evalShaderID);
 	}
 
 	if (gs_file_path)
 	{
 		GLuint geoShaderID  = createShaderFromFile(GL_GEOMETRY_SHADER, gs_file_path);
-		glAttachShader(m_particlProgramID, geoShaderID);
+		glAttachShader(programID, geoShaderID);
 	}
 
     Log("Linking Shader... ");
-	glLinkProgram(m_particlProgramID);
+	glLinkProgram(programID);
 
     GLint result = GL_FALSE;
     int infoLogLength;
 
-	glGetProgramiv(m_particlProgramID, GL_LINK_STATUS, &result);
-	glGetProgramiv(m_particlProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
+	glGetProgramiv(programID, GL_LINK_STATUS, &result);
+	glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &infoLogLength);
 	if(infoLogLength > 0)
     {
-		std::vector<char> tessProgramErrMsg(infoLogLength + 1);
-		glGetProgramInfoLog(m_particlProgramID, infoLogLength, NULL, &tessProgramErrMsg[0]);
-		//printf("%s\n", &tessProgramErrMsg[0]);
+		std::vector<char> tessProgramErrMsg(infoLogLength);
+		glGetProgramInfoLog(programID, infoLogLength, NULL, &tessProgramErrMsg[0]);
 		Err("{}", &tessProgramErrMsg[0]);
 	}
-
-	if (vs_file_path)  glDetachShader(m_particlProgramID, vertShaderID);
-	if (tcs_file_path) glDetachShader(m_particlProgramID, ctrlShaderID);
-	if (tes_file_path) glDetachShader(m_particlProgramID, evalShaderID);
-	if (gs_file_path)  glDetachShader(m_particlProgramID, geoShaderID);
-	if (fs_file_path)  glDetachShader(m_particlProgramID, fragShaderID);
 
 	//
 	// https://khronos.org/registry/OpenGL-Refpages/gl4/html/glDeleteShader.xhtml
 	// A value of 0 for shader will be silently ignored
 	//
-	GL_API_CHECK( glDeleteShader(vertShaderID) );
-	GL_API_CHECK( glDeleteShader(ctrlShaderID) );
-	GL_API_CHECK( glDeleteShader(evalShaderID) );
-	GL_API_CHECK( glDeleteShader(fragShaderID) );
-	GL_API_CHECK( glDeleteShader(geoShaderID) );
 
-	return m_particlProgramID;
+	if (vertShaderID)
+	{
+		glDetachShader(programID, vertShaderID);
+		GL_API_CHECK( glDeleteShader(vertShaderID) );
+	}
+	if (ctrlShaderID)
+	{
+		glDetachShader(programID, ctrlShaderID);
+		GL_API_CHECK( glDeleteShader(ctrlShaderID) );
+	}
+	if (evalShaderID)
+	{
+		glDetachShader(programID, evalShaderID);
+		GL_API_CHECK( glDeleteShader(evalShaderID) );
+	}
+	if (geoShaderID)
+	{
+		glDetachShader(programID, geoShaderID);
+		GL_API_CHECK( glDeleteShader(geoShaderID) );
+	}
+	if (fragShaderID)
+	{
+		glDetachShader(programID, fragShaderID);
+		GL_API_CHECK( glDeleteShader(fragShaderID) );
+	}
+
+	return programID;
 }
