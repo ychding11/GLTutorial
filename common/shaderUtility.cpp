@@ -224,16 +224,18 @@ GLuint LoadShaders(const char* vs_file_path, const char* fs_file_path, const cha
     Log("Linking Shader... ");
 	glLinkProgram(programID);
 
-    GLint result = GL_FALSE;
-    int infoLogLength;
-
-	glGetProgramiv(programID, GL_LINK_STATUS, &result);
-	glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &infoLogLength);
-	if(infoLogLength > 0)
-    {
-		std::vector<char> tessProgramErrMsg(infoLogLength);
-		glGetProgramInfoLog(programID, infoLogLength, NULL, &tessProgramErrMsg[0]);
-		Err("{}", &tessProgramErrMsg[0]);
+	GLint success = 0;
+	glGetProgramiv(programID, GL_LINK_STATUS, &success);
+	if (success == GL_FALSE) //< the most recent link failed
+	{
+		//< query how many bytes to allocate, the length includes NULL terminator.
+		GLint maxLength = 0;
+		glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &maxLength);
+		std::vector<GLchar> errorLog(maxLength);
+		//< NULL, don't care actually written bytes
+		glGetProgramInfoLog(programID, maxLength, NULL, &errorLog[0]);
+		Err("{}", &errorLog[0]);
+		throw std::runtime_error("Link shader failed!");
 	}
 
 	//
