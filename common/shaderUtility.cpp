@@ -152,23 +152,33 @@ static GLuint createShaderFromFile(GLenum type, std::string path)
 		return 0;
 	}
 
-    Log("Compiling shader: {}", path.c_str());
-	GLuint shaderID = glCreateShader(type);
+    Log("Compiling shader code : {}", path.c_str());
+
+	//< creates an empty shader object for the shader stage given by given type
+	GLuint shaderID = glCreateShader(type); 
     char const* tempPtr = shaderCode.c_str();
+	//< Feed shader source code into OpenGL
+	//< here we feed 1 string
+	//< NULL, OpenGL will assume all of the strings are NULL-terminated
     glShaderSource(shaderID, 1, &tempPtr, NULL);
+	//< Compiles the given shader
     glCompileShader(shaderID);
 
     GLint result = false;
+	GLint success = 0;
     int infoLogLength;
-    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &result);
-    glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
-    if (infoLogLength > 0)
-    {
-        std::vector<char> errMsg(infoLogLength + 1);
-        glGetShaderInfoLog(shaderID, infoLogLength, NULL, &errMsg[0]);
-        printf("%s\n", &errMsg[0]);
-        return 0;
-    }
+    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
+	if (success == GL_FALSE) //< the most recent compilation failed
+	{
+		//< query how many bytes to allocate, the length includes NULL terminator.
+		GLint maxLength = 0;
+		glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &maxLength);
+		std::vector<GLchar> errorLog(maxLength);
+		//< NULL, don't care actually written bytes
+		glGetShaderInfoLog(shaderID, maxLength, NULL, &errorLog[0]);
+		Err("{}", std::string(errorLog.begin(), errorLog.end()));
+		return 0;
+	}
     return shaderID;
 }
 
