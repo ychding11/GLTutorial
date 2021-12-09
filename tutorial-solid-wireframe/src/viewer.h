@@ -60,10 +60,6 @@ private:
     RenderSetting &m_setting;
     DisplayOption &m_option;
 
-    TextureID m_diffuse_TexID{ INVALIDE_TEXTURE_ID };
-    TextureID m_normal_TexID{ INVALIDE_TEXTURE_ID };
-    TextureID m_displace_TexID{ INVALIDE_TEXTURE_ID };
-
     friend void drawUI(Viewer &viewer);
 
 private:
@@ -80,13 +76,16 @@ public:
         glfwTerminate();
     }
 
-    Viewer(std::string title = "Solid Wireframe", int width = 1280, int height = 720)
-        : m_window_title(title)
-        , m_window_width(width)
+    Viewer(std::string title , int width , int height)
+        : m_window_width(width)
         , m_window_height(height)
         , m_setting(GetRenderSetting())
         , m_option(GetDisplayOption())
     {
+        if (m_window_title.empty())
+        {
+            m_window_title = title;
+        }
         initWindow();
         initOpenGLShaders();
         initMaterials();
