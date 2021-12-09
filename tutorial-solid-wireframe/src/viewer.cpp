@@ -107,6 +107,7 @@ void Viewer::animateCamera(Camera &camera)
 
 void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camera &camera)
 {
+    glEnable(GL_MULTISAMPLE);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
@@ -270,7 +271,7 @@ int Viewer::initWindow()
     glfwSetMouseButtonCallback(m_window, glfwindow_mouseButton_cb);
     glfwSetCursorPosCallback(m_window, glfwindow_mouseMotion_cb);
 
-    glewExperimental = true;
+    glewExperimental = true; //< defined in glew
     if(glewInit() != GLEW_OK)
     {
         throw std::runtime_error("Failed to initialize GLEW !");

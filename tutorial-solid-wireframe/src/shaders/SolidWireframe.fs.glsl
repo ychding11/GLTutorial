@@ -34,7 +34,6 @@ void main()
     vec3 diffuseLight  = 0.84f * diffuse * lightColor * diffuseColor;
     vec3 ambientLight  = vec3(0.06f) * lightColor;
 
-    //colorFrag = specularLight + diffuseLight + ambientLight; 
     vec3 finalColor = specularLight + diffuseLight + ambientLight; 
     fragColor = (edgeIntensity * vec4(0.1,0.1,0.1,1.0)) + ((1.0-edgeIntensity) * vec4(finalColor,1.f));
 }
