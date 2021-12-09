@@ -6,10 +6,18 @@ It is to demonstrate how to draw wireframe on shaded surface in one pass. The mo
 
 The above is the main idea. The advantage of this method is :
 
-- view independent
-- draw wireframe on shaded surface in one pass
+- It is robust , view independent
+- It is able to draw wireframe on shaded surface in a single pass
 
 It requires the GPU is capable of Geometry Shader.
+
+### Height to edge
+
+- picture to demo the height to edges in window space
+  ![](.\pic.png)
+  
+- picture to demo how to do it in geometry shader
+  ![](.\height-to-edge.png)
 
 ## Screen Shot
 
