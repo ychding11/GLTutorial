@@ -353,22 +353,23 @@ void Viewer::SaveImageSequence(const std::string dir)
 
 #include "IconsFontAwesome4.h"
 
-static bool drawTextureDropList(const std::string & label,
-    const std::vector<std::string> &textureNames,
-    std::string &pickedTextureName
+static bool drawDropList(const std::string & label,
+    const std::vector<std::string> &itemNames,
+    std::string &pickedItemName
     )
 {
     ImGui::Text(label.c_str());
     ImGui::SameLine();
-    if (ImGui::BeginCombo(("##combo_" + label).c_str(), pickedTextureName.c_str())) // The second parameter is the label previewed before opening the combo.
+    // The second parameter is the label previewed before opening the combo
+    if (ImGui::BeginCombo(("##combo_" + label).c_str(), pickedItemName.c_str()))
     {
         bool picked = false;
-        for (auto i = 0; i < textureNames.size(); i++)
+        for (auto i = 0; i < itemNames.size(); i++)
         {
-            bool is_selected = (pickedTextureName == textureNames[i]); // You can store your selection however you want, outside or inside your objects
-            if (ImGui::Selectable(textureNames[i].c_str(), is_selected))
+            bool is_selected = (pickedItemName == itemNames[i]); // You can store your selection however you want, outside or inside your objects
+            if (ImGui::Selectable(itemNames[i].c_str(), is_selected))
             {
-                pickedTextureName = textureNames[i];
+                pickedItemName = itemNames[i];
                 picked = true;
             }
             if (is_selected)
@@ -377,7 +378,7 @@ static bool drawTextureDropList(const std::string & label,
         ImGui::EndCombo();
         if (picked)
         {
-            Log("Pick Texture : {}", pickedTextureName);
+            Log("Pick Item: {}", pickedItemName);
             return true; //< pick something
         }
     }
@@ -450,9 +451,15 @@ static void drawUI(Viewer &viewer)
         if (ImGui::BeginMenu(ICON_FA_EYE " View"))
         {
             ImGui::Checkbox("ShowUI", &displayOption.showUI);
+            ImGui::Separator();
             ImGui::Checkbox("ShowHelp", &setting.showHelpTip);
             ImGui::Separator();
             ImGui::Checkbox("Wireframe", &displayOption.wireframe);
+            ImGui::Separator();
+            if (drawDropList("PP Filter", {"Sharpen","Blur"}, viewer.m_picked_pp))
+            {
+
+            }
             ImGui::Separator();
             ImGui::EndMenu();
         }

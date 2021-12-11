@@ -64,6 +64,8 @@ private:
 
     glm::vec3 m_mesh_color{0.5, 0.5, 0.5};
 
+    std::string m_picked_pp{ "Blur" };
+
     RenderSetting &m_setting;
     DisplayOption &m_option;
 
