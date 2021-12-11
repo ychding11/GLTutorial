@@ -60,7 +60,6 @@ private:
     RenderSetting &m_setting;
     DisplayOption &m_option;
 
-    TextureID m_normal_TexID{ INVALIDE_TEXTURE_ID };
     TextureID m_displace_TexID{ INVALIDE_TEXTURE_ID };
 
     GLuint m_empty_vao{0};
