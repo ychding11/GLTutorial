@@ -42,8 +42,29 @@ vec3 sharpen()
     return col;
 }
 
+//< blur kernel
+vec3 blur()
+{
+    float kernel[9] = float[]
+    (
+    1.0 / 16, 2.0 / 16, 1.0 / 16,
+    2.0 / 16, 4.0 / 16, 2.0 / 16,
+    1.0 / 16, 2.0 / 16, 1.0 / 16  
+    );
+    
+    vec3 sampleTex[9];
+    for(int i = 0; i < 9; i++)
+    {
+        sampleTex[i] = vec3(texture(u_tex_color_map, texCoord.st + offsets[i]*texelsize));
+    }
+    vec3 col = vec3(0.0);
+    for(int i = 0; i < 9; i++)
+        col += sampleTex[i] * kernel[i];
+    return col;
+}
 void main()
 { 
     //FragColor = texture(u_tex_color_map, texCoord);
-    FragColor = vec4(sharpen(), 1.0);
+    //FragColor = vec4(sharpen(), 1.0);
+    FragColor = vec4(blur(), 1.0);
 }

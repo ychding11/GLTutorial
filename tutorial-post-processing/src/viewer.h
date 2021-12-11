@@ -37,11 +37,18 @@ class Viewer
 {
 private:
 
+    enum PPFilter
+    {
+        Sharpen,
+        Blur,
+        Count
+    };
+
+    std::string m_window_title{ "Post-Processing" };
     int m_window_width = 1280;
     int m_window_height = 720;
     GLFWwindow *m_window{nullptr};
 
-    std::string m_window_title{ "Post-Processing" };
     bool m_capture_colorbuffer{false};
     bool m_save_image_sequence{false};
     bool m_enable_vsync{false};
