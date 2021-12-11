@@ -20,6 +20,10 @@ In 2007, Crytek published a technique called screen-space ambient occlusion (SSA
     - The number of samples that have a higher depth value than the fragment's depth is occlusion factor
 - How to select surrounding samples is trick. It determines the tradeoff between quality and speed
 
+## SSAO Steps in this demo
+
+
+
 
 ## Screen Shot
 
@@ -30,4 +34,5 @@ In 2007, Crytek published a technique called screen-space ambient occlusion (SSA
 ## Reference
 
 - https://learnopengl.com/Advanced-Lighting/SSAO
+- http://john-chapman-graphics.blogspot.nl/2013/01/ssao-tutorial.html
 
