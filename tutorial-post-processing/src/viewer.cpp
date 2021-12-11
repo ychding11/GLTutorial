@@ -439,6 +439,12 @@ static void drawUI(Viewer &viewer)
             ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);
             ImGui::Separator();
             ImGui::Checkbox("Visualize normal", &viewer.m_visualize_normal);
+            ImGui::Separator();
+            if (viewer.m_visualize_normal)
+            {
+                ImGui::SliderFloat("Normal Visualize Scale", &viewer.m_normal_visualize_scale, 0.f, 0.1f);
+                ImGui::Separator();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu(ICON_FA_EYE " View"))
@@ -448,7 +454,6 @@ static void drawUI(Viewer &viewer)
             ImGui::Separator();
             ImGui::Checkbox("Wireframe", &displayOption.wireframe);
             ImGui::Separator();
-            ImGui::SliderFloat("Normal Visualize Scale", &viewer.m_normal_visualize_scale, 0.f, 0.1f);
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu(ICON_FA_WINDOWS " Settings"))

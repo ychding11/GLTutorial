@@ -6,24 +6,24 @@ in vec2 texCoord;
 
 uniform sampler2D u_tex_color_map;
 
-const float offset = 1.0 / 700.0;  
-const vec2 texelsize = vec2(1.0 / 1280.0, 1.0/720.0);  
+const vec2 texelsize = vec2(1.0 / 1280.0, 1.0/720.0);  //hardcode framebuffer size
 
-vec3 sharpen()
-{
-vec2 offsets[9] = vec2[]
+const vec2 offsets[9] = vec2[]
     (
-        vec2(-1.0f,  1.0f), // top-left
-        vec2( 0.0f,    1.0f), // top-center
-        vec2( 1.0f,  1.0f), // top-right
-        vec2(-1.0f,  0.0f),   // center-left
+        vec2(-1.0f,  1.0f),     // top-left
+        vec2( 0.0f,    1.0f),   // top-center
+        vec2( 1.0f,  1.0f),     // top-right
+        vec2(-1.0f,  0.0f),     // center-left
         vec2( 0.0f,    0.0f),   // center-center
-        vec2( 1.0f,  0.0f),   // center-right
-        vec2(-1.0f, -1.0f), // bottom-left
-        vec2( 0.0f,   -1.0f), // bottom-center
-        vec2( 1.0f, -1.0f)  // bottom-right    
+        vec2( 1.0f,  0.0f),     // center-right
+        vec2(-1.0f, -1.0f),     // bottom-left
+        vec2( 0.0f,   -1.0f),   // bottom-center
+        vec2( 1.0f, -1.0f)      // bottom-right    
     );
 
+//< sharpen kernel
+vec3 sharpen()
+{
     float kernel[9] = float[]
     (
         -1, -1, -1,

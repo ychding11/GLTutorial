@@ -55,14 +55,12 @@ private:
     float m_clip_plane_distance{0.0f};
     float m_normal_visualize_scale{0.01f};
 
-    glm::vec3 m_mesh_color{1.0, 1., 1.};
+    glm::vec3 m_mesh_color{0.5, 0.5, 0.5};
 
     RenderSetting &m_setting;
     DisplayOption &m_option;
 
-    TextureID m_displace_TexID{ INVALIDE_TEXTURE_ID };
-
-    GLuint m_empty_vao{0};
+    GLuint m_empty_vao{0}; //< in core profile, we need an explict empty vao, 0 means nothing
 
     friend void drawUI(Viewer &viewer);
 
