@@ -18,6 +18,7 @@ In 2007, Crytek published a technique called screen-space ambient occlusion (SSA
     - Take multiple depth samples in a sphere sample kernel surrounding current fragment position 
     - Compare each of the samples with the current fragment's depth value
     - The number of samples that have a higher depth value than the fragment's depth is occlusion factor
+- How to select surrounding samples is trick. It determines the tradeoff between quality and speed
 
 
 ## Screen Shot
