@@ -8,10 +8,9 @@ uniform sampler2D u_tex_color_map;
 
 const float offset = 1.0 / 700.0;  
 
-void main()
-{ 
-    //FragColor = texture(u_tex_color_map, texCoord);
-    vec2 offsets[9] = vec2[]
+vec3 sharpen()
+{
+vec2 offsets[9] = vec2[]
     (
         vec2(-offset,  offset), // top-left
         vec2( 0.0f,    offset), // top-center
@@ -39,6 +38,11 @@ void main()
     vec3 col = vec3(0.0);
     for(int i = 0; i < 9; i++)
         col += sampleTex[i] * kernel[i];
-    
-    FragColor = vec4(col, 1.0);
+    return col;
+}
+
+void main()
+{ 
+    //FragColor = texture(u_tex_color_map, texCoord);
+    FragColor = vec4(sharpen(), 1.0);
 }
