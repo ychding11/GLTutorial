@@ -4,6 +4,8 @@ out vec4 FragColor;
   
 in vec2 texCoord;
 
+uniform uint u_pp_filter;
+
 uniform sampler2D u_tex_color_map;
 
 const vec2 texelsize = vec2(1.0 / 1280.0, 1.0/720.0);  //hardcode framebuffer size
