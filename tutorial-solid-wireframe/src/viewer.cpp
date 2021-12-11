@@ -237,10 +237,6 @@ void Viewer::initOpenGLShaders()
 
 }
 
-void Viewer::initMaterials(void)
-{
-}
-
 int Viewer::initWindow()
 {
     if(!glfwInit())
