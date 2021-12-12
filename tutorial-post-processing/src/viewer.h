@@ -18,11 +18,15 @@
 #include "framebuffer.h"
 #include "config.h"
 
+#include "enum_str.h"
+
 class MeshBin;
 
 class Viewer;
 
 void drawUI(Viewer &viewer);
+
+MyEnum(PPFilter, None, Sharpen, Blur);
 
 //<
 //< It serve as a container for modules such as
@@ -39,6 +43,7 @@ private:
 
     enum PPFilter
     {
+        None,
         Sharpen,
         Blur,
         Count
