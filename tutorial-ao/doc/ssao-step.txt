@@ -1,0 +1,25 @@
+digraph G
+{
+    graph[labelloc = "t" abel=""];
+    node [shape=record fontname="Arial" fontsize=10 width=0.8, height=0.5];
+    edge [fontname="Arial" fontsize=12];
+    
+    comment=" "
+
+    
+    subgraph cluster_SSAO
+    {
+        graph[style=dotted label="SSAO Step"];
+        
+		GPass      [label="G-Buffer Pass" shape=rectangle, height=0.7, width=2 style=filled]
+		SSAO       [label="SSAO Pass" shape=rectangle, height=0.7, width=2 style=filled]
+		SSAOFilter [label="SSAO Filter" shape=rectangle, height=0.7, width=2 style=filled]
+		Lighting   [label="Lighting Pass" shape=rectangle, height=0.7, width=2 style=filled]
+		
+		{rank=same;Model, Texture} -> GPass -> {rank=same; Position, Normal, Color};
+		{Position, Sample, Noise } -> SSAO -> SSAOFilter -> SSAOMap
+		{SSAOMap, Position, Normal, Color } -> Lighting -> {Final}
+    
+    }
+
+ }
