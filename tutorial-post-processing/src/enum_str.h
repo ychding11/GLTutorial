@@ -50,7 +50,7 @@ using int_c_array = int[];
         }                                                                                                       \
         return m;                                                                                               \
     };                                                                                                          \
-    static const std::map<std::string, enumType> enumType##StrMap = enumType##ToStringMap(__VA_ARGS__);         \
+    static std::map<std::string, enumType> enumType##StrMap = enumType##ToStringMap(__VA_ARGS__);         \
     inline const enumType enumType##FromString(const std::string& str)                                           \
     {                                                                                                           \
         if(enumType##StrMap.count(str) == 0)                                                                    \
