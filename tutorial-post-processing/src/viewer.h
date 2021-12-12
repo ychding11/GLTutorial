@@ -41,14 +41,6 @@ class Viewer
 {
 private:
 
-    enum PPFilter
-    {
-        None,
-        Sharpen,
-        Blur,
-        Count
-    };
-
     std::string m_window_title{ "Post-Processing" };
     int m_window_width = 1280;
     int m_window_height = 720;
@@ -67,9 +59,10 @@ private:
     float m_clip_plane_distance{0.0f};
     float m_normal_visualize_scale{0.01f};
 
-    glm::vec3 m_mesh_color{0.5, 0.5, 0.5};
+    glm::vec3 m_mesh_color{1.0 };
 
     std::string m_picked_pp{ "Blur" };
+    PPFilter m_filter_type{Blur};
 
     RenderSetting &m_setting;
     DisplayOption &m_option;

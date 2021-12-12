@@ -172,7 +172,7 @@ void Viewer::renderFullScreen()
 
     m_full_screen_Shader.Active();
     m_solidWireframeShader.SetInt("u_tex_color_map", 0);
-    m_solidWireframeShader.SetInt("u_pp_filter", 0);
+    m_solidWireframeShader.SetInt("u_pp_filter", m_filter_type); // switch pp type
 
     glBindVertexArray(m_empty_vao);
     GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
@@ -456,9 +456,9 @@ static void drawUI(Viewer &viewer)
             ImGui::Separator();
             ImGui::Checkbox("Wireframe", &displayOption.wireframe);
             ImGui::Separator();
-            if (drawDropList("PP Filter", {"Sharpen","Blur"}, viewer.m_picked_pp))
+            if (drawDropList("PP Filter", PPFilterStrVector, viewer.m_picked_pp))
             {
-
+                viewer.m_filter_type = PPFilterFromString(viewer.m_picked_pp);
             }
             ImGui::Separator();
             ImGui::EndMenu();

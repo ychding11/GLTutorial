@@ -4,7 +4,7 @@ out vec4 FragColor;
   
 in vec2 texCoord;
 
-uniform uint u_pp_filter;
+uniform int u_pp_filter;
 
 uniform sampler2D u_tex_color_map;
 
@@ -64,9 +64,15 @@ vec3 blur()
         col += sampleTex[i] * kernel[i];
     return col;
 }
+
 void main()
-{ 
-    //FragColor = texture(u_tex_color_map, texCoord);
-    //FragColor = vec4(sharpen(), 1.0);
-    FragColor = vec4(blur(), 1.0);
+{
+    if (u_pp_filter == 0) // None
+        FragColor = texture(u_tex_color_map, texCoord);
+    else if (u_pp_filter == 1) // Sharpen
+        FragColor = vec4(sharpen(), 1.0);
+    else if (u_pp_filter == 2) // Blur
+        FragColor = vec4(blur(), 1.0);
+    else 
+        FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }
