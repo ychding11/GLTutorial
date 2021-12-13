@@ -171,8 +171,8 @@ void Viewer::renderFullScreen()
     glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture());
 
     m_full_screen_Shader.Active();
-    m_solidWireframeShader.SetInt("u_tex_color_map", 0);
-    m_solidWireframeShader.SetInt("u_pp_filter", m_filter_type); // switch pp type
+    m_full_screen_Shader.SetInt("u_tex_color_map", 0);
+    m_full_screen_Shader.SetInt("u_pp_filter", m_filter_type); 
 
     glBindVertexArray(m_empty_vao);
     GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );

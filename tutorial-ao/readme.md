@@ -22,7 +22,7 @@ In 2007, Crytek published a technique called screen-space ambient occlusion (SSA
 
 ## SSAO Steps in this demo
 
-
+![](.\doc\ssao-step.png)
 
 
 ## Screen Shot

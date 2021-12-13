@@ -89,12 +89,13 @@ public:
     }
 
     Viewer(std::string title, int width, int height)
-        : m_window_title(title)
-        , m_window_width(width)
+        : m_window_width(width)
         , m_window_height(height)
         , m_setting(GetRenderSetting())
         , m_option(GetDisplayOption())
     {
+        if (m_window_title.empty())
+            m_window_title = title;
         initWindow();
         initOpenGLShaders();
         initMaterials();
