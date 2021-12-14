@@ -1,0 +1,29 @@
+digraph G
+{
+    graph[labelloc = "t" abel=""];
+    node [shape=record fontname="Arial" fontsize=10 width=0.8, height=0.5];
+    edge [fontname="Arial" fontsize=12];
+    
+    comment=" "
+
+    
+    subgraph cluster_stencil_test
+    {
+        graph[style=dotted label="Stencil Test Step"];
+        
+		Ds   [label="Read Stencil Buffer" shape=rectangle, height=0.7, width=2 style=filled]
+		Fs   [label="Fragment stencil value" shape=rectangle, height=0.7, width=2 style=filled]
+		Dm   [label="Dm = Ds & mask" shape=rectangle, height=0.7, width=2 style=filled]
+		Fm   [label="Fm = Fs & mask" shape=rectangle, height=0.7, width=2 style=filled]
+		Fun   [label="Fm Func Dm" shape=rectangle, height=0.7, width=2 style=filled]
+		
+		{rank=same; Ds, Fs};
+		{rank=same; Dm, Fm};
+		Ds -> Dm;
+		Fs -> Fm;
+		{Dm, Fm} -> Fun;
+	
+	
+    }
+
+ }
