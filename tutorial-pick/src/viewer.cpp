@@ -46,23 +46,15 @@ void Viewer::Run()
     GUI::Setup(m_window, "#version 130");
     do
     {
-        evaluateDirtyValue();
-        animateExplode();
         animateCamera(*m_camera);
         render(meshes, SimpleMesh{}, *m_camera);
+        glfwSwapBuffers(m_window);
+        glfwPollEvents();
+        glfwSwapInterval(m_enable_vsync); //< enable vsync
+        m_frame_id++;
     } while(glfwGetKey(m_window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(m_window) == 0);
 
     GUI::CleanUp();
-}
-
-void Viewer::evaluateDirtyValue()
-{
-
-}
-
-void Viewer::animateExplode()
-{
-    
 }
 
 void Viewer::animateCamera(Camera &camera)
@@ -159,10 +151,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     //< draw ui after render
     drawUI(*this);
 
-    glfwSwapBuffers(m_window);
-    glfwPollEvents();
-    glfwSwapInterval(m_enable_vsync); //< enable vsync
-    m_frame_id++;
 }
 
 void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
