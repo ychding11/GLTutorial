@@ -105,7 +105,7 @@ private:
     void initOpenGLShaders(void);
     void render(const MeshBin &meshBin, SimpleMesh& simplemesh, const Camera &camera);
     void animateCamera(Camera &camera);
-    void renderMeshBin(const MeshBin& meshBin, const Camera& camera);
-    void lighting(const MeshBin& meshBin, const Camera& camera);
+    void renderOutlining(const MeshBin& meshBin, const Camera& camera);
+    void renderSurface(const MeshBin& meshBin, const Camera& camera);
     void renderLight(Light& light, const Camera& camera);
 };

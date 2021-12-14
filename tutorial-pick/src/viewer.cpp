@@ -133,8 +133,8 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    renderMeshBin(meshBin, camera);
-    
+    renderSurface(meshBin, camera);
+    renderOutlining(meshBin, camera);
 
     //< shall capture color buffer here
     if (m_capture_colorbuffer)
@@ -153,14 +153,13 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 
 }
 
-void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
+void Viewer::renderOutlining(const MeshBin& meshBin, const Camera& camera)
 {
-    lighting(meshBin, camera);
-
-    //< begin draw edge
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilMask(0x00); // write mask : no writing
+    //< draw edge, always draw without depth compare
+    //< draw a little larger object to compare with objectID
     glDisable(GL_DEPTH_TEST);
+    glStencilMask(0x00); // write mask : no writing
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // ref value 1 shall be object ID
 
     glm::mat4 modelMatrix = glm::mat4(1.0);
     glm::mat4 viewMatrix = camera.viewMatrix();
@@ -184,10 +183,13 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     glEnable(GL_DEPTH_TEST);
 }
 
-void Viewer::lighting(const MeshBin& meshBin, const Camera& camera)
+void Viewer::renderSurface(const MeshBin& meshBin, const Camera& camera)
 {
+    //< all rendered pixels with stencil ref value 1
+    //< shall be object ID
     glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    glStencilMask(0xFF);
+    glStencilMask(0xFF); //< write mask, write all 8 bits data
+    glEnable(GL_DEPTH_TEST);
 
     glm::mat4 modelMatrix = glm::mat4(1.0);
     glm::mat4 viewMatrix = camera.viewMatrix();
