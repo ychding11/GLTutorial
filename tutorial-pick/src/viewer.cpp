@@ -108,8 +108,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-    glFrontFace(GL_CCW);
-
     if (m_double_side_lighting)
     {
         /* This case, keep both front & back face triangle */
@@ -121,6 +119,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     {
         glDisable(GL_CLIP_DISTANCE0);
         glEnable(GL_CULL_FACE);
+        glFrontFace(GL_CCW);
         glCullFace(GL_BACK);
     }
 
@@ -164,7 +163,7 @@ void Viewer::renderOutlining(const MeshBin& meshBin, const Camera& camera)
     glm::mat4 modelMatrix = glm::mat4(1.0);
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
-    modelMatrix = glm::scale(modelMatrix, glm::vec3(1.03f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(1.06f));
 
     m_edgeShader.Active();
     m_edgeShader.SetMat4("M", modelMatrix);
