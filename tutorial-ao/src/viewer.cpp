@@ -306,6 +306,18 @@ int Viewer::initWindow()
     colorBufferDscs[0].warp_s = GL_CLAMP_TO_EDGE;
     colorBufferDscs[0].warp_t = GL_CLAMP_TO_EDGE;
 
+    colorBufferDscs[1].attachment = GL_COLOR_ATTACHMENT0;
+    colorBufferDscs[1].internalformat = GL_RGBA16F;
+    colorBufferDscs[1].width  = m_window_width;
+    colorBufferDscs[1].height = m_window_height;
+    colorBufferDscs[1].border = 0;
+    colorBufferDscs[1].format = GL_RGBA;
+    colorBufferDscs[1].type = GL_FLOAT;
+    colorBufferDscs[1].mag_filter = GL_NEAREST;
+    colorBufferDscs[1].min_filter = GL_NEAREST;
+    colorBufferDscs[1].warp_s = GL_CLAMP_TO_EDGE;
+    colorBufferDscs[1].warp_t = GL_CLAMP_TO_EDGE;
+
 
     m_framebuffer.Init(m_window_width, m_window_height);
 
