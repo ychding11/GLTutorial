@@ -5,7 +5,7 @@
 #include "framebuffer.h"
 
 
-void Framebuffer::Init(int numColorBuffer, const ColorBufferDsc** colorDscs, const ZBufferDsc* zDscs)
+void Framebuffer::Init(int numColorBuffer, ColorBufferDsc* colorDscs, ZBufferDsc* zDscs)
 {
     if (m_initialized)
     {
@@ -17,7 +17,7 @@ void Framebuffer::Init(int numColorBuffer, const ColorBufferDsc** colorDscs, con
 
     for (int i = 0; i < numColorBuffer; ++i)
     {
-        const auto& desc = *colorDscs[i];
+        const auto& desc = colorDscs[i];
         glGenTextures(1, &m_color_textuers[i]);
         glBindTexture(GL_TEXTURE_2D, m_color_textuers[i]);
         glTexImage2D(GL_TEXTURE_2D, 0, desc.internalformat, desc.width, desc.height, desc.border, desc.format, desc.type, NULL);

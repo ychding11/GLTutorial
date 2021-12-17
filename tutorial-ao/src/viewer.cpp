@@ -294,6 +294,9 @@ int Viewer::initWindow()
         return -1;
     }
     ColorBufferDsc colorBufferDscs[3];
+    ZBufferDsc  zBufferDsc;
+
+    //< position
     colorBufferDscs[0].attachment = GL_COLOR_ATTACHMENT0;
     colorBufferDscs[0].internalformat = GL_RGBA16F;
     colorBufferDscs[0].width  = m_window_width;
@@ -306,7 +309,8 @@ int Viewer::initWindow()
     colorBufferDscs[0].warp_s = GL_CLAMP_TO_EDGE;
     colorBufferDscs[0].warp_t = GL_CLAMP_TO_EDGE;
 
-    colorBufferDscs[1].attachment = GL_COLOR_ATTACHMENT0;
+    //< normal 
+    colorBufferDscs[1].attachment = GL_COLOR_ATTACHMENT1;
     colorBufferDscs[1].internalformat = GL_RGBA16F;
     colorBufferDscs[1].width  = m_window_width;
     colorBufferDscs[1].height = m_window_height;
@@ -315,11 +319,30 @@ int Viewer::initWindow()
     colorBufferDscs[1].type = GL_FLOAT;
     colorBufferDscs[1].mag_filter = GL_NEAREST;
     colorBufferDscs[1].min_filter = GL_NEAREST;
-    colorBufferDscs[1].warp_s = GL_CLAMP_TO_EDGE;
-    colorBufferDscs[1].warp_t = GL_CLAMP_TO_EDGE;
+    //colorBufferDscs[1].warp_s = GL_CLAMP_TO_EDGE;
+    //colorBufferDscs[1].warp_t = GL_CLAMP_TO_EDGE;
+
+    //< color 
+    colorBufferDscs[2].attachment = GL_COLOR_ATTACHMENT2;
+    colorBufferDscs[2].internalformat = GL_RGBA;
+    colorBufferDscs[2].width  = m_window_width;
+    colorBufferDscs[2].height = m_window_height;
+    colorBufferDscs[2].border = 0;
+    colorBufferDscs[2].format = GL_RGBA;
+    colorBufferDscs[2].type = GL_UNSIGNED_BYTE;
+    colorBufferDscs[2].mag_filter = GL_NEAREST;
+    colorBufferDscs[2].min_filter = GL_NEAREST;
+    //colorBufferDscs[1].warp_s = GL_CLAMP_TO_EDGE;
+    //colorBufferDscs[1].warp_t = GL_CLAMP_TO_EDGE;
+
+    zBufferDsc.attachment = GL_DEPTH_ATTACHMENT;
+    zBufferDsc.width  = m_window_width;
+    zBufferDsc.height = m_window_height;
+    zBufferDsc.internalformat = GL_DEPTH_COMPONENT;
 
 
-    m_framebuffer.Init(m_window_width, m_window_height);
+    //m_framebuffer.Init(m_window_width, m_window_height);
+    m_framebuffer.Init(3, colorBufferDscs, &zBufferDsc);
 
     glGenVertexArrays(1, &m_empty_vao);
 

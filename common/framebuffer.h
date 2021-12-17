@@ -37,7 +37,7 @@ public:
     GLenum attachment{ GL_DEPTH_STENCIL_ATTACHMENT };
     GLsizei  width{ 0 };
     GLsizei  height{ 0 };
-    GLint internalformat{ GL_DEPTH_STENCIL_ATTACHMENT }; //< number of color components in the texture
+    GLint internalformat{ GL_DEPTH_COMPONENT }; //< number of color components in the texture
 };
 
 
@@ -78,7 +78,7 @@ public:
     {
     }
 
-    void Init(int numColorBuffer, const ColorBufferDsc** colorDscs, const ZBufferDsc* zDscs);
+    void Init(int numColorBuffer, ColorBufferDsc* colorDscs, ZBufferDsc* zDscs);
 
     void Init(int width, int height)
     {
