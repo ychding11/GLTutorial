@@ -168,7 +168,7 @@ void Viewer::renderFullScreen()
     glClear(GL_COLOR_BUFFER_BIT);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture(1));
+    glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture(2));
 
     m_full_screen_Shader.Active();
     m_full_screen_Shader.SetInt("u_tex_color_map", 0);
@@ -182,6 +182,8 @@ void Viewer::renderFullScreen()
 
 void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
 {
+    unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+    glDrawBuffers(3, attachments);
     glm::mat4 modelMatrix = glm::mat4(1.0);
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
@@ -341,6 +343,8 @@ int Viewer::initWindow()
 
     //m_framebuffer.Init(m_window_width, m_window_height);
     m_framebuffer.Init(3, colorBufferDscs, &zBufferDsc);
+    unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+    glDrawBuffers(3, attachments);
 
     glGenVertexArrays(1, &m_empty_vao);
 
