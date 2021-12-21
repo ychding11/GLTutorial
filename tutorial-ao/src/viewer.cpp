@@ -168,7 +168,7 @@ void Viewer::renderFullScreen()
     glClear(GL_COLOR_BUFFER_BIT);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture());
+    glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture(1));
 
     m_full_screen_Shader.Active();
     m_full_screen_Shader.SetInt("u_tex_color_map", 0);
@@ -190,9 +190,7 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     m_solidWireframeShader.SetMat4("M", modelMatrix);
     m_solidWireframeShader.SetMat4("V", viewMatrix);
     m_solidWireframeShader.SetMat4("P", projMatrix);
-    m_solidWireframeShader.SetVec2("u_window_size", {m_window_width, m_window_height});
     m_solidWireframeShader.SetVec3("u_mesh_color", m_mesh_color);
-    m_solidWireframeShader.SetVec3("u_eye_position", camera.eye());
     for (int i = 0; i < meshBin.size(); ++i)
     {
         glBindVertexArray( meshBin.vao(i) );
@@ -231,11 +229,11 @@ void Viewer::renderLight(Light& light, const Camera& camera)
 void Viewer::initOpenGLShaders()
 {
     m_solidWireframeShader.Init(
-        "shaders/SolidWireframe.vs.glsl",
-        "shaders/SolidWireframe.fs.glsl",
+        "shaders/ssao.vs.glsl",
+        "shaders/ssao.fs.glsl",
         nullptr,
         nullptr,
-        "shaders/SolidWireframe.gs.glsl"
+        nullptr
         );
 
     m_vertex_normal_visualize_shader.Init(
