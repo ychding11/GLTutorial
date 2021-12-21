@@ -1,5 +1,5 @@
 ## Overview
-It is to reuse information in screen space to do planar reflection.
+SSR is to reuse information in screen space to do planar reflection.
 
 - cube map based reflection
   - self reflection
@@ -12,13 +12,9 @@ It is to reuse information in screen space to do planar reflection.
 
 ### summary
 
-
-
-
-
-## Screen Shot
-
-
+- each fragments shall know whether to do SSR
+- SSR is fit for Deferred Rendering
+- Generate a SSR texture, Filter the texture, Use it in lighting pass
 
 
 
