@@ -15,6 +15,8 @@ void Framebuffer::Init(int numColorBuffer, ColorBufferDsc* colorDscs, ZBufferDsc
     glGenFramebuffers(1, &m_framebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
 
+    std::vector<GLenum> attachments(numColorBuffer, 0);
+
     for (int i = 0; i < numColorBuffer; ++i)
     {
         const auto& desc = colorDscs[i];
@@ -26,7 +28,9 @@ void Framebuffer::Init(int numColorBuffer, ColorBufferDsc* colorDscs, ZBufferDsc
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, desc.warp_s);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, desc.warp_t);
         glFramebufferTexture2D(GL_FRAMEBUFFER, desc.attachment, GL_TEXTURE_2D, m_color_textuers[i], 0);
+        attachments[i] = desc.attachment;
     }
+    glDrawBuffers(numColorBuffer, attachments.data());
 
     glGenRenderbuffers(1, &m_rb_depth_stencil);
     glBindRenderbuffer(GL_RENDERBUFFER, m_rb_depth_stencil);
