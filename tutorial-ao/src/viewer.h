@@ -26,7 +26,10 @@ class Viewer;
 
 void drawUI(Viewer &viewer);
 
-MyEnum(PPFilter, None, Sharpen, Blur);
+MyEnum(PPFilter, None,Sharpen,Blur);
+
+MyEnum(GPassItem,Position,Normal,Albedo);
+
 
 //<
 //< It serve as a container for modules such as
@@ -63,6 +66,8 @@ private:
 
     std::string m_picked_pp{ "Blur" };
     PPFilter m_filter_type{Blur};
+
+    std::string m_picked_GPassItem{ "Albedo" };
 
     RenderSetting &m_setting;
     DisplayOption &m_option;

@@ -167,8 +167,9 @@ void Viewer::renderFullScreen()
     glDisable(GL_DEPTH_TEST);  //< disable z depth
     glClear(GL_COLOR_BUFFER_BIT);
 
+    auto gpassItem = GPassItemFromString(m_picked_GPassItem);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture(2));
+    glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture(gpassItem));
 
     m_full_screen_Shader.Active();
     m_full_screen_Shader.SetInt("u_tex_color_map", 0);
@@ -506,6 +507,10 @@ static void drawUI(Viewer &viewer)
             if (drawDropList("PP Filter", PPFilterStrVector, viewer.m_picked_pp))
             {
                 viewer.m_filter_type = PPFilterFromString(viewer.m_picked_pp);
+            }
+            ImGui::Separator();
+            if (drawDropList("GPass Item", GPassItemStrVector, viewer.m_picked_GPassItem))
+            {
             }
             ImGui::Separator();
             ImGui::EndMenu();
