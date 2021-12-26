@@ -81,7 +81,6 @@ private:
     Framebuffer m_GPassFB;
     Shader m_GPassShader{"GPass"};
     Shader m_full_screen_Shader{"full_screen"};
-    Shader m_vertex_normal_visualize_shader{"vertex_normal_visualize"};
 
     std::unique_ptr<Camera>     m_camera;
 

@@ -195,31 +195,6 @@ void Viewer::renderGPass(const MeshBin& meshBin, const Camera& camera)
     glUseProgram(0);
 }
 
-void Viewer::visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera)
-{
-    glm::mat4 modelMatrix = glm::mat4(1.0);
-    glm::mat4 viewMatrix = camera.viewMatrix();
-    glm::mat4 projMatrix = camera.projMatrix();
-
-    m_vertex_normal_visualize_shader.Active();
-    m_vertex_normal_visualize_shader.SetMat4("M", modelMatrix);
-    m_vertex_normal_visualize_shader.SetMat4("V", viewMatrix);
-    m_vertex_normal_visualize_shader.SetMat4("P", projMatrix);
-    m_vertex_normal_visualize_shader.SetFloat("u_normal_visualize_scale", m_normal_visualize_scale);
-    for (int i = 0; i < meshBin.size(); ++i)
-    {
-        glBindVertexArray( meshBin.vao(i) );
-        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
-    }
-
-    glBindVertexArray(0);
-    glUseProgram(0);
-}
-
-void Viewer::renderLight(Light& light, const Camera& camera)
-{
-}
-
 
 void Viewer::initOpenGLShaders()
 {
@@ -229,14 +204,6 @@ void Viewer::initOpenGLShaders()
         nullptr,
         nullptr,
         nullptr
-        );
-
-    m_vertex_normal_visualize_shader.Init(
-        "shaders/VertexNormalVisualize.vs.glsl",
-        "shaders/VertexNormalVisualize.fs.glsl",
-        nullptr,
-        nullptr,
-        "shaders/VertexNormalVisualize.gs.glsl"
         );
 
     m_full_screen_Shader.Init(
