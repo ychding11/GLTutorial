@@ -63,6 +63,12 @@ public:
 
     // utility uniform functions
     // ------------------------------------------------------------------------
+    void SetTex2D(const std::string& name, GLuint texID, int slot) const
+    {
+        glActiveTexture(GL_TEXTURE0); //< always slot 0 ?
+        glBindTexture(GL_TEXTURE_2D, texID);
+        glUniform1i(glGetUniformLocation(m_programID, name.c_str()), slot);
+    }
     void SetBool(const std::string& name, bool value) const
     {
         glUniform1i(glGetUniformLocation(m_programID, name.c_str()), (int)value);

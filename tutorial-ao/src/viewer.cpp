@@ -168,10 +168,12 @@ void Viewer::renderFullScreen()
     glClear(GL_COLOR_BUFFER_BIT);
 
     auto gpassItem = GPassItemFromString(m_picked_GPassItem);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture(gpassItem));
+    auto texID = m_framebuffer.ColorTexture(gpassItem);
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture(gpassItem));
 
     m_full_screen_Shader.Active();
+    m_full_screen_Shader.SetTex2D("u_tex_color_map", texID, 0);
     m_full_screen_Shader.SetInt("u_tex_color_map", 0);
     m_full_screen_Shader.SetInt("u_pp_filter", m_filter_type); 
 
