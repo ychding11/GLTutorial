@@ -95,7 +95,7 @@ void Viewer::animateCamera(Camera &camera)
 
 void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camera &camera)
 {
-    m_framebuffer.Active();
+    m_GPassFB.Active();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -131,7 +131,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     {
         visualizeVertexNormal(meshBin, camera);
     }
-    m_framebuffer.DeActive(); //< switch to defautl frame buffer
+    m_GPassFB.DeActive(); //< switch to defautl frame buffer
 
 
     //< 
@@ -168,7 +168,7 @@ void Viewer::renderFullScreen()
     glClear(GL_COLOR_BUFFER_BIT);
 
     auto gpassItem = GPassItemFromString(m_picked_GPassItem);
-    auto texID = m_framebuffer.ColorTexture(gpassItem);
+    auto texID = m_GPassFB.ColorTexture(gpassItem);
 
     m_full_screen_Shader.Active();
     m_full_screen_Shader.SetTex2D("u_tex_color_map", texID, 0);
@@ -340,8 +340,8 @@ int Viewer::initWindow()
     zBufferDsc.internalformat = GL_DEPTH_COMPONENT;
 
 
-    //m_framebuffer.Init(m_window_width, m_window_height);
-    m_framebuffer.Init(3, colorBufferDscs, &zBufferDsc);
+    //m_GPassFB.Init(m_window_width, m_window_height);
+    m_GPassFB.Init(3, colorBufferDscs, &zBufferDsc);
 
     glGenVertexArrays(1, &m_empty_vao);
 

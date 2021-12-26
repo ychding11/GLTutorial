@@ -78,7 +78,7 @@ private:
 
 private:
 
-    Framebuffer m_framebuffer;
+    Framebuffer m_GPassFB;
     Shader m_GPassShader{"GPass"};
     Shader m_full_screen_Shader{"full_screen"};
     Shader m_vertex_normal_visualize_shader{"vertex_normal_visualize"};
