@@ -95,12 +95,6 @@ void Viewer::animateCamera(Camera &camera)
 
 void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camera &camera)
 {
-    m_GPassFB.Active();
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     glFrontFace(GL_CCW);
 
     if (m_double_side_lighting)
@@ -126,13 +120,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    renderMeshBin(meshBin, camera);
-    if (m_visualize_normal)
-    {
-        visualizeVertexNormal(meshBin, camera);
-    }
-    m_GPassFB.DeActive(); //< switch to defautl frame buffer
-
+    renderGPass(meshBin, camera);
 
     //< 
     //< The following draw to default frame buffer 
@@ -181,8 +169,14 @@ void Viewer::renderFullScreen()
     glUseProgram(0);
 }
 
-void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
+void Viewer::renderGPass(const MeshBin& meshBin, const Camera& camera)
 {
+    m_GPassFB.Active();
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     glm::mat4 modelMatrix = glm::mat4(1.0);
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
@@ -486,8 +480,6 @@ static void drawUI(Viewer &viewer)
             ImGui::SliderFloat("Clip plane distance", &viewer.m_clip_plane_distance, -0.5f, 0.5f);
             ImGui::Separator();
             ImGui::Checkbox("Double side lighting", &viewer.m_double_side_lighting);
-            ImGui::Separator();
-            ImGui::Checkbox("Visualize normal", &viewer.m_visualize_normal);
             ImGui::Separator();
             if (viewer.m_visualize_normal)
             {
