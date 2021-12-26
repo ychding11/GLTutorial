@@ -169,8 +169,6 @@ void Viewer::renderFullScreen()
 
     auto gpassItem = GPassItemFromString(m_picked_GPassItem);
     auto texID = m_framebuffer.ColorTexture(gpassItem);
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture(gpassItem));
 
     m_full_screen_Shader.Active();
     m_full_screen_Shader.SetTex2D("u_tex_color_map", texID, 0);
@@ -189,11 +187,11 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
 
-    m_solidWireframeShader.Active();
-    m_solidWireframeShader.SetMat4("M", modelMatrix);
-    m_solidWireframeShader.SetMat4("V", viewMatrix);
-    m_solidWireframeShader.SetMat4("P", projMatrix);
-    m_solidWireframeShader.SetVec3("u_mesh_color", m_mesh_color);
+    m_GPassShader.Active();
+    m_GPassShader.SetMat4("M", modelMatrix);
+    m_GPassShader.SetMat4("V", viewMatrix);
+    m_GPassShader.SetMat4("P", projMatrix);
+    m_GPassShader.SetVec3("u_mesh_color", m_mesh_color);
     for (int i = 0; i < meshBin.size(); ++i)
     {
         glBindVertexArray( meshBin.vao(i) );
@@ -231,7 +229,7 @@ void Viewer::renderLight(Light& light, const Camera& camera)
 
 void Viewer::initOpenGLShaders()
 {
-    m_solidWireframeShader.Init(
+    m_GPassShader.Init(
         "shaders/ssao.vs.glsl",
         "shaders/ssao.fs.glsl",
         nullptr,
