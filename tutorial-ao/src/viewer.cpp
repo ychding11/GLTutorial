@@ -151,6 +151,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 //< each draw maintains its own state
 void Viewer::renderFullScreen()
 {
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "Debug_Pass");
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDisable(GL_DEPTH_TEST);  //< disable z depth
     glClear(GL_COLOR_BUFFER_BIT);
@@ -167,10 +168,12 @@ void Viewer::renderFullScreen()
     GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
     glBindVertexArray(0);
     glUseProgram(0);
+    glPopDebugGroup();
 }
 
 void Viewer::renderGPass(const MeshBin& meshBin, const Camera& camera)
 {
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "Geometry_Pass");
     m_GPassFB.Active();
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -193,6 +196,7 @@ void Viewer::renderGPass(const MeshBin& meshBin, const Camera& camera)
     }
     glBindVertexArray(0);
     glUseProgram(0);
+    glPopDebugGroup();
 }
 
 
