@@ -332,20 +332,13 @@ void Viewer::SavePng(const std::string filename)
 }
 void Viewer::SaveScreen(const std::string filename)
 {
-    /**
+    /*
      * https://www.khronos.org/opengl/wiki/Framebuffer#Read_color_buffer
      *
-     **/
+     */
     const int kSize = m_window_height * m_window_width;
     std::vector<GLfloat> pixels((size_t)kSize * 3);
-    glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
-    GLenum errorCheckValue = glGetError();
-    if (errorCheckValue != GL_NO_ERROR)
-    {
-        //fprintf(stderr, "Error: Could not read color buffer: %s\n", gluErrorString(errorCheckValue));
-        Err("Could not read color buffer: {}", gluErrorString(errorCheckValue));
-    }
-
+    GL_API_CHECK( glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data()) );
     stbi_write_tga(filename.c_str(), m_window_width, m_window_height, 3, pixels.data()); //< only 3 channels
     Log("save color buffer into : {}", filename);
 }
