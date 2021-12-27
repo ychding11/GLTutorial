@@ -69,19 +69,19 @@ void Viewer::animateCamera(Camera &camera)
         }
         case 2:
         {
-            float scale = -0.01;
+            float scale = -0.01f;
             camera.zoom(scale); 
             break;
         }
         case 3:
         {
-            float scale = 0.01;
+            float scale = 0.01f;
             camera.zoom(scale); 
             break;
         }
         case 4:
         {
-            glm::vec2 delta{ myRandom() * 0.05, myRandom() * 0.04 };
+            glm::vec2 delta{ myRandom() * 0.05f, myRandom() * 0.04f };
             camera.rotate(delta);
             break;
         }
