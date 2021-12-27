@@ -87,8 +87,8 @@ private:
 private:
 
     Framebuffer m_GPassFB;
-    Shader m_GPassShader{"GPass"};
-    Shader m_full_screen_Shader{"full_screen"};
+    Shader m_GPassShader{"GPass Shader"};
+    Shader m_debugShader{"Full Screen Debug Shader"};
 
     std::unique_ptr<Camera>     m_camera;
 

@@ -159,10 +159,10 @@ void Viewer::renderFullScreen()
     auto gpassItem = GPassItemFromString(m_picked_GPassItem);
     auto texID = m_GPassFB.ColorTexture(gpassItem);
 
-    m_full_screen_Shader.Active();
-    m_full_screen_Shader.SetTex2D("u_tex_color_map", texID, 0);
-    m_full_screen_Shader.SetInt("u_tex_color_map", 0);
-    m_full_screen_Shader.SetInt("u_pp_filter", m_filter_type); 
+    m_debugShader.Active();
+    m_debugShader.SetTex2D("u_tex_color_map", texID, 0);
+    m_debugShader.SetInt("u_tex_color_map", 0);
+    m_debugShader.SetInt("u_pp_filter", m_filter_type); 
 
     glBindVertexArray(m_empty_vao);
     GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
@@ -210,7 +210,7 @@ void Viewer::initOpenGLShaders()
         nullptr
         );
 
-    m_full_screen_Shader.Init(
+    m_debugShader.Init(
         "shaders/FullScreen.vs.glsl",
         "shaders/FullScreen.fs.glsl"
     );
