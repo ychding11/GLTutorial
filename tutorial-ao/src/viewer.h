@@ -24,6 +24,11 @@ class MeshBin;
 
 class Viewer;
 
+inline float lerp(float a, float b, float f)
+{
+    return a + f * (b - a);
+}
+
 void drawUI(Viewer &viewer);
 
 MyEnum(PPFilter, None,Sharpen,Blur);
@@ -73,6 +78,8 @@ private:
     DisplayOption &m_option;
 
     GLuint m_empty_vao{0}; //< in core profile, we need an explict empty vao, 0 means nothing
+
+    GLuint m_ssaoNoiseTex{0};
 
     friend void drawUI(Viewer &viewer);
 
@@ -127,4 +134,5 @@ private:
     void visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera);
     void renderLight(Light& light, const Camera& camera);
     void renderFullScreen();
+    void generateNoiseTexture();
 };
