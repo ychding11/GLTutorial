@@ -80,7 +80,8 @@ private:
     GLuint m_empty_vao{0}; //< in core profile, we need an explict empty vao, 0 means nothing
 
     GLuint m_ssaoNoiseTex{0};
-
+    std::vector<glm::vec3> m_ssaoSamples;
+    
     friend void drawUI(Viewer &viewer);
 
 private:
@@ -135,4 +136,5 @@ private:
     void renderLight(Light& light, const Camera& camera);
     void renderFullScreen();
     void generateNoiseTexture();
+    void generateSSAOSamples();
 };

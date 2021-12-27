@@ -358,9 +358,9 @@ void Viewer::SaveImageSequence(const std::string dir)
     m_sequence_count++;
 }
 
-void generateSSAOSamples(std::vector<glm::vec3> &samples)
+void Viewer::generateSSAOSamples()
 {
-    for (unsigned int i = 0; i < 64; ++i)
+    for (auto i = 0; i < 64; ++i)
     {
         glm::vec3 sample{myRandom(), myRandom(), 0.5f * (myRandom() + 1.f)};
         sample = glm::normalize(sample);
@@ -368,7 +368,7 @@ void generateSSAOSamples(std::vector<glm::vec3> &samples)
         float scale = float(i) / 64.0f;
         scale = lerp(0.1f, 1.0f, scale * scale);
         sample *= scale;
-        samples.push_back(sample);
+        m_ssaoSamples.push_back(sample);
     }
 }
 
@@ -377,8 +377,7 @@ void Viewer::generateNoiseTexture()
     std::vector<glm::vec3> noises;
     for (unsigned int i = 0; i < 16; i++)
     {
-        glm::vec3 noise{myRandom(), myRandom(), 0.0f}; 
-        noises.push_back(noise);
+        noises.emplace_back(myRandom(), myRandom(), 0.0f);
     }
     glGenTextures(1, &m_ssaoNoiseTex);
     glBindTexture(GL_TEXTURE_2D, m_ssaoNoiseTex);
