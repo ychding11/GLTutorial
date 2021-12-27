@@ -203,8 +203,8 @@ void Viewer::renderGPass(const MeshBin& meshBin, const Camera& camera)
 void Viewer::initOpenGLShaders()
 {
     m_GPassShader.Init(
-        "shaders/ssao.vs.glsl",
-        "shaders/ssao.fs.glsl",
+        "shaders/gpass.vs.glsl",
+        "shaders/gpass.fs.glsl",
         nullptr,
         nullptr,
         nullptr

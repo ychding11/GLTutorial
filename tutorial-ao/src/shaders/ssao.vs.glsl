@@ -1,30 +1,17 @@
 #version 440 core
 
-struct VertexOut
-{
-    vec3 positionWorld;
-    vec3 normalWorld;
-    vec4 color;
-};
 
-layout(location = 0) in vec3 aPosition; //vertex attribute
-layout(location = 1) in vec3 aNormal;  //vertex attribute
+out vec2 texCoord;
 
-out VertexOut  vdata;
 
-uniform mat4 M;
-uniform mat4 V;
-uniform mat4 P;
-uniform vec3 u_mesh_color;
-
-//< Lighting in Pixel shader, World Space.
+//< 
+//< https://rauwendaal.net/2014/06/14/rendering-a-screen-covering-triangle-in-opengl/ 
+//< 
 void main()
 {
-    gl_Position = P * V * M * vec4(aPosition, 1.f);
-
-    vec3 positionWorld = (M * vec4(aPosition, 1.f)).xyz;
-
-    vdata.positionWorld = positionWorld;
-    vdata.normalWorld   = mat3(transpose(inverse(M))) * aNormal;
-    vdata.color = vec4(u_mesh_color, 1.0f);
+    float x = -1.0 + float((gl_VertexID & 1) << 2);
+    float y = -1.0 + float((gl_VertexID & 2) << 1);
+    texCoord.x = (x+1.0)*0.5;
+    texCoord.y = (y+1.0)*0.5;
+    gl_Position = vec4(x, y, 0, 1);
 }
