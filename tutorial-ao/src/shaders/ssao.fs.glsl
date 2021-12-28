@@ -30,6 +30,9 @@ void main()
     // create TBN change-of-basis matrix: from tangent-space to view-space
     vec3 tangent = normalize(randomVec - normal * dot(randomVec, normal));
     vec3 bitangent = cross(normal, tangent);
+    //<
+    //< OpenGL uses column-major matrices
+    //<
     mat3 TBN = mat3(tangent, bitangent, normal);
 
     // iterate over the sample kernel and calculate occlusion factor

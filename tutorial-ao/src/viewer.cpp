@@ -125,7 +125,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     //< 
     //< The following draw to default frame buffer 
     //< 
-    renderFullScreen();
+    renderDebug();
 
     //< capture color buffer here
     if (m_capture_colorbuffer)
@@ -149,7 +149,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 }
 
 //< each draw maintains its own state
-void Viewer::renderFullScreen()
+void Viewer::renderDebug()
 {
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "Debug_Pass");
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

@@ -134,7 +134,7 @@ private:
     void renderGPass(const MeshBin& meshBin, const Camera& camera);
     void visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera);
     void renderLight(Light& light, const Camera& camera);
-    void renderFullScreen();
+    void renderDebug();
     void generateNoiseTexture();
     void generateSSAOSamples();
 };
