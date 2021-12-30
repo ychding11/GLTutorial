@@ -178,15 +178,13 @@ void Viewer::renderSsaoPass(const Camera& camera)
     glDisable(GL_DEPTH_TEST);  //< disable z depth
     glClear(GL_COLOR_BUFFER_BIT);
 
-    auto gpassItem = GPassItemFromString(m_picked_GPassItem);
-    auto texIDPos = m_GPassFB.ColorTexture(gpassItem);
-    auto texIDNormal = m_GPassFB.ColorTexture(gpassItem);
-    auto texIDNoise = m_GPassFB.ColorTexture(gpassItem);
+    auto texIDPos = m_GPassFB.ColorTexture(Position);
+    auto texIDNormal = m_GPassFB.ColorTexture(Normal);
 
     m_ssaoShader.Active();
     m_ssaoShader.SetTex2D("texPosition", texIDPos, 0);
     m_ssaoShader.SetTex2D("texNormal", texIDNormal, 1);
-    m_ssaoShader.SetTex2D("texNoise", texIDNoise, 2);
+    m_ssaoShader.SetTex2D("texNoise", m_ssaoNoiseTex, 2);
     m_GPassShader.SetMat4("P", camera.projMatrix());
     m_ssaoShader.SetInt("u_tex_color_map", 0);
 
