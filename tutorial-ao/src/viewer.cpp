@@ -171,6 +171,30 @@ void Viewer::renderDebug()
     glPopDebugGroup();
 }
 
+void Viewer::renderSsaoPass()
+{
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "SSAO_Pass");
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDisable(GL_DEPTH_TEST);  //< disable z depth
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    auto gpassItem = GPassItemFromString(m_picked_GPassItem);
+    auto texID = m_GPassFB.ColorTexture(gpassItem);
+
+    m_ssaoShader.Active();
+    m_ssaoShader.SetTex2D("texPosition", texID, 0);
+    m_ssaoShader.SetTex2D("texNormal", texID, 1);
+    m_ssaoShader.SetTex2D("texNoise", texID, 2);
+    m_ssaoShader.SetInt("u_tex_color_map", 0);
+    m_ssaoShader.SetInt("u_pp_filter", m_filter_type);
+
+    glBindVertexArray(m_empty_vao);
+    GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
+    glBindVertexArray(0);
+    glUseProgram(0);
+    glPopDebugGroup();
+}
+
 void Viewer::renderGPass(const MeshBin& meshBin, const Camera& camera)
 {
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "Geometry_Pass");

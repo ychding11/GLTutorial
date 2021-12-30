@@ -3,7 +3,7 @@
 
 out float FragColor;
 
-in vec2 TexCoords;
+in vec2 texCoord;
 
 uniform sampler2D texPosition;
 uniform sampler2D texNormal;
@@ -23,9 +23,9 @@ const vec2 noiseScale = vec2(1280/4.0, 720.0/4.0);
 
 void main()
 {
-    vec3 fragPos = texture(texPosition, TexCoords).xyz;
-    vec3 normal  = normalize(texture(texNormal, TexCoords).rgb);
-    vec3 randomVec = normalize(texture(texNoise, TexCoords * noiseScale).xyz);
+    vec3 fragPos = texture(texPosition, texCoord).xyz;
+    vec3 normal  = normalize(texture(texNormal, texCoord).rgb);
+    vec3 randomVec = normalize(texture(texNoise, texCoord * noiseScale).xyz);
 
     // create TBN change-of-basis matrix: from tangent-space to view-space
     vec3 tangent = normalize(randomVec - normal * dot(randomVec, normal));
