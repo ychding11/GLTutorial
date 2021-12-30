@@ -136,7 +136,7 @@ private:
     void visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera);
     void renderLight(Light& light, const Camera& camera);
     void renderDebug();
-    void renderSsaoPass();
+    void renderSsaoPass(const Camera& camera);
     void generateNoiseTexture();
     void generateSSAOSamples();
 };
