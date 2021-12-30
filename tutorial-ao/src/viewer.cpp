@@ -214,6 +214,10 @@ void Viewer::initOpenGLShaders()
         "shaders/FullScreen.vs.glsl",
         "shaders/FullScreen.fs.glsl"
     );
+    m_ssaoShader.Init(
+        "shaders/ssao.vs.glsl",
+        "shaders/ssao.fs.glsl"
+    );
 
 }
 

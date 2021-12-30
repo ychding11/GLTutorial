@@ -89,6 +89,7 @@ private:
     Framebuffer m_GPassFB;
     Shader m_GPassShader{"GPass Shader"};
     Shader m_debugShader{"Full Screen Debug Shader"};
+    Shader m_ssaoShader{"SSAO Shader"};
 
     std::unique_ptr<Camera>     m_camera;
 
