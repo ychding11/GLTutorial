@@ -121,11 +121,11 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     }
 
     renderGPass(meshBin, camera);
-
+    renderSsaoPass(camera);
     //< 
     //< The following draw to default frame buffer 
     //< 
-    renderDebug();
+    //renderDebug();
 
     //< capture color buffer here
     if (m_capture_colorbuffer)
@@ -185,8 +185,10 @@ void Viewer::renderSsaoPass(const Camera& camera)
     m_ssaoShader.SetTex2D("texPosition", texIDPos, 0);
     m_ssaoShader.SetTex2D("texNormal", texIDNormal, 1);
     m_ssaoShader.SetTex2D("texNoise", m_ssaoNoiseTex, 2);
-    m_GPassShader.SetMat4("P", camera.projMatrix());
-    m_ssaoShader.SetInt("u_tex_color_map", 0);
+    m_ssaoShader.SetMat4("P", camera.projMatrix());
+    for (unsigned int i = 0; i < 64; ++i)
+        m_ssaoShader.SetVec3("samples[" + std::to_string(i) + "]", m_ssaoSamples[i]);
+    //m_ssaoShader.SetInt("u_tex_color_map", 0);
 
     glBindVertexArray(m_empty_vao);
     GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
@@ -338,6 +340,8 @@ int Viewer::initWindow()
 
     glGenVertexArrays(1, &m_empty_vao);
 
+    generateSSAOSamples();
+    generateNoiseTexture();
     return 0;
 }
 
