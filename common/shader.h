@@ -65,7 +65,7 @@ public:
     // ------------------------------------------------------------------------
     void SetTex2D(const std::string& name, GLuint texID, int slot) const
     {
-        glActiveTexture(GL_TEXTURE0); //< always slot 0 ?
+        glActiveTexture(GL_TEXTURE0 + slot); //< always slot 0 ?
         glBindTexture(GL_TEXTURE_2D, texID);
         glUniform1i(glGetUniformLocation(m_programID, name.c_str()), slot);
     }
