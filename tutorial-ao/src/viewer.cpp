@@ -340,17 +340,17 @@ int Viewer::initWindow()
     //m_GPassFB.Init(m_window_width, m_window_height);
     m_GPassFB.Init(3, colorBufferDscs, &zBufferDsc);
 
-    colorBufferDscs[0].attachment = GL_COLOR_ATTACHMENT0;
-    colorBufferDscs[0].internalformat = GL_RED;
-    colorBufferDscs[0].width  = m_window_width;
-    colorBufferDscs[0].height = m_window_height;
-    colorBufferDscs[0].border = 0;
-    colorBufferDscs[0].format = GL_RED;
-    colorBufferDscs[0].type = GL_FLOAT;
-    colorBufferDscs[0].mag_filter = GL_NEAREST;
-    colorBufferDscs[0].min_filter = GL_NEAREST;
-    colorBufferDscs[0].warp_s = GL_CLAMP_TO_EDGE;
-    colorBufferDscs[0].warp_t = GL_CLAMP_TO_EDGE;
+    //colorBufferDscs[0].attachment = GL_COLOR_ATTACHMENT0;
+    //colorBufferDscs[0].internalformat = GL_RED;
+    //colorBufferDscs[0].width  = m_window_width;
+    //colorBufferDscs[0].height = m_window_height;
+    //colorBufferDscs[0].border = 0;
+    //colorBufferDscs[0].format = GL_RED;
+    //colorBufferDscs[0].type = GL_FLOAT;
+    //colorBufferDscs[0].mag_filter = GL_NEAREST;
+    //colorBufferDscs[0].min_filter = GL_NEAREST;
+    //colorBufferDscs[0].warp_s = GL_CLAMP_TO_EDGE;
+    //colorBufferDscs[0].warp_t = GL_CLAMP_TO_EDGE;
     m_SsaoFB.Init(1, colorBufferDscs, &zBufferDsc);
 
     glGenVertexArrays(1, &m_empty_vao);

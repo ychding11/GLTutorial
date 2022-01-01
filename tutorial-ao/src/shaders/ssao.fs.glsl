@@ -1,7 +1,9 @@
 
 #version 440 core
 
-out float FragColor;
+//out float FragColor;
+out vec4 FragColor; //< workaround 
+
 
 in vec2 texCoord;
 
@@ -54,5 +56,6 @@ void main()
     }
     occlusion = 1.0f - (occlusion / sampleNum);
     
-    FragColor = occlusion;
+    //FragColor = occlusion;
+    FragColor = vec4(vec3(occlusion), 1.0);
 }
