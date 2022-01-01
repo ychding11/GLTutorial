@@ -69,7 +69,8 @@ In 2007, Crytek published a technique called screen-space ambient occlusion (SSA
 
 ## SSAO Texture Visualization
 
-Default framebuffer is RGBA. But ssao texture is a single channel texture.
+- Problems : Default framebuffer format is RGBA. But ssao texture is a single channel texture.
+- Solution : It is a workaround, duplicate ssao in RGB channels.
 
 ## Reference
 
