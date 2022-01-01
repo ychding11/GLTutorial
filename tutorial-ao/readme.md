@@ -66,7 +66,10 @@ In 2007, Crytek published a technique called screen-space ambient occlusion (SSA
   void glPopDebugGroup(void);
   ```
 
-  
+
+## SSAO Texture Visualization
+
+Default framebuffer is RGBA. But ssao texture is a single channel texture.
 
 ## Reference
 
