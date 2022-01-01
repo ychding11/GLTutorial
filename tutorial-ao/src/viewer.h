@@ -87,6 +87,7 @@ private:
 private:
 
     Framebuffer m_GPassFB;
+    Framebuffer m_SsaoFB;
     Shader m_GPassShader{"GPass Shader"};
     Shader m_debugShader{"Full Screen Debug Shader"};
     Shader m_ssaoShader{"SSAO Shader"};
