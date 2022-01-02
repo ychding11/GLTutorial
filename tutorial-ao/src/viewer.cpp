@@ -239,8 +239,8 @@ void Viewer::initOpenGLShaders()
         );
 
     m_debugShader.Init(
-        "shaders/FullScreen.vs.glsl",
-        "shaders/FullScreen.fs.glsl"
+        "shaders/debug.vs.glsl",
+        "shaders/debug.fs.glsl"
     );
     m_ssaoShader.Init(
         "shaders/ssao.vs.glsl",
