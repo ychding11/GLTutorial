@@ -33,7 +33,7 @@ void drawUI(Viewer &viewer);
 
 MyEnum(PPFilter, None,Sharpen,Blur);
 
-MyEnum(GPassItem,Position,Normal,Albedo);
+MyEnum(GPassItem,Position,Normal,Albedo,SSAO);
 
 
 //<

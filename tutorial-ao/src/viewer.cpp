@@ -157,8 +157,16 @@ void Viewer::renderDebug()
     glClear(GL_COLOR_BUFFER_BIT);
 
     auto gpassItem = GPassItemFromString(m_picked_GPassItem);
-    //auto texID = m_GPassFB.ColorTexture(gpassItem);
-    auto texID = m_SsaoFB.ColorTexture(0);
+    GLuint texID = 0;
+    if (gpassItem == SSAO)
+    {
+        texID = m_SsaoFB.ColorTexture(0);
+    }
+    else
+    {
+        texID = m_GPassFB.ColorTexture(gpassItem);
+    }
+
 
     m_debugShader.Active();
     m_debugShader.SetTex2D("u_tex_color_map", texID, 0);
@@ -190,7 +198,6 @@ void Viewer::renderSsaoPass(const Camera& camera)
     m_ssaoShader.SetMat4("P", camera.projMatrix());
     for (unsigned int i = 0; i < 64; ++i)
         m_ssaoShader.SetVec3("samples[" + std::to_string(i) + "]", m_ssaoSamples[i]);
-    //m_ssaoShader.SetInt("u_tex_color_map", 0);
 
     glBindVertexArray(m_empty_vao);
     GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
