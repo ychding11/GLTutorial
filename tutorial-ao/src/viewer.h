@@ -112,7 +112,6 @@ public:
             m_window_title = title;
         initWindow();
         initOpenGLShaders();
-        initMaterials();
     }
 
     void SetModel(std::string modelPath)
@@ -130,7 +129,6 @@ private:
     std::string m_objPath;
     int initWindow(void);
     void initOpenGLShaders(void);
-    void initMaterials(void);
     void render(const MeshBin &meshBin, SimpleMesh& simplemesh, const Camera &camera);
     void animateCamera(Camera &camera);
     void renderGPass(const MeshBin& meshBin, const Camera& camera);

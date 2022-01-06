@@ -148,7 +148,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     m_frame_id++;
 }
 
-//< each draw maintains its own state
+//< render texture to screen
 void Viewer::renderDebug()
 {
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "Debug_Pass");
@@ -254,10 +254,6 @@ void Viewer::initOpenGLShaders()
         "shaders/ssao.fs.glsl"
     );
 
-}
-
-void Viewer::initMaterials(void)
-{
 }
 
 int Viewer::initWindow()
