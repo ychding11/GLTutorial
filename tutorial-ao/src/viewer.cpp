@@ -317,6 +317,7 @@ int Viewer::initWindow()
         throw std::runtime_error("Failed to initialize GLEW !");
         return -1;
     }
+    CheckOpenGLError("", __FILE__, __LINE__);
     ColorBufferDsc colorBufferDscs[3];
     ZBufferDsc  zBufferDsc;
 
@@ -381,7 +382,7 @@ int Viewer::initWindow()
     //colorBufferDscs[0].warp_t = GL_CLAMP_TO_EDGE;
     m_SsaoFB.Init(1, colorBufferDscs, &zBufferDsc);
 
-    glGenVertexArrays(1, &m_empty_vao);
+    GL_API_CHECK( glGenVertexArrays(1, &m_empty_vao) );
 
     generateSSAOSamples();
     generateNoiseTexture();
