@@ -28,9 +28,9 @@ void drawOverlay(RenderSetting &setting);
 void drawHelp(RenderSetting &setting);
 
 
-void PostProcessing(GLuint srcTex, GLuint dstTex, Shader& shader)
+void PostProcessing(GLuint srcTex, GLuint dstTex, const Shader& shader, std::string label = "PostProcessing")
 {
-    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "PostProcessing_Pass");
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, label.c_str());
         GLuint m_empty_vao{ 0 }; //< in core profile, we need an explict empty vao, 0 means nothing
         glGenVertexArrays(1, &m_empty_vao);
         GLuint m_framebuffer{ 0 };
@@ -44,32 +44,30 @@ void PostProcessing(GLuint srcTex, GLuint dstTex, Shader& shader)
 
         shader.Active();
         shader.SetTex2D("u_tex_src_map", srcTex, 0);
-        shader.SetInt("u_tex_color_map", 0);
 
         GL_API_CHECK( glBindVertexArray(m_empty_vao) );
         GL_API_CHECK( glDrawArrays(GL_TRIANGLES, 0, 3) );
         glBindVertexArray(0);
-        glUseProgram(0);
+        shader.Deactive();
         glDeleteVertexArrays(1, &m_empty_vao);
         glDeleteFramebuffers(1, &m_framebuffer); //< suppose color attachment is valid after FB object deletion
     glPopDebugGroup();
 }
-void PresentTex(GLuint srcTex, Shader& shader)
+void PresentTex(GLuint srcTex, const Shader& shader, std::string label = "PresentTexture")
 {
-    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "PresentTexture");
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, label.c_str());
+        GLuint m_empty_vao{ 0 }; //< in core profile, we need an explict empty vao, 0 means nothing
+        glGenVertexArrays(1, &m_empty_vao);
         glBindFramebuffer(GL_FRAMEBUFFER, 0); //< to display 
         glClear(GL_COLOR_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST);  //< disable z depth
 
         shader.Active();
         shader.SetTex2D("u_tex_color_map", srcTex, 0);
-
-        GLuint m_empty_vao{ 0 }; //< in core profile, we need an explict empty vao, 0 means nothing
-        glGenVertexArrays(1, &m_empty_vao);
         glBindVertexArray(m_empty_vao);
         GL_API_CHECK(glDrawArrays(GL_TRIANGLES, 0, 3));
         glBindVertexArray(0);
-        glUseProgram(0);
+        shader.Deactive();
         glDeleteVertexArrays(1, &m_empty_vao);
     glPopDebugGroup();
 }
@@ -215,26 +213,25 @@ void Viewer::renderDebug()
 void Viewer::renderSsaoPass(const Camera& camera)
 {
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "SSAO_Pass");
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    m_SsaoFB.Active();
-    glDisable(GL_DEPTH_TEST);  //< disable z depth
-    glClear(GL_COLOR_BUFFER_BIT);
+        m_SsaoFB.Active();
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST);  //< disable z depth
 
-    auto texIDPos = m_GPassFB.ColorTexture(Position);
-    auto texIDNormal = m_GPassFB.ColorTexture(Normal);
+        auto texIDPos = m_GPassFB.ColorTexture(Position);
+        auto texIDNormal = m_GPassFB.ColorTexture(Normal);
 
-    m_ssaoShader.Active();
-    m_ssaoShader.SetTex2D("texPosition", texIDPos, 0);
-    m_ssaoShader.SetTex2D("texNormal", texIDNormal, 1);
-    m_ssaoShader.SetTex2D("texNoise", m_ssaoNoiseTex, 2);
-    m_ssaoShader.SetMat4("P", camera.projMatrix());
-    for (unsigned int i = 0; i < 64; ++i)
-        m_ssaoShader.SetVec3("samples[" + std::to_string(i) + "]", m_ssaoSamples[i]);
+        m_ssaoShader.Active();
+        m_ssaoShader.SetTex2D("texPosition", texIDPos, 0);
+        m_ssaoShader.SetTex2D("texNormal", texIDNormal, 1);
+        m_ssaoShader.SetTex2D("texNoise", m_ssaoNoiseTex, 2);
+        m_ssaoShader.SetMat4("P", camera.projMatrix());
+        for (unsigned int i = 0; i < 64; ++i)
+            m_ssaoShader.SetVec3("samples[" + std::to_string(i) + "]", m_ssaoSamples[i]);
 
-    glBindVertexArray(m_empty_vao);
-    GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
-    glBindVertexArray(0);
-    glUseProgram(0);
+        glBindVertexArray(m_empty_vao);
+        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
+        glBindVertexArray(0);
+        glUseProgram(0);
     glPopDebugGroup();
 }
 

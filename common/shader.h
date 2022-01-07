@@ -56,9 +56,13 @@ public:
 
     // activate the shader
     // ------------------------------------------------------------------------
-    void Active()
+    void Active() const 
     {
         glUseProgram(m_programID);
+    }
+    void Deactive() const 
+    {
+        glUseProgram(0);
     }
 
     // utility uniform functions
