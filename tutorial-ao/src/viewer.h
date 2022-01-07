@@ -33,7 +33,7 @@ void drawUI(Viewer &viewer);
 
 MyEnum(PPFilter, None,Sharpen,Blur);
 
-MyEnum(GPassItem,Position,Normal,Albedo,SSAO);
+MyEnum(TexItem,Position,Normal,Albedo,SSAO);
 
 
 //<
@@ -72,7 +72,7 @@ private:
     std::string m_picked_pp{ "Blur" };
     PPFilter m_filter_type{Blur};
 
-    std::string m_picked_GPassItem{ "Albedo" };
+    std::string m_pickedTexItem{ "Albedo" };
 
     RenderSetting &m_setting;
     DisplayOption &m_option;

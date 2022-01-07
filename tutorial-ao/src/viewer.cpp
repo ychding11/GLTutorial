@@ -199,13 +199,8 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 //< render texture to screen
 void Viewer::renderDebug()
 {
-    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "Debug_Pass");
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glDisable(GL_DEPTH_TEST);  //< disable z depth
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    auto gpassItem = GPassItemFromString(m_picked_GPassItem);
     GLuint texID = 0;
+    auto gpassItem = TexItemFromString(m_pickedTexItem);
     if (gpassItem == SSAO)
     {
         texID = m_SsaoFB.ColorTexture(0);
@@ -214,16 +209,7 @@ void Viewer::renderDebug()
     {
         texID = m_GPassFB.ColorTexture(gpassItem);
     }
-
-
-    m_debugShader.Active();
-    m_debugShader.SetTex2D("u_tex_color_map", texID, 0);
-
-    glBindVertexArray(m_empty_vao);
-    GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
-    glBindVertexArray(0);
-    glUseProgram(0);
-    glPopDebugGroup();
+    PresentTex(texID, m_debugShader);
 }
 
 void Viewer::renderSsaoPass(const Camera& camera)
@@ -592,7 +578,7 @@ static void drawUI(Viewer &viewer)
                 viewer.m_filter_type = PPFilterFromString(viewer.m_picked_pp);
             }
             ImGui::Separator();
-            if (drawDropList("GPass Item", GPassItemStrVector, viewer.m_picked_GPassItem))
+            if (drawDropList("GPass Item", TexItemStrVector, viewer.m_pickedTexItem))
             {
             }
             ImGui::Separator();
