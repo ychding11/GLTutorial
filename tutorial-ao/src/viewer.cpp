@@ -217,49 +217,45 @@ void Viewer::renderSsaoPass(const Camera& camera)
         glClear(GL_COLOR_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST);  //< disable z depth
 
-        auto texIDPos = m_GPassFB.ColorTexture(Position);
-        auto texIDNormal = m_GPassFB.ColorTexture(Normal);
+        auto positionTex = m_GPassFB.ColorTexture(Position);
+        auto normalTex   = m_GPassFB.ColorTexture(Normal);
 
         m_ssaoShader.Active();
-        m_ssaoShader.SetTex2D("texPosition", texIDPos, 0);
-        m_ssaoShader.SetTex2D("texNormal", texIDNormal, 1);
+        m_ssaoShader.SetTex2D("texPosition", positionTex, 0);
+        m_ssaoShader.SetTex2D("texNormal", normalTex, 1);
         m_ssaoShader.SetTex2D("texNoise", m_ssaoNoiseTex, 2);
         m_ssaoShader.SetMat4("P", camera.projMatrix());
         for (unsigned int i = 0; i < 64; ++i)
             m_ssaoShader.SetVec3("samples[" + std::to_string(i) + "]", m_ssaoSamples[i]);
 
-        glBindVertexArray(m_empty_vao);
+        GL_API_CHECK( glBindVertexArray(m_empty_vao) );
         GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
-        glBindVertexArray(0);
-        glUseProgram(0);
     glPopDebugGroup();
 }
 
 void Viewer::renderGPass(const MeshBin& meshBin, const Camera& camera)
 {
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "Geometry_Pass");
-    m_GPassFB.Active();
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        m_GPassFB.Active();
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 modelMatrix = glm::mat4(1.0);
-    glm::mat4 viewMatrix = camera.viewMatrix();
-    glm::mat4 projMatrix = camera.projMatrix();
+        glm::mat4 modelMatrix = glm::mat4(1.0);
+        glm::mat4 viewMatrix = camera.viewMatrix();
+        glm::mat4 projMatrix = camera.projMatrix();
 
-    m_GPassShader.Active();
-    m_GPassShader.SetMat4("M", modelMatrix);
-    m_GPassShader.SetMat4("V", viewMatrix);
-    m_GPassShader.SetMat4("P", projMatrix);
-    m_GPassShader.SetVec3("u_mesh_color", m_mesh_color);
-    for (int i = 0; i < meshBin.size(); ++i)
-    {
-        glBindVertexArray( meshBin.vao(i) );
-        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
-    }
-    glBindVertexArray(0);
-    glUseProgram(0);
+        m_GPassShader.Active();
+        m_GPassShader.SetMat4("M", modelMatrix);
+        m_GPassShader.SetMat4("V", viewMatrix);
+        m_GPassShader.SetMat4("P", projMatrix);
+        m_GPassShader.SetVec3("u_mesh_color", m_mesh_color);
+        for (int i = 0; i < meshBin.size(); ++i)
+        {
+            GL_API_CHECK( glBindVertexArray( meshBin.vao(i) ) );
+            GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
+        }
     glPopDebugGroup();
 }
 
@@ -510,6 +506,9 @@ static void drawUI(Viewer &viewer)
     {
         return;
     }
+    glBindVertexArray(0);
+    glUseProgram(0);
+
     GUI::BeginFrame();
 
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5.0f, 5.0f));
