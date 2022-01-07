@@ -67,12 +67,5 @@ vec3 blur()
 
 void main()
 {
-    if (u_pp_filter == 0) // None
-        FragColor = texture(u_tex_color_map, texCoord);
-    else if (u_pp_filter == 1) // Sharpen
-        FragColor = vec4(sharpen(), 1.0);
-    else if (u_pp_filter == 2) // Blur
-        FragColor = vec4(blur(), 1.0);
-    else 
-        FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    FragColor = texture(u_tex_color_map, texCoord);
 }

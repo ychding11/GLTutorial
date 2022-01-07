@@ -139,3 +139,4 @@ private:
     void generateNoiseTexture();
     void generateSSAOSamples();
 };
+
