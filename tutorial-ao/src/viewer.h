@@ -69,9 +69,6 @@ private:
 
     glm::vec3 m_mesh_color{1.0 };
 
-    std::string m_picked_pp{ "Blur" };
-    PPFilter m_filter_type{Blur};
-
     std::string m_pickedTexItem{ "Albedo" };
 
     RenderSetting &m_setting;

@@ -573,11 +573,6 @@ static void drawUI(Viewer &viewer)
             ImGui::Separator();
             ImGui::Checkbox("Wireframe", &displayOption.wireframe);
             ImGui::Separator();
-            if (drawDropList("PP Filter", PPFilterStrVector, viewer.m_picked_pp))
-            {
-                viewer.m_filter_type = PPFilterFromString(viewer.m_picked_pp);
-            }
-            ImGui::Separator();
             if (drawDropList("GPass Item", TexItemStrVector, viewer.m_pickedTexItem))
             {
             }
