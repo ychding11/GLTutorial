@@ -39,7 +39,6 @@ inline void CheckOpenGLError(const char* stmt, const char* fname, int line)
 #define GL_API_CHECK(stmt) do {                          \
             stmt;                                        \
             CheckOpenGLError(#stmt, __FILE__, __LINE__); \
-			__debugbreak();                              \
         } while (0)
 #else
 #define GL_API_CHECK(stmt) stmt
