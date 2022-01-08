@@ -164,8 +164,8 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 void Viewer::renderFullScreen()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glDisable(GL_DEPTH_TEST);  //< disable z depth
     glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);  //< disable z depth
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture());
@@ -215,18 +215,13 @@ void Viewer::visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera)
     m_vertex_normal_visualize_shader.SetFloat("u_normal_visualize_scale", m_normal_visualize_scale);
     for (int i = 0; i < meshBin.size(); ++i)
     {
-        glBindVertexArray( meshBin.vao(i) );
-        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
+        GL_API_CHECK( glBindVertexArray(meshBin.vao(i)) );
+        GL_API_CHECK( glDrawArrays(GL_TRIANGLES, 0, meshBin.vertex_num(i)) );
     }
 
     glBindVertexArray(0);
     glUseProgram(0);
 }
-
-void Viewer::renderLight(Light& light, const Camera& camera)
-{
-}
-
 
 void Viewer::initOpenGLShaders()
 {
@@ -251,10 +246,6 @@ void Viewer::initOpenGLShaders()
         "shaders/FullScreen.fs.glsl"
     );
 
-}
-
-void Viewer::initMaterials(void)
-{
 }
 
 int Viewer::initWindow()
@@ -317,7 +308,7 @@ void Viewer::SavePng(const std::string filename)
 
     const int kSize = m_window_height * m_window_width;
     std::vector<GLfloat> pixels((size_t)kSize * 3);
-    GL_API_CHECK(glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data()));
+    GL_API_CHECK( glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data()) );
     stbi_flip_vertically_on_write(1);
     stbi_write_png(filename.c_str(), m_window_width, m_window_height, 3, pixels.data(), m_window_width * 3); //< only 3 channels
     Log("save color buffer into : {}", filename.c_str());
@@ -330,11 +321,10 @@ void Viewer::SaveScreen(const std::string filename)
      **/
     const int kSize = m_window_height * m_window_width;
     std::vector<GLfloat> pixels((size_t)kSize * 3);
-    glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+    GL_API_CHECK( glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data()) );
     GLenum errorCheckValue = glGetError();
     if (errorCheckValue != GL_NO_ERROR)
     {
-        //fprintf(stderr, "Error: Could not read color buffer: %s\n", gluErrorString(errorCheckValue));
         Err("Could not read color buffer: {}", gluErrorString(errorCheckValue));
     }
 
