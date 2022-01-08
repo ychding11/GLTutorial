@@ -259,14 +259,14 @@ int Viewer::initWindow()
         glfwTerminate();
         return -1;
     }
-    glfwMakeContextCurrent(m_window); //< pick context of window into current thread
-
-    glfwSwapInterval(1); //< enable vsync
 
     glfwSetCursorPos(m_window, m_window_width / 2.f, m_window_height / 2.f);
     glfwSetKeyCallback(m_window, glfwindow_key_cb);
     glfwSetMouseButtonCallback(m_window, glfwindow_mouseButton_cb);
     glfwSetCursorPosCallback(m_window, glfwindow_mouseMotion_cb);
+
+    glfwMakeContextCurrent(m_window); //< pick context of window into current thread
+    glfwSwapInterval(1); //< enable vsync
 
     glewExperimental = true;
     if(glewInit() != GLEW_OK)
@@ -274,7 +274,11 @@ int Viewer::initWindow()
         throw std::runtime_error("Failed to initialize GLEW !");
         return -1;
     }
-    CheckOpenGLError("", __FILE__, __LINE__);
+
+    //< There are bugs in glewInit(), it would set opengl error code 
+    //< The following is an workaround
+    ClearOpenGLError(__FILE__, __LINE__); 
+
     ColorBufferDsc colorBufferDscs[3];
     ZBufferDsc  zBufferDsc;
 

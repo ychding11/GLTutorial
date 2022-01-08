@@ -278,14 +278,14 @@ int Viewer::initWindow()
         glfwTerminate();
         return -1;
     }
-    glfwMakeContextCurrent(m_window); //< pick context of window into current thread
-
-    glfwSwapInterval(1); //< enable vsync
 
     glfwSetCursorPos(m_window, m_window_width / 2.f, m_window_height / 2.f);
     glfwSetKeyCallback(m_window, glfwindow_key_cb);
     glfwSetMouseButtonCallback(m_window, glfwindow_mouseButton_cb);
     glfwSetCursorPosCallback(m_window, glfwindow_mouseMotion_cb);
+
+    glfwSwapInterval(1); //< enable vsync
+    glfwMakeContextCurrent(m_window); //< pick context of window into current thread
 
     glewExperimental = true;
     if(glewInit() != GLEW_OK)
@@ -293,9 +293,14 @@ int Viewer::initWindow()
         throw std::runtime_error("Failed to initialize GLEW !");
         return -1;
     }
+
+    //< There are bugs in glewInit(), it would set opengl error code 
+    //< The following is an workaround
+    ClearOpenGLError(__FILE__, __LINE__); 
+
     m_framebuffer.Init(m_window_width, m_window_height);
 
-    glGenVertexArrays(1, &m_empty_vao);
+    GL_API_CHECK( glGenVertexArrays(1, &m_empty_vao) );
 
     return 0;
 }

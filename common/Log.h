@@ -25,12 +25,22 @@ namespace Logging
 
 #include <GL/glew.h>
 
+inline void ClearOpenGLError(const char* fname, int line)
+{
+	GLenum err = glGetError();
+	while (err != GL_NO_ERROR)
+	{
+		Log("Clear OpenGL Error: {}, at {}:{} - Clear OpenGl Error !", gluErrorString(err), fname, line);
+		err = glGetError();
+	}
+}
+
 inline void CheckOpenGLError(const char* stmt, const char* fname, int line)
 {
 	GLenum err = glGetError();
 	while (err != GL_NO_ERROR)
 	{
-		Warn("OpenGL error: {}, at {}:{} - {}", gluErrorString(err), fname, line, stmt);
+		Err("OpenGL error: {}, at {}:{} - {}", gluErrorString(err), fname, line, stmt);
 		err = glGetError();
 	}
 }
