@@ -8,9 +8,36 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
+#include <unordered_map>
 #include <Log.h>
 
 #include "shaderUtility.h" 
+enum ShaderParamType
+{
+    Scalar,
+    Vector,
+    Matrix,
+    Tex2D,
+};
+
+//< 1. dynamic memory would incur management overhead
+//< 2. union style design would make the code ugly
+struct ShaderParam
+{
+    std::string name;
+    ShaderParamType type;
+    int demension;
+    int slot{-1};
+    int arraysize{ 1 };
+    void* data{nullptr};
+
+    ~ShaderParam()
+    {
+        delete data; //< delete nullptr is OK
+    }
+};
+ 
+typedef std::unordered_map<std::string, ShaderParam> ShaderParamMap;
 
 class Shader
 {
@@ -18,7 +45,7 @@ private:
     std::string m_name;
     GLuint m_programID{0};
     bool m_initialized{false};
-
+    ShaderParamMap* m_paramMap{nullptr};
 
     GLint uniformLocation(const std::string& name) const
     {
