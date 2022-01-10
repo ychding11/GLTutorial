@@ -12,7 +12,8 @@
 #include <Log.h>
 
 #include "shaderUtility.h" 
-enum ShaderParamType
+
+enum class ShaderParamType
 {
     Scalar,
     Vector,
@@ -92,6 +93,67 @@ public:
     void Deactive() const 
     {
         glUseProgram(0);
+    }
+
+    void Apply() const
+    {
+        for (auto it = m_paramMap.begin(); it != m_paramMap.end(); ++it)
+        {
+            auto param = it->second;
+            auto type = param.type;
+            switch (type)
+            {
+            case ShaderParamType::Scalar:
+            {
+                SetInt(param.name, *(int*)(param.data));
+                break;
+            }
+            case ShaderParamType::Vector:
+            {
+                if (param.demension == 1)
+                {
+
+                }
+                else if (param.demension == 2)
+                {
+
+                }
+                else if (param.demension == 3)
+                {
+
+                }
+                else if (param.demension == 4)
+                {
+
+                }
+
+                break;
+            }
+            case ShaderParamType::Matrix:
+            {
+                if (param.demension == 2)
+                {
+
+                }
+                else if (param.demension == 3)
+                {
+
+                }
+                else if (param.demension == 4)
+                {
+
+                }
+
+                break;
+            }
+            case ShaderParamType::Tex2D:
+            {
+                break;
+            }
+            default :
+                break;
+            }
+        }
     }
 
     // utility uniform functions
