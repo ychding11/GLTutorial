@@ -25,8 +25,8 @@ enum ShaderParamType
 struct ShaderParam
 {
     std::string name;
-    ShaderParamType type;
-    int demension;
+    ShaderParamType type{Scalar};
+    int demension{1};
     int slot{-1};
     int arraysize{ 1 };
     void* data{nullptr};
@@ -41,11 +41,13 @@ typedef std::unordered_map<std::string, ShaderParam> ShaderParamMap;
 
 class Shader
 {
+public:
+    ShaderParamMap m_paramMap;
+
 private:
     std::string m_name;
     GLuint m_programID{0};
     bool m_initialized{false};
-    ShaderParamMap* m_paramMap{nullptr};
 
     GLint uniformLocation(const std::string& name) const
     {

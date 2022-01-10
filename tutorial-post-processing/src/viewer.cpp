@@ -167,11 +167,8 @@ void Viewer::renderFullScreen()
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);  //< disable z depth
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_framebuffer.ColorTexture());
-
     m_full_screen_Shader.Active();
-    m_full_screen_Shader.SetInt("u_tex_color_map", 0);
+    m_full_screen_Shader.SetTex2D("u_tex_color_map", m_framebuffer.ColorTexture(), 0);
     m_full_screen_Shader.SetInt("u_pp_filter", m_filter_type); 
 
     glBindVertexArray(m_empty_vao);
