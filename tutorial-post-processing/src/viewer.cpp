@@ -167,9 +167,20 @@ void Viewer::renderFullScreen()
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);  //< disable z depth
 
+    auto& shaderParam = m_full_screen_Shader.m_paramMap;
+    shaderParam["u_pp_filter"].name = "u_pp_filter";
+    shaderParam["u_pp_filter"].type = ShaderParamType::Scalar;
+    shaderParam["u_pp_filter"].data = new int(m_filter_type);
+
+    shaderParam["u_tex_color_map"].name = "u_tex_color_map";
+    shaderParam["u_tex_color_map"].type = ShaderParamType::Tex2D;
+    shaderParam["u_tex_color_map"].data = new GLuint(m_framebuffer.ColorTexture());
+    shaderParam["u_tex_color_map"].slot = 0;
+
     m_full_screen_Shader.Active();
-    m_full_screen_Shader.SetTex2D("u_tex_color_map", m_framebuffer.ColorTexture(), 0);
-    m_full_screen_Shader.SetInt("u_pp_filter", m_filter_type); 
+    m_full_screen_Shader.Apply();
+    //m_full_screen_Shader.SetTex2D("u_tex_color_map", m_framebuffer.ColorTexture(), 0);
+    //m_full_screen_Shader.SetInt("u_pp_filter", m_filter_type); 
 
     glBindVertexArray(m_empty_vao);
     GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );

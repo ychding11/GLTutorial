@@ -26,7 +26,7 @@ enum class ShaderParamType
 struct ShaderParam
 {
     std::string name;
-    ShaderParamType type{Scalar};
+    ShaderParamType type{ ShaderParamType::Scalar};
     int demension{1};
     int slot{-1};
     int arraysize{ 1 };
@@ -99,8 +99,8 @@ public:
     {
         for (auto it = m_paramMap.begin(); it != m_paramMap.end(); ++it)
         {
-            auto param = it->second;
-            auto type = param.type;
+            auto &param = it->second;
+            auto &type = param.type;
             switch (type)
             {
             case ShaderParamType::Scalar:
