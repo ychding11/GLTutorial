@@ -167,6 +167,7 @@ void Viewer::renderFullScreen()
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);  //< disable z depth
 
+    //memory leak here
     auto& shaderParam = m_full_screen_Shader.m_paramMap;
     shaderParam["u_pp_filter"].name = "u_pp_filter";
     shaderParam["u_pp_filter"].type = ShaderParamType::Scalar;
@@ -182,8 +183,8 @@ void Viewer::renderFullScreen()
     //m_full_screen_Shader.SetTex2D("u_tex_color_map", m_framebuffer.ColorTexture(), 0);
     //m_full_screen_Shader.SetInt("u_pp_filter", m_filter_type); 
 
-    glBindVertexArray(m_empty_vao);
-    GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, 3 ) );
+    GL_API_CHECK( glBindVertexArray(m_empty_vao) );
+    GL_API_CHECK( glDrawArrays(GL_TRIANGLES, 0, 3) );
     glBindVertexArray(0);
     glUseProgram(0);
 }

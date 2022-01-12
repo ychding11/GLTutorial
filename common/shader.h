@@ -35,6 +35,7 @@ struct ShaderParam
     ~ShaderParam()
     {
         delete data; //< delete nullptr is OK
+        Log("{} shader param destruction !", name);
     }
 };
  
