@@ -98,6 +98,7 @@ public:
 
     void Apply() const
     {
+        glUseProgram(m_programID);
         for (auto it = m_paramMap.begin(); it != m_paramMap.end(); ++it)
         {
             auto &param = it->second;

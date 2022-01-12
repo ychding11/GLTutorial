@@ -163,10 +163,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 //< each draw maintains its own state
 void Viewer::renderFullScreen()
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glDisable(GL_DEPTH_TEST);  //< disable z depth
-
     //memory leak here
     auto& shaderParam = m_full_screen_Shader.m_paramMap;
     shaderParam["u_pp_filter"].name = "u_pp_filter";
@@ -178,15 +174,13 @@ void Viewer::renderFullScreen()
     shaderParam["u_tex_color_map"].data = new GLuint(m_framebuffer.ColorTexture());
     shaderParam["u_tex_color_map"].slot = 0;
 
-    m_full_screen_Shader.Active();
-    m_full_screen_Shader.Apply();
-    //m_full_screen_Shader.SetTex2D("u_tex_color_map", m_framebuffer.ColorTexture(), 0);
-    //m_full_screen_Shader.SetInt("u_pp_filter", m_filter_type); 
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);  //< disable z depth
 
+    m_full_screen_Shader.Apply();
     GL_API_CHECK( glBindVertexArray(m_empty_vao) );
     GL_API_CHECK( glDrawArrays(GL_TRIANGLES, 0, 3) );
-    glBindVertexArray(0);
-    glUseProgram(0);
 }
 
 void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
