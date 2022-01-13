@@ -15,6 +15,7 @@
 #include "objloader.h"
 #include "simpleMesh.h"
 #include "shaderUtility.h"
+#include "graphicsUtility.h"
 
 #include "camera.h" 
 #include "viewer.h" 
@@ -163,18 +164,10 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 //< each draw maintains its own state
 void Viewer::renderFullScreen()
 {
-    //memory leak here
     auto& shaderParam = m_full_screen_Shader.m_paramMap;
     *(int*)shaderParam["u_pp_filter"].data = m_filter_type;
     *(GLuint*)shaderParam["u_tex_color_map"].data = (m_framebuffer.ColorTexture());
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glDisable(GL_DEPTH_TEST);  //< disable z depth
-
-    m_full_screen_Shader.Apply();
-    GL_API_CHECK( glBindVertexArray(m_empty_vao) );
-    GL_API_CHECK( glDrawArrays(GL_TRIANGLES, 0, 3) );
+    PresentTex(m_full_screen_Shader);
 }
 
 void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
@@ -192,8 +185,8 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     m_solidWireframeShader.SetVec3("u_eye_position", camera.eye());
     for (int i = 0; i < meshBin.size(); ++i)
     {
-        glBindVertexArray( meshBin.vao(i) );
-        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
+        GL_API_CHECK( glBindVertexArray(meshBin.vao(i)) );
+        GL_API_CHECK( glDrawArrays(GL_TRIANGLES, 0, meshBin.vertex_num(i)) );
     }
     glBindVertexArray(0);
     glUseProgram(0);

@@ -164,7 +164,9 @@ void Viewer::renderDebug()
     {
         texID = m_GPassFB.ColorTexture(gpassItem);
     }
-    PresentTex(texID, m_debugShader);
+    auto& shaderParam = m_debugShader.m_paramMap;
+    *(GLuint*)shaderParam["u_tex_color_map"].data = texID; 
+    PresentTex(m_debugShader);
 }
 
 void Viewer::renderSsaoPass(const Camera& camera)
@@ -231,6 +233,15 @@ void Viewer::initOpenGLShaders()
         "shaders/debug.vs.glsl",
         "shaders/debug.fs.glsl"
     );
+    
+    {
+    auto& shaderParam = m_debugShader.m_paramMap;
+    shaderParam["u_tex_color_map"].name = "u_tex_color_map";
+    shaderParam["u_tex_color_map"].type = ShaderParamType::Tex2D;
+    shaderParam["u_tex_color_map"].data = new GLuint(0);
+    shaderParam["u_tex_color_map"].slot = 0;
+    }
+
     m_ssaoShader.Init(
         "shaders/ssao.vs.glsl",
         "shaders/ssao.fs.glsl"

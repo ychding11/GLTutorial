@@ -7,8 +7,9 @@
 #include <GL/glew.h>
 #include "shader.h"
 
+//< suppose all shader parameter is updated
 void PostProcessing(GLuint srcTex, GLuint dstTex, const Shader& shader, std::string label = "PostProcessing");
 
-void PresentTex(GLuint srcTex, const Shader& shader, std::string label = "PresentTexture");
+void PresentTex(const Shader& shader, std::string label = "PresentTexture");
 
 

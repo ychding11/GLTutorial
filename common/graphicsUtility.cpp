@@ -30,13 +30,11 @@ void PostProcessing(GLuint srcTex, GLuint dstTex, const Shader& shader, std::str
 
         GL_API_CHECK( glBindVertexArray(m_empty_vao) );
         GL_API_CHECK( glDrawArrays(GL_TRIANGLES, 0, 3) );
-        glBindVertexArray(0);
-        shader.Deactive();
         glDeleteVertexArrays(1, &m_empty_vao);
         glDeleteFramebuffers(1, &m_framebuffer); //< suppose color attachment is valid after FB object deletion
     glPopDebugGroup();
 }
-void PresentTex(GLuint srcTex, const Shader& shader, std::string label)
+void PresentTex(const Shader& shader, std::string label)
 {
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, label.c_str());
         GLuint m_empty_vao{ 0 }; //< in core profile, we need an explict empty vao, 0 means nothing
@@ -45,13 +43,10 @@ void PresentTex(GLuint srcTex, const Shader& shader, std::string label)
         glClear(GL_COLOR_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST);  //< disable z depth
 
-        shader.Active();
-        shader.SetTex2D("u_tex_color_map", srcTex, 0);
-        glBindVertexArray(m_empty_vao);
-        GL_API_CHECK(glDrawArrays(GL_TRIANGLES, 0, 3));
-        glBindVertexArray(0);
-        shader.Deactive();
-        glDeleteVertexArrays(1, &m_empty_vao);
+        shader.Apply();
+        GL_API_CHECK( glBindVertexArray(m_empty_vao) );
+        GL_API_CHECK( glDrawArrays(GL_TRIANGLES, 0, 3) );
+        GL_API_CHECK( glDeleteVertexArrays(1, &m_empty_vao) );
     glPopDebugGroup();
 }
 
