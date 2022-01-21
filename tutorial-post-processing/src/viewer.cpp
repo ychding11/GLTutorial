@@ -165,8 +165,8 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 void Viewer::renderFullScreen()
 {
     auto& shaderParam = m_full_screen_Shader.m_paramMap;
-    *(int*)shaderParam["u_pp_filter"].data = m_filter_type;
-    *(GLuint*)shaderParam["u_tex_color_map"].data = (m_framebuffer.ColorTexture());
+    SHADER_PARAM_SET_INT(shaderParam, "u_pp_filter", m_filter_type );
+    SHADER_PARAM_SET_INT(shaderParam, "u_tex_color_map", m_framebuffer.ColorTexture() );
     PresentTex(m_full_screen_Shader);
 }
 
@@ -235,18 +235,6 @@ void Viewer::initOpenGLShaders()
         "shaders/FullScreen.vs.glsl",
         "shaders/FullScreen.fs.glsl"
     );
-    {
-    auto& shaderParam = m_full_screen_Shader.m_paramMap;
-    shaderParam["u_pp_filter"].name = "u_pp_filter";
-    shaderParam["u_pp_filter"].type = ShaderParamType::Scalar;
-    shaderParam["u_pp_filter"].data = new int(m_filter_type);
-
-    shaderParam["u_tex_color_map"].name = "u_tex_color_map";
-    shaderParam["u_tex_color_map"].type = ShaderParamType::Tex2D;
-    shaderParam["u_tex_color_map"].data = new GLuint(m_framebuffer.ColorTexture());
-    shaderParam["u_tex_color_map"].slot = 0;
-    }
-
 }
 
 int Viewer::initWindow()
