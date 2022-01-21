@@ -50,6 +50,13 @@ void Shader::Init(const char* vs_file_path, const char* fs_file_path,
             m_paramMap[paramName].demension = 4;
             m_paramMap[paramName].data = new glm::mat4();
         }
+        else if (type == GL_FLOAT_VEC2)
+        {
+            m_paramMap[paramName].name = paramName;
+            m_paramMap[paramName].type = ShaderParamType::Vector;
+            m_paramMap[paramName].demension = 2;
+            m_paramMap[paramName].data = new glm::vec2();
+        }
         else if (type == GL_FLOAT_VEC3)
         {
             m_paramMap[paramName].name = paramName;

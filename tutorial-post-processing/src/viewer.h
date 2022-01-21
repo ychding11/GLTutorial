@@ -74,7 +74,7 @@ private:
 private:
 
     Framebuffer m_framebuffer;
-    Shader m_solidWireframeShader{"standard"};
+    Shader m_solidWireframeShader{"wireframe"};
     Shader m_full_screen_Shader{"full_screen"};
     Shader m_vertex_normal_visualize_shader{"vertex_normal_visualize"};
 
