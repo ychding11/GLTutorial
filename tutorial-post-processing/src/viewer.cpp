@@ -176,13 +176,22 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
 
-    m_solidWireframeShader.Active();
-    m_solidWireframeShader.SetMat4("M", modelMatrix);
-    m_solidWireframeShader.SetMat4("V", viewMatrix);
-    m_solidWireframeShader.SetMat4("P", projMatrix);
-    m_solidWireframeShader.SetVec2("u_window_size", {m_window_width, m_window_height});
-    m_solidWireframeShader.SetVec3("u_mesh_color", m_mesh_color);
-    m_solidWireframeShader.SetVec3("u_eye_position", camera.eye());
+    //m_solidWireframeShader.Active();
+    //m_solidWireframeShader.SetMat4("M", modelMatrix);
+    //m_solidWireframeShader.SetMat4("V", viewMatrix);
+    //m_solidWireframeShader.SetMat4("P", projMatrix);
+    //m_solidWireframeShader.SetVec2("u_window_size", {m_window_width, m_window_height});
+    //m_solidWireframeShader.SetVec3("u_mesh_color", m_mesh_color);
+    //m_solidWireframeShader.SetVec3("u_eye_position", camera.eye());
+    glm::vec2 windowSize(m_window_width, m_window_height);
+    auto& shaderParam = m_solidWireframeShader.m_paramMap;
+    SHADER_PARAM_SET_VEC2(shaderParam, "u_window_size", windowSize );
+    SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
+    SHADER_PARAM_SET_VEC3(shaderParam, "u_eye_position", camera.eye());
+    SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "V", viewMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "P", projMatrix);
+    m_solidWireframeShader.Apply();
     for (int i = 0; i < meshBin.size(); ++i)
     {
         GL_API_CHECK( glBindVertexArray(meshBin.vao(i)) );

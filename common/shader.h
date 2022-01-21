@@ -30,6 +30,11 @@
         *(glm::mat3*)shaderParam[name].data = value;                    \
 } while (0)
 
+#define SHADER_PARAM_SET_VEC2(paramMap, name, value) do {               \
+        SHADER_PARAM_CHECK(paramMap, name);                             \
+        *(glm::vec2*)shaderParam[name].data = value;                    \
+} while (0)
+
 #define SHADER_PARAM_SET_VEC3(paramMap, name, value) do {               \
         SHADER_PARAM_CHECK(paramMap, name);                             \
         *(glm::vec3*)shaderParam[name].data = value;                    \
