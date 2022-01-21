@@ -8,20 +8,17 @@
 #include <sstream>
 #include <cstring>
 
-
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
 #include "objloader.h"
 #include "Log.h"
 
-
-static AABB load_obj(const std::string &filename, const std::string &base_dir, std::vector<Mesh> &meshes)
+AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_dir, std::vector<Mesh> &meshes)
 {
-
     std::stringstream ss;
-    std::vector<tinyobj::material_t> materials;
     tinyobj::attrib_t attrib;
+    std::vector<tinyobj::material_t> materials;
     std::vector<tinyobj::shape_t> shapes;
 
     AABB aabb;
@@ -29,13 +26,13 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
     std::string err;
     if ( !tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename.c_str(), base_dir.c_str()) )
     {
-        throw std::runtime_error("Failed to load model : " + filename);
+        Err("Fail to load obj model : {}", filename);
         return aabb;
     }
 
     if (materials.size() == 0)
     {
-        throw std::runtime_error("No material found in model : " + filename);
+        Err("No material found in obj model : {}", filename);
         return aabb;
     }
 
@@ -101,7 +98,7 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
     aabb.Extend(pmax);
 
     ss << "After binning," << meshes.size() << " meshes constructed(each mesh contains only one material)" << "\n"
-       << "Mesh file : " << filename << "\n"
+       << "Obj Model file : " << filename << "\n"
        << aabb.str()
     ;
 
@@ -131,7 +128,7 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
     MeshBin::MeshBin(const std::string &filename)
         : m_max_object_num(256)
     {
-        m_aabb = load_obj(filename, "Model/", m_meshes);
+        m_aabb = loadObjModel(filename, "Model/", m_meshes);
         if (m_aabb.Empty())
         {
             Err("AABB is empty, exit!");
@@ -141,7 +138,6 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
         {
             Log("mesh AABB Center is {}", glm::to_string(m_aabb.Center()));
         }
-        init_instace_buffer();
         create_vaos();
     }
 
@@ -149,8 +145,9 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
     {
         for (int i = 0; i < m_meshes.size(); ++i)
         {
+            GLenum errorCheckValue = glGetError();
 
-            m_vb_size[m_object_num]    = m_meshes[i].vertices.size() * sizeof(SimpleVertex);
+            m_vb_size[m_object_num] = m_meshes[i].vertices.size() * sizeof(SimpleVertex);
             m_vertex_num[m_object_num] = m_meshes[i].vertices.size();
 
             const size_t vertexStride = sizeof(SimpleVertex);
@@ -163,45 +160,27 @@ static AABB load_obj(const std::string &filename, const std::string &base_dir, s
             glBindBuffer(GL_ARRAY_BUFFER, m_vbo_id[m_object_num]);
             glBufferData(GL_ARRAY_BUFFER, m_vb_size[m_object_num], m_meshes[i].vertices.data(), GL_STATIC_DRAW);
 
+            //< 
+            //< It is a composed API :
+            //<   - specify generic vertex attribute format
+            //<   - specify generic vertex attribute stride 
+            //<   - specify vertex buffer binding 
+            //<   - specify mapping between {vertex buffer binding, vertex attribute}
+            //<     - vertex attribute index <--> buffer currently bound to GL_ARRAY_BUFFER
+            //< See details on page 344 of glspec45.core.pdf
             glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, vertexStride, 0);
             glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexStride, (GLvoid*)normalOffset);
 
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
 
-            glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO); 
-            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, m_instance_stride, (void*)0);
-            glEnableVertexAttribArray(2);
-            glVertexAttribDivisor(2, 1); //< vertex attribute 2 advances once per instance
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-
             glBindVertexArray(0);
 
+            errorCheckValue = glGetError();
+            if (errorCheckValue != GL_NO_ERROR)
+            {
+                fprintf(stderr, "Error: Could not create a VBO: %s\n", gluErrorString(errorCheckValue));
+            }
             m_object_num++;
         }
-    }
-
-    void MeshBin::init_instace_buffer()
-    {
-        glm::vec3 translations[100];
-        m_instance_stride = sizeof(glm::vec3);
-        m_instance_count = 0;
-        float offset = 0.1f;
-        for (int z = -10; z < 10; z += 2)
-        {
-            for (int x = -10; x < 10; x += 2)
-            {
-                glm::vec3 translation;
-                translation.x = (float)x / 10.0f + offset;
-                translation.z = (float)z / 10.0f + offset;
-                translation.y = 0.f;
-                translations[m_instance_count++] = translation;
-            }
-        }
-        m_instance_buffer_byte_size = m_instance_stride * m_instance_count ;
-
-        glGenBuffers(1, &m_instanceVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
-        glBufferData(GL_ARRAY_BUFFER, m_instance_buffer_byte_size, &translations[0], GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }

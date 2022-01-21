@@ -7,19 +7,34 @@
 #include <fstream>
 #include <vector>
 #include <cassert>
+#include <filesystem> //< require c++ 17
 
 #include "shaderUtility.h"
 #include "Log.h"
 
+namespace fs = std::filesystem;
+
 static GLuint createShaderFromFile(GLenum type, std::string path);
+
+static std::string readFileToString(fs::path path)
+{
+	if (!fs::exists(path))
+	{
+		Err("file NOT exist : {}", path);
+	}
+
+	std::ifstream f(path, std::ios::in | std::ios::binary);
+	const auto sz = fs::file_size(path);
+	std::string result(sz, '\0');
+	f.read(result.data(), sz);
+	f.close();
+	return result;
+}
 
 GLuint loadStandardShaders(const char *vert_file_path, const char *frag_file_path)
 {
     GLuint vertexShaderID   = createShaderFromFile(GL_VERTEX_SHADER, vert_file_path);
     GLuint fragmentShaderID = createShaderFromFile(GL_FRAGMENT_SHADER, frag_file_path);
-
-    GLint result = GL_FALSE;
-    int infoLogLength;
 
     Log( "Linking shader..." );
     GLuint programID = glCreateProgram();
@@ -27,13 +42,16 @@ GLuint loadStandardShaders(const char *vert_file_path, const char *frag_file_pat
     glAttachShader(programID, fragmentShaderID);
     glLinkProgram(programID);
 
+    GLint result = GL_FALSE;
+    int infoLogLength;
+
     glGetShaderiv(programID, GL_LINK_STATUS, &result);
     glGetShaderiv(programID, GL_INFO_LOG_LENGTH, &infoLogLength);
     if(infoLogLength > 0)
     {
-        std::vector<char> programErrorMessage(infoLogLength + 1);
+        std::vector<char> programErrorMessage(infoLogLength);
         glGetShaderInfoLog(programID, infoLogLength, NULL, &programErrorMessage[0]);
-        std::cout << programErrorMessage[0] << std::endl;
+		Err("{}", programErrorMessage.data());
     }
 
     glDetachShader(programID, vertexShaderID);
@@ -64,14 +82,13 @@ GLuint loadTessShaders(const char *tess_vert_file_path, const char *tess_ctrl_fi
 
     GLint result = GL_FALSE;
     int infoLogLength;
-
 	glGetProgramiv(m_particlProgramID, GL_LINK_STATUS, &result);
 	glGetProgramiv(m_particlProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
 	if(infoLogLength > 0)
     {
-		std::vector<char> tessProgramErrMsg(infoLogLength + 1);
+		std::vector<char> tessProgramErrMsg(infoLogLength );
 		glGetProgramInfoLog(m_particlProgramID, infoLogLength, NULL, &tessProgramErrMsg[0]);
-		printf("%s\n", &tessProgramErrMsg[0]);
+		Err("{}", tessProgramErrMsg.data());
 	}
 
 	glDetachShader(m_particlProgramID, vertShaderID);
@@ -109,9 +126,9 @@ GLuint loadExplodeShaders(const char *vert_file_path, const char *gs_file_path, 
 	glGetProgramiv(explodeProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
 	if(infoLogLength > 0)
     {
-		std::vector<char> programErrMsg(infoLogLength + 1);
+		std::vector<char> programErrMsg(infoLogLength);
 		glGetProgramInfoLog(explodeProgramID, infoLogLength, NULL, &programErrMsg[0]);
-		printf("%s\n", &programErrMsg[0]);
+		Err("{}", programErrMsg.data());
 	}
 
 	glDetachShader(explodeProgramID, vertShaderID);
@@ -135,24 +152,8 @@ static GLuint createShaderFromFile(GLenum type, std::string path)
         GL_GEOMETRY_SHADER == type
     );
 
-	std::string shaderCode;
-	std::ifstream shaderStream(path, std::ios::in);
-	if(shaderStream.is_open())
-    {
-		std::string line;
-		while(std::getline(shaderStream, line))
-        {
-            shaderCode += "\n" + line;
-		}
-        shaderStream.close();
-	}
-    else
-    {
-        throw std::runtime_error( std::string("Couldn't open ") + path);
-		return 0;
-	}
-
-    Log("Compiling shader code : {}", path.c_str());
+	std::string shaderCode = readFileToString(path);
+    Log("Compiling shader : {}", path);
 
 	//< creates an empty shader object for the shader stage given by given type
 	GLuint shaderID = glCreateShader(type); 
@@ -174,7 +175,7 @@ static GLuint createShaderFromFile(GLenum type, std::string path)
 		std::vector<GLchar> errorLog(maxLength);
 		//< NULL, don't care actually written bytes
 		glGetShaderInfoLog(shaderID, maxLength, NULL, &errorLog[0]);
-		Err("{}", std::string(errorLog.begin(), errorLog.end()));
+		Err("{}", errorLog.data());
 		return 0;
 	}
     return shaderID;
@@ -235,7 +236,6 @@ GLuint LoadShaders(const char* vs_file_path, const char* fs_file_path, const cha
 		//< NULL, don't care actually written bytes
 		glGetProgramInfoLog(programID, maxLength, NULL, &errorLog[0]);
 		Err("{}", &errorLog[0]);
-		throw std::runtime_error("Link shader failed!");
 	}
 
 	//

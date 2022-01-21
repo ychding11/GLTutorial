@@ -13,19 +13,19 @@
 
 #include "aabb.h" 
 
-struct SimpleVertex
-{
-    glm::vec3 position;
-    glm::vec3 normal;
-};
-
-struct Mesh
-{
-    std::vector<SimpleVertex> vertices;
-};
-
 class MeshBin
 {
+    struct SimpleVertex
+    {
+        glm::vec3 position, normal;
+    };
+
+    struct Mesh
+    {
+        std::vector<SimpleVertex> vertices;
+
+    };
+
 private:
     //const GLuint m_max_object_num = 256;
     const GLuint m_max_object_num;
@@ -34,14 +34,10 @@ private:
     std::vector<GLuint> m_vbo_id{m_max_object_num, 0};
     std::vector<size_t> m_vb_size{m_max_object_num, 0};
     std::vector<size_t> m_vertex_num{m_max_object_num, 0};
-    GLuint m_instanceVBO{0};
+
     std::vector<Mesh> m_meshes; //< binned meshes
 
     AABB m_aabb;
-
-    int m_instance_stride{0};
-    int m_instance_count{0};
-    int m_instance_buffer_byte_size{0};
 
 public:
     MeshBin() = delete;
@@ -55,9 +51,12 @@ public:
             glDeleteBuffers(1, &m_vbo_id[i]);
             glDeleteVertexArrays(1, &m_vao_id[i]);
         }
-       glDeleteBuffers(1, &m_instanceVBO);
     }
 
+    const AABB& Aabb() const
+    {
+        return m_aabb;
+    }
     glm::vec3 Center() const
     {
         return m_aabb.Center();
@@ -66,11 +65,6 @@ public:
     float LogestDim() const
     {
         return m_aabb.LongestEdge();
-    }
-
-    int instance_count() const
-    {
-        return m_instance_count;
     }
 
     size_t size() const
@@ -91,7 +85,7 @@ public:
 private:
 
     void create_vaos();
-    void init_instace_buffer();
+    AABB loadObjModel(const std::string& filename, const std::string& base_dir, std::vector<Mesh>& meshes);
 };
 
 

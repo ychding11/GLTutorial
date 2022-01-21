@@ -1,11 +1,28 @@
 //=================================================================================//
 // Copyright (c) 2021 Yaochuang Ding 
 //=================================================================================//
-
 #pragma once
 
 #include <GL/glew.h>
 #include "shader.h"
+
+class AABB;
+class Camera;
+
+class BoundingBoxDrawer
+{
+public :
+    BoundingBoxDrawer() = default;
+
+    void Init();
+    void DrawBoundingBox(const AABB& aabb, const Camera& camera);
+
+private:
+    GLuint m_vao_id;
+    GLuint vbo_id;
+    GLuint ibo_id;
+    Shader m_shader{"BoxDrawer"};
+};
 
 //< suppose all shader parameter is updated
 void PostProcessing(GLuint srcTex, GLuint dstTex, const Shader& shader, std::string label = "PostProcessing");

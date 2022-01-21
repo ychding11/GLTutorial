@@ -12,6 +12,18 @@
 #include "shader.h" 
 #include "texture.h" 
 
+//< declares a scoped enumeration type whose underlying type is int
+enum ShaderStage : int
+{
+    VS = 0,
+    HS = 1,
+    DS = 2,
+    GS = 3,
+    PS = 4,
+    CS = 5,
+    ShaderTypeCount
+};
+
 class Material
 {
 public:
@@ -46,35 +58,11 @@ public:
         return &m_shader;
     }
 
-    void ActiveDiffuseMap()
-    {
-        if (m_dirty && m_reevaluate)
-        {
-            m_albedoMapTexId = GetTextureCache().Acquire(m_diffuseTexName);
-            m_normalMapTexId = GetTextureCache().Acquire(m_normalTexName);
-            m_dirty = false;
-            m_reevaluate = false;
-        }
+    void ActiveDiffuseMap();
 
-        if (m_albedoMapTexId == INVALIDE_TEXTURE_ID)
-        {
-            Err("diffuse map texture ID is invalide.");
-            return;
-        }
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, m_albedoMapTexId);
-    }
-
-    void ActiveNormalMap()
-    {
-        if (m_normalMapTexId == INVALIDE_TEXTURE_ID)
-        {
-            Err("normal map texture ID is invalide.");
-            return;
-        }
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, m_normalMapTexId);
-    }
+    void ActiveNormalMap();
+    void DeactiveNormalMap();
+    
 
     void SetBool(const std::string& name, bool value) const
     {
@@ -124,4 +112,13 @@ public:
     {
         m_shader.SetMat4(name, mat);
     }
+};
+
+//< 
+//< https://developer.download.nvidia.com/whitepapers/2007/SDK10/SolidWireframe.pdf
+//< http://strattonbrazil.blogspot.com/2011/09/single-pass-wireframe-rendering_10.html
+//< 
+class SolideWireframeMaterial : public Material
+{
+
 };
