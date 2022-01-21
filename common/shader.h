@@ -40,6 +40,11 @@
         *(glm::vec4*)shaderParam[name].data = value;                    \
 } while (0)
 
+#define SHADER_PARAM_SET_SAMPLER2D(paramMap, name, value) do {         \
+        SHADER_PARAM_CHECK(paramMap, name);                            \
+        *(int*)shaderParam[name].data = value;                         \
+} while (0)
+
 #define SHADER_PARAM_SET_INT(paramMap, name, value) do {               \
         SHADER_PARAM_CHECK(paramMap, name);                            \
         *(int*)shaderParam[name].data = value;                         \

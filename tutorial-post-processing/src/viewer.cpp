@@ -166,7 +166,7 @@ void Viewer::renderFullScreen()
 {
     auto& shaderParam = m_full_screen_Shader.m_paramMap;
     SHADER_PARAM_SET_INT(shaderParam, "u_pp_filter", m_filter_type );
-    SHADER_PARAM_SET_INT(shaderParam, "u_tex_color_map", m_framebuffer.ColorTexture() );
+    SHADER_PARAM_SET_SAMPLER2D(shaderParam, "u_tex_color_map", m_framebuffer.ColorTexture() );
     PresentTex(m_full_screen_Shader);
 }
 
