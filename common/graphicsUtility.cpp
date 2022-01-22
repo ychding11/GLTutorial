@@ -114,16 +114,16 @@
     void PresentTex(const Shader& shader, std::string label)
     {
         glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, label.c_str());
-        GLuint m_empty_vao{ 0 }; //< in core profile, we need an explict empty vao, 0 means nothing
-        glGenVertexArrays(1, &m_empty_vao);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0); //< to display 
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDisable(GL_DEPTH_TEST);  //< disable z depth
+            GLuint m_empty_vao{ 0 }; //< in core profile, we need an explict empty vao, 0 means nothing
+            glGenVertexArrays(1, &m_empty_vao);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0); //< to display 
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_DEPTH_TEST);  //< disable z depth
 
-        shader.Apply();
-        GL_API_CHECK(glBindVertexArray(m_empty_vao));
-        GL_API_CHECK(glDrawArrays(GL_TRIANGLES, 0, 3));
-        GL_API_CHECK(glDeleteVertexArrays(1, &m_empty_vao));
+            shader.Apply();
+            GL_API_CHECK(glBindVertexArray(m_empty_vao));
+            GL_API_CHECK(glDrawArrays(GL_TRIANGLES, 0, 3));
+            GL_API_CHECK(glDeleteVertexArrays(1, &m_empty_vao));
         glPopDebugGroup();
     }
 

@@ -94,7 +94,7 @@ public:
     ShaderParamMap m_paramMap;
 
 private:
-    std::string m_name;
+    std::string m_name{"Not Set"};
     GLuint m_programID{0};
     bool m_initialized{false};
 
@@ -122,6 +122,11 @@ public:
         : m_name(name)
     {
 
+    }
+
+    std::string Name() const
+    {
+        return m_name;
     }
 
     void Init(const char* vs_file_path, const char* fs_file_path,
