@@ -165,7 +165,7 @@ void Viewer::renderDebug()
         texID = m_GPassFB.ColorTexture(gpassItem);
     }
     auto& shaderParam = m_debugShader.m_paramMap;
-    *(GLuint*)shaderParam["u_tex_color_map"].data = texID; 
+    SHADER_PARAM_SET_SAMPLER2D(shaderParam, "u_tex_color_map", texID);
     PresentTex(m_debugShader);
 }
 
@@ -194,22 +194,23 @@ void Viewer::renderSsaoPass(const Camera& camera)
 
 void Viewer::renderGPass(const MeshBin& meshBin, const Camera& camera)
 {
+    glm::mat4 modelMatrix = glm::mat4(1.0);
+    glm::mat4 viewMatrix = camera.viewMatrix();
+    glm::mat4 projMatrix = camera.projMatrix();
+
+    auto& shaderParam = m_GPassShader.m_paramMap;
+    SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
+    SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "V", viewMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "P", projMatrix);
+
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, "Geometry_Pass");
         m_GPassFB.Active();
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        glm::mat4 modelMatrix = glm::mat4(1.0);
-        glm::mat4 viewMatrix = camera.viewMatrix();
-        glm::mat4 projMatrix = camera.projMatrix();
-
-        m_GPassShader.Active();
-        m_GPassShader.SetMat4("M", modelMatrix);
-        m_GPassShader.SetMat4("V", viewMatrix);
-        m_GPassShader.SetMat4("P", projMatrix);
-        m_GPassShader.SetVec3("u_mesh_color", m_mesh_color);
+        m_GPassShader.Apply();
         for (int i = 0; i < meshBin.size(); ++i)
         {
             GL_API_CHECK( glBindVertexArray( meshBin.vao(i) ) );
