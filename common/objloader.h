@@ -82,6 +82,8 @@ public:
         return m_vao_id[index];
     }
 
+    void DrawBins() const;
+
 private:
 
     void create_vaos();

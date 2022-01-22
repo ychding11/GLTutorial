@@ -211,11 +211,12 @@ void Viewer::renderGPass(const MeshBin& meshBin, const Camera& camera)
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         m_GPassShader.Apply();
-        for (int i = 0; i < meshBin.size(); ++i)
-        {
-            GL_API_CHECK( glBindVertexArray( meshBin.vao(i) ) );
-            GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
-        }
+        meshBin.DrawBins();
+        //for (int i = 0; i < meshBin.size(); ++i)
+        //{
+        //    GL_API_CHECK( glBindVertexArray( meshBin.vao(i) ) );
+        //    GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
+        //}
     glPopDebugGroup();
 }
 

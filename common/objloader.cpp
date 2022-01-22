@@ -184,3 +184,12 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
             m_object_num++;
         }
     }
+
+    void MeshBin::DrawBins() const
+    {
+        for (int i = 0; i < this->size(); ++i)
+        {
+            GL_API_CHECK( glBindVertexArray( this->vao(i) ) );
+            GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, this->vertex_num(i) ) );
+        }
+    }
