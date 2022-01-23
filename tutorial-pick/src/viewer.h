@@ -107,5 +107,4 @@ private:
     void animateCamera(Camera &camera);
     void renderOutlining(const MeshBin& meshBin, const Camera& camera);
     void renderSurface(const MeshBin& meshBin, const Camera& camera);
-    void renderLight(Light& light, const Camera& camera);
 };

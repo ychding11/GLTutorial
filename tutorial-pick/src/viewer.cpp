@@ -210,11 +210,6 @@ void Viewer::renderSurface(const MeshBin& meshBin, const Camera& camera)
     glUseProgram(0);
 }
 
-void Viewer::renderLight(Light& light, const Camera& camera)
-{
-}
-
-
 void Viewer::initOpenGLShaders()
 {
     m_edgeShader.Init(
