@@ -193,11 +193,6 @@ void Viewer::visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera)
     glPopDebugGroup();
 }
 
-void Viewer::renderLight(Light& light, const Camera& camera)
-{
-}
-
-
 void Viewer::initOpenGLShaders()
 {
     m_solidWireframeShader.Init(

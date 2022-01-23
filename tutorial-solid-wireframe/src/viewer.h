@@ -109,5 +109,4 @@ private:
     void animateCamera(Camera &camera);
     void renderMeshBin(const MeshBin& meshBin, const Camera& camera);
     void visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera);
-    void renderLight(Light& light, const Camera& camera);
 };
