@@ -154,32 +154,43 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 
 void Viewer::renderOutlining(const MeshBin& meshBin, const Camera& camera)
 {
-    //< draw edge, always draw without depth compare
-    //< draw a little larger object to compare with objectID
-    glDisable(GL_DEPTH_TEST);
-    glStencilMask(0x00); // write mask : no writing
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // ref value 1 shall be object ID
-
     glm::mat4 modelMatrix = glm::mat4(1.0);
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
     modelMatrix = glm::scale(modelMatrix, glm::vec3(1.06f));
 
-    m_edgeShader.Active();
-    m_edgeShader.SetMat4("M", modelMatrix);
-    m_edgeShader.SetMat4("V", viewMatrix);
-    m_edgeShader.SetMat4("P", projMatrix);
-    m_edgeShader.SetVec3("u_mesh_color", m_mesh_color);
-    for (int i = 0; i < meshBin.size(); ++i)
-    {
-        glBindVertexArray( meshBin.vao(i) );
-        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
-    }
-    glBindVertexArray(0);
-    glUseProgram(0);
-    glStencilMask(0xFF);
-    glStencilFunc(GL_ALWAYS, 0, 0xFF);
-    glEnable(GL_DEPTH_TEST);
+    auto& shaderParam = m_edgeShader.m_paramMap;
+    SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
+    SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "V", viewMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "P", projMatrix);
+
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, m_edgeShader.Name().c_str());
+        //< draw edge, always draw without depth compare
+        //< draw a little larger object to compare with objectID
+        glDisable(GL_DEPTH_TEST);
+        glStencilMask(0x00); // write mask : no writing
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // ref value 1 shall be object ID
+
+        m_edgeShader.Apply();
+        meshBin.DrawBins();
+        glStencilMask(0xFF);
+        glStencilFunc(GL_ALWAYS, 0, 0xFF);
+        glEnable(GL_DEPTH_TEST);
+    glPopDebugGroup();
+
+    //m_edgeShader.Active();
+    //m_edgeShader.SetMat4("M", modelMatrix);
+    //m_edgeShader.SetMat4("V", viewMatrix);
+    //m_edgeShader.SetMat4("P", projMatrix);
+    //m_edgeShader.SetVec3("u_mesh_color", m_mesh_color);
+    //for (int i = 0; i < meshBin.size(); ++i)
+    //{
+    //    glBindVertexArray( meshBin.vao(i) );
+    //    GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
+    //}
+    //glBindVertexArray(0);
+    //glUseProgram(0);
 }
 
 void Viewer::renderSurface(const MeshBin& meshBin, const Camera& camera)
