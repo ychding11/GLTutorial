@@ -207,20 +207,6 @@ void Viewer::renderSurface(const MeshBin& meshBin, const Camera& camera)
         glStencilFunc(GL_ALWAYS, 0, 0xFF);
         glEnable(GL_DEPTH_TEST);
     glPopDebugGroup();
-
-        //m_lightingShader.Active();
-        //m_lightingShader.SetMat4("M", modelMatrix);
-        //m_lightingShader.SetMat4("V", viewMatrix);
-        //m_lightingShader.SetMat4("P", projMatrix);
-        //m_lightingShader.SetVec3("u_mesh_color", m_mesh_color);
-        //m_lightingShader.SetVec3("u_eye_position", camera.eye());
-        //for (int i = 0; i < meshBin.size(); ++i)
-        //{
-        //    glBindVertexArray( meshBin.vao(i) );
-        //    GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
-        //}
-        //glBindVertexArray(0);
-        //glUseProgram(0);
 }
 
 void Viewer::initOpenGLShaders()
