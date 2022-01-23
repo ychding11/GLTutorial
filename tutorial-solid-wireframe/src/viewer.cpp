@@ -154,20 +154,33 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     glm::mat4 modelMatrix = glm::mat4(1.0);
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
+    glm::vec2 windowSize(m_window_width, m_window_height);
 
-    m_solidWireframeShader.Active();
-    m_solidWireframeShader.SetMat4("M", modelMatrix);
-    m_solidWireframeShader.SetMat4("V", viewMatrix);
-    m_solidWireframeShader.SetMat4("P", projMatrix);
-    m_solidWireframeShader.SetVec2("u_window_size", {m_window_width, m_window_height});
-    m_solidWireframeShader.SetVec3("u_mesh_color", m_mesh_color);
-    m_solidWireframeShader.SetVec3("u_eye_position", camera.eye());
-    m_solidWireframeShader.SetBool("u_show_wireframe", m_show_wireframe); // use int in glsl
-    for (int i = 0; i < meshBin.size(); ++i)
-    {
-        glBindVertexArray( meshBin.vao(i) );
-        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
-    }
+        //m_solidWireframeShader.Active();
+        //m_solidWireframeShader.SetMat4("M", modelMatrix);
+        //m_solidWireframeShader.SetMat4("V", viewMatrix);
+        //m_solidWireframeShader.SetMat4("P", projMatrix);
+        //m_solidWireframeShader.SetVec2("u_window_size", {m_window_width, m_window_height});
+        //m_solidWireframeShader.SetVec3("u_mesh_color", m_mesh_color);
+        //m_solidWireframeShader.SetVec3("u_eye_position", camera.eye());
+        //m_solidWireframeShader.SetBool("u_show_wireframe", m_show_wireframe); // use int in glsl
+
+    auto& shaderParam = m_solidWireframeShader.m_paramMap;
+    SHADER_PARAM_SET_VEC2(shaderParam, "u_window_size", windowSize );
+    SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
+    SHADER_PARAM_SET_VEC3(shaderParam, "u_eye_position", camera.eye());
+    SHADER_PARAM_SET_INT(shaderParam, "u_show_wireframe", m_show_wireframe);
+    SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "V", viewMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "P", projMatrix);
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, m_solidWireframeShader.Name().c_str());
+        m_solidWireframeShader.Apply();
+        for (int i = 0; i < meshBin.size(); ++i)
+        {
+            glBindVertexArray( meshBin.vao(i) );
+            GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
+        }
+    glPopDebugGroup();
 
     glBindVertexArray(0);
     glUseProgram(0);
@@ -260,6 +273,11 @@ int Viewer::initWindow()
         throw std::runtime_error("Failed to initialize GLEW !");
         return -1;
     }
+
+    //< There are bugs in glewInit(), it would set opengl error code 
+    //< The following is an workaround
+    ClearOpenGLError(__FILE__, __LINE__); 
+
     return 0;
 }
 
