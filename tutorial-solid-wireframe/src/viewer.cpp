@@ -182,28 +182,15 @@ void Viewer::visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera)
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
 
-    //m_vertex_normal_visualize.Active();
-    //m_vertex_normal_visualize.SetMat4("M", modelMatrix);
-    //m_vertex_normal_visualize.SetMat4("V", viewMatrix);
-    //m_vertex_normal_visualize.SetMat4("P", projMatrix);
-    //m_vertex_normal_visualize.SetFloat("u_normal_visualize_scale", m_normal_visualize_scale);
-
     auto& shaderParam = m_vertex_normal_visualize.m_paramMap;
-    SHADER_PARAM_SET_FLOAT(shaderParam, "u_normal_visualize_scale", m_normal_visualize_scale);
     SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
     SHADER_PARAM_SET_MAT4(shaderParam, "V", viewMatrix);
     SHADER_PARAM_SET_MAT4(shaderParam, "P", projMatrix);
+    SHADER_PARAM_SET_FLOAT(shaderParam, "u_normal_visualize_scale", m_normal_visualize_scale);
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, m_vertex_normal_visualize.Name().c_str());
         m_vertex_normal_visualize.Apply();
-        for (int i = 0; i < meshBin.size(); ++i)
-        {
-            glBindVertexArray( meshBin.vao(i) );
-            GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
-        }
+        meshBin.DrawBins();
     glPopDebugGroup();
-
-    glBindVertexArray(0);
-    glUseProgram(0);
 }
 
 void Viewer::renderLight(Light& light, const Camera& camera)
