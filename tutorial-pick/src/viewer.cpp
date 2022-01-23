@@ -174,51 +174,53 @@ void Viewer::renderOutlining(const MeshBin& meshBin, const Camera& camera)
 
         m_edgeShader.Apply();
         meshBin.DrawBins();
+
+        glStencilMask(0xFF);
+        glStencilFunc(GL_ALWAYS, 0, 0xFF);
+        glEnable(GL_DEPTH_TEST);
+    glPopDebugGroup();
+}
+
+void Viewer::renderSurface(const MeshBin& meshBin, const Camera& camera)
+{
+    glm::mat4 modelMatrix = glm::mat4(1.0);
+    glm::mat4 viewMatrix = camera.viewMatrix();
+    glm::mat4 projMatrix = camera.projMatrix();
+
+    auto& shaderParam = m_lightingShader.m_paramMap;
+    SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
+    SHADER_PARAM_SET_VEC3(shaderParam, "u_eye_position", camera.eye());
+    SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "V", viewMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "P", projMatrix);
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, m_lightingShader.Name().c_str());
+        //< all rendered pixels with stencil ref value 1
+        //< shall be object ID
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        glStencilMask(0xFF); //< write mask, write all 8 bits data
+        glEnable(GL_DEPTH_TEST);
+
+        m_lightingShader.Apply();
+        meshBin.DrawBins();
+
         glStencilMask(0xFF);
         glStencilFunc(GL_ALWAYS, 0, 0xFF);
         glEnable(GL_DEPTH_TEST);
     glPopDebugGroup();
 
-    //m_edgeShader.Active();
-    //m_edgeShader.SetMat4("M", modelMatrix);
-    //m_edgeShader.SetMat4("V", viewMatrix);
-    //m_edgeShader.SetMat4("P", projMatrix);
-    //m_edgeShader.SetVec3("u_mesh_color", m_mesh_color);
-    //for (int i = 0; i < meshBin.size(); ++i)
-    //{
-    //    glBindVertexArray( meshBin.vao(i) );
-    //    GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
-    //}
-    //glBindVertexArray(0);
-    //glUseProgram(0);
-}
-
-void Viewer::renderSurface(const MeshBin& meshBin, const Camera& camera)
-{
-    //< all rendered pixels with stencil ref value 1
-    //< shall be object ID
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    glStencilMask(0xFF); //< write mask, write all 8 bits data
-    glEnable(GL_DEPTH_TEST);
-
-    glm::mat4 modelMatrix = glm::mat4(1.0);
-    glm::mat4 viewMatrix = camera.viewMatrix();
-    glm::mat4 projMatrix = camera.projMatrix();
-
-    m_lightingShader.Active();
-    m_lightingShader.SetMat4("M", modelMatrix);
-    m_lightingShader.SetMat4("V", viewMatrix);
-    m_lightingShader.SetMat4("P", projMatrix);
-    m_lightingShader.SetVec3("u_mesh_color", m_mesh_color);
-    m_lightingShader.SetVec3("u_eye_position", camera.eye());
-    for (int i = 0; i < meshBin.size(); ++i)
-    {
-        glBindVertexArray( meshBin.vao(i) );
-        GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
-    }
-
-    glBindVertexArray(0);
-    glUseProgram(0);
+        //m_lightingShader.Active();
+        //m_lightingShader.SetMat4("M", modelMatrix);
+        //m_lightingShader.SetMat4("V", viewMatrix);
+        //m_lightingShader.SetMat4("P", projMatrix);
+        //m_lightingShader.SetVec3("u_mesh_color", m_mesh_color);
+        //m_lightingShader.SetVec3("u_eye_position", camera.eye());
+        //for (int i = 0; i < meshBin.size(); ++i)
+        //{
+        //    glBindVertexArray( meshBin.vao(i) );
+        //    GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
+        //}
+        //glBindVertexArray(0);
+        //glUseProgram(0);
 }
 
 void Viewer::initOpenGLShaders()
