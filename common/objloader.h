@@ -27,13 +27,13 @@ class MeshBin
     };
 
 private:
-    //const GLuint m_max_object_num = 256;
-    const GLuint m_max_object_num;
-    size_t m_object_num{ 0 };
-    std::vector<GLuint> m_vao_id{m_max_object_num, 0};
-    std::vector<GLuint> m_vbo_id{m_max_object_num, 0};
-    std::vector<size_t> m_vb_size{m_max_object_num, 0};
-    std::vector<size_t> m_vertex_num{m_max_object_num, 0};
+    //const GLuint m_max_mesh_num = 256;
+    const GLuint m_max_mesh_num;
+    size_t m_mesh_num{ 0 };
+    std::vector<GLuint> m_vao_id{m_max_mesh_num, 0};
+    std::vector<GLuint> m_vbo_id{m_max_mesh_num, 0};
+    std::vector<size_t> m_vb_size{m_max_mesh_num, 0};
+    std::vector<size_t> m_vertex_num{m_max_mesh_num, 0};
 
     std::vector<Mesh> m_meshes; //< binned meshes
 
@@ -51,7 +51,7 @@ public:
 
     ~MeshBin()
     {
-        for (int i = 0; i < m_object_num; i++)
+        for (int i = 0; i < m_mesh_num; i++)
         {
             glDeleteBuffers(1, &m_vbo_id[i]);
             glDeleteVertexArrays(1, &m_vao_id[i]);
@@ -74,7 +74,7 @@ public:
 
     size_t size() const
     {
-        return m_object_num;
+        return m_mesh_num;
     }
 
     size_t vertex_num(int index) const

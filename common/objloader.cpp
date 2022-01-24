@@ -126,7 +126,7 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
 ///////////////////////////// Class MeshBin //////////////////////////////////////////////
 
     MeshBin::MeshBin(const std::string &filename)
-        : m_max_object_num(256)
+        : m_max_mesh_num(256)
     {
         m_aabb = loadObjModel(filename, "Model/", m_meshes);
         if (m_aabb.Empty())
@@ -148,18 +148,18 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
         {
             GLenum errorCheckValue = glGetError();
 
-            m_vb_size[m_object_num] = m_meshes[i].vertices.size() * sizeof(SimpleVertex);
-            m_vertex_num[m_object_num] = m_meshes[i].vertices.size();
+            m_vb_size[m_mesh_num] = m_meshes[i].vertices.size() * sizeof(SimpleVertex);
+            m_vertex_num[m_mesh_num] = m_meshes[i].vertices.size();
 
             const size_t vertexStride = sizeof(SimpleVertex);
             const size_t normalOffset = sizeof(m_meshes[i].vertices[0].position);
 
-            glGenVertexArrays(1, &m_vao_id[m_object_num]);
-            glBindVertexArray(m_vao_id[m_object_num]);
+            glGenVertexArrays(1, &m_vao_id[m_mesh_num]);
+            glBindVertexArray(m_vao_id[m_mesh_num]);
 
-            glGenBuffers(1, &m_vbo_id[m_object_num]);
-            glBindBuffer(GL_ARRAY_BUFFER, m_vbo_id[m_object_num]);
-            glBufferData(GL_ARRAY_BUFFER, m_vb_size[m_object_num], m_meshes[i].vertices.data(), GL_STATIC_DRAW);
+            glGenBuffers(1, &m_vbo_id[m_mesh_num]);
+            glBindBuffer(GL_ARRAY_BUFFER, m_vbo_id[m_mesh_num]);
+            glBufferData(GL_ARRAY_BUFFER, m_vb_size[m_mesh_num], m_meshes[i].vertices.data(), GL_STATIC_DRAW);
 
             //< 
             //< It is a composed API :
@@ -183,7 +183,7 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
 
             glBindVertexArray(0);
 
-            m_object_num++;
+            m_mesh_num++;
         }
     }
 
