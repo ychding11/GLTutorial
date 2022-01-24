@@ -138,6 +138,7 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
         {
             Log("mesh AABB Center is {}", glm::to_string(m_aabb.Center()));
         }
+        init_instace_buffer();
         create_vaos();
     }
 
@@ -174,15 +175,41 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
 
+            glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, m_instance_stride, (void*)0);
+            glEnableVertexAttribArray(2);
+            glVertexAttribDivisor(2, 1); //< vertex attribute 2 advances once per instance
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+
             glBindVertexArray(0);
 
-            errorCheckValue = glGetError();
-            if (errorCheckValue != GL_NO_ERROR)
-            {
-                fprintf(stderr, "Error: Could not create a VBO: %s\n", gluErrorString(errorCheckValue));
-            }
             m_object_num++;
         }
+    }
+
+    void MeshBin::init_instace_buffer()
+    {
+        glm::vec3 translations[100];
+        m_instance_stride = sizeof(glm::vec3);
+        m_instance_count = 0;
+        float offset = 0.1f;
+        for (int z = -10; z < 10; z += 2)
+        {
+            for (int x = -10; x < 10; x += 2)
+            {
+                glm::vec3 translation;
+                translation.x = (float)x / 10.0f + offset;
+                translation.z = (float)z / 10.0f + offset;
+                translation.y = 0.f;
+                translations[m_instance_count++] = translation;
+            }
+        }
+        m_instance_buffer_byte_size = m_instance_stride * m_instance_count;
+
+        glGenBuffers(1, &m_instanceVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
+        glBufferData(GL_ARRAY_BUFFER, m_instance_buffer_byte_size, &translations[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     void MeshBin::DrawBins() const

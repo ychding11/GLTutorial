@@ -39,6 +39,11 @@ private:
 
     AABB m_aabb;
 
+    GLuint m_instanceVBO{ 0 };
+    int m_instance_stride{ 0 };
+    int m_instance_count{ 0 };
+    int m_instance_buffer_byte_size{ 0 };
+
 public:
     MeshBin() = delete;
 
@@ -82,12 +87,18 @@ public:
         return m_vao_id[index];
     }
 
+    GLuint instance_count() const
+    {
+        return m_instance_count;
+    }
+
     void DrawBins() const;
 
 private:
 
     void create_vaos();
     AABB loadObjModel(const std::string& filename, const std::string& base_dir, std::vector<Mesh>& meshes);
+    void MeshBin::init_instace_buffer();
 };
 
 
