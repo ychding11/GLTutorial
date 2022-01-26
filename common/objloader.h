@@ -93,6 +93,7 @@ public:
     }
 
     void DrawBins() const;
+    void DrawBinsInstanced() const;
 
 private:
 

@@ -175,13 +175,7 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
         m_instanceShader.Apply();
         if (m_instance_draw)
         {
-            for (int i = 0; i < meshBin.size(); ++i)
-            {
-                glBindVertexArray( meshBin.vao(i) );
-                glEnableVertexAttribArray(2);
-                GL_API_CHECK( glDrawArraysInstanced( GL_TRIANGLES, 0, meshBin.vertex_num(i), meshBin.instance_count() ) );
-                glDisableVertexAttribArray(2);
-            }
+            meshBin.DrawBinsInstanced();
         }
         else
         {

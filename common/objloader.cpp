@@ -220,3 +220,13 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
             GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, this->vertex_num(i) ) );
         }
     }
+    void MeshBin::DrawBinsInstanced() const
+    {
+        for (int i = 0; i < this->size(); ++i)
+        {
+            GL_API_CHECK( glBindVertexArray(this->vao(i)) );
+            GL_API_CHECK( glEnableVertexAttribArray(2) );
+            GL_API_CHECK( glDrawArraysInstanced(GL_TRIANGLES, 0, this->vertex_num(i), this->instance_count()) );
+            GL_API_CHECK( glDisableVertexAttribArray(2) );
+        }
+    }
