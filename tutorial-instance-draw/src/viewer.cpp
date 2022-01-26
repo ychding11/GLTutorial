@@ -165,12 +165,21 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
 {
     glm::mat4 modelMatrix = glm::mat4(1.0);
 
-    m_instanceShader.Active();
-    m_instanceShader.SetMat4("M", modelMatrix);
-    m_instanceShader.SetMat4("V", camera.viewMatrix());
-    m_instanceShader.SetMat4("P", camera.projMatrix());
-    m_instanceShader.SetVec3("u_eye_position", camera.eye());
-    m_instanceShader.SetVec3("u_mesh_color", m_mesh_color);
+    //m_instanceShader.Active();
+    //m_instanceShader.SetMat4("M", modelMatrix);
+    //m_instanceShader.SetMat4("V", camera.viewMatrix());
+    //m_instanceShader.SetMat4("P", camera.projMatrix());
+    //m_instanceShader.SetVec3("u_eye_position", camera.eye());
+    //m_instanceShader.SetVec3("u_mesh_color", m_mesh_color);
+
+    auto& shaderParam = m_instanceShader.m_paramMap;
+    SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
+    SHADER_PARAM_SET_MAT4(shaderParam, "V", camera.viewMatrix());
+    SHADER_PARAM_SET_MAT4(shaderParam, "P", camera.projMatrix());
+    SHADER_PARAM_SET_VEC3(shaderParam, "u_eye_position", camera.eye());
+    SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, m_instanceShader.Name().c_str());
+        m_instanceShader.Apply();
     for (int i = 0; i < meshBin.size(); ++i)
     {
         glBindVertexArray( meshBin.vao(i) );
@@ -185,6 +194,7 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
             GL_API_CHECK( glDrawArrays( GL_TRIANGLES, 0, meshBin.vertex_num(i) ) );
         }
     }
+    glPopDebugGroup();
 }
 
 void Viewer::renderLight(Light& light, const Camera& camera)
