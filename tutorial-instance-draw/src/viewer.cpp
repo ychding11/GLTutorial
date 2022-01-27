@@ -204,10 +204,6 @@ void Viewer::renderLight(Light& light, const Camera& camera)
     glDrawArrays( GL_TRIANGLES, 0, light.GetMesh()->vertex_num() );
 }
 
-void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
-{
-}
-
 void Viewer::initOpenGLShaders()
 {
     m_instanceShader.Init(
