@@ -196,19 +196,6 @@ void Viewer::initOpenGLShaders()
         );
 }
 
-void Viewer::initMaterials(void)
-{
-    //< shader cache someday
-    m_light_material.Init("shaders/light.vs.glsl", "shaders/light.fs.glsl");
-
-    GetTextureCache().Add("textures/brickwall_diffuse.jpg");
-    GetTextureCache().Add("textures/brickwall_normal.jpg");
-
-    GetTextureCache().Add("textures/bricks2_diffuse.jpg");
-    GetTextureCache().Add("textures/bricks2_normal.jpg");
-    GetTextureCache().Add("textures/bricks2_disp.jpg");
-}
-
 int Viewer::initWindow()
 {
     if(!glfwInit())
