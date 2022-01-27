@@ -184,25 +184,6 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     glPopDebugGroup();
 }
 
-void Viewer::renderLight(Light& light, const Camera& camera)
-{
-    glm::mat4 modelMatrix = light.GetWorldMatrix();
-    glm::mat4 viewMatrix = camera.viewMatrix();
-    glm::mat4 projMatrix = camera.projMatrix();
-
-    auto* shader = light.GetMaterial()->GetShader();
-    shader->Active();
-    shader->SetMat4("M", modelMatrix);
-    shader->SetMat4("V", viewMatrix);
-    shader->SetMat4("P", projMatrix);
-    shader->SetVec3("u_viewer_pos", camera.eye());
-
-    shader->SetVec3("u_light_pos", light.GetPosition());
-    shader->SetVec3("u_light_color", light.GetColor());
-
-    glBindVertexArray( light.GetMesh()->vao() );
-    glDrawArrays( GL_TRIANGLES, 0, light.GetMesh()->vertex_num() );
-}
 
 void Viewer::initOpenGLShaders()
 {
