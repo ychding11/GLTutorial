@@ -117,9 +117,6 @@ private:
     void initMaterials(void);
     void render(const MeshBin &meshBin, SimpleMesh& simplemesh, const Camera &camera);
     void animateCamera(Camera &camera);
-    void animateExplode();
-    void evaluateDirtyValue();
-    void renderMeshBin(const MeshBin& meshBin, const Camera& camera);
     void renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera);
     void renderLight(Light& light, const Camera& camera);
 };

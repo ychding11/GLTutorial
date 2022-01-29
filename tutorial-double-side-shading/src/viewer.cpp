@@ -42,7 +42,7 @@ void Viewer::Run()
 
     m_cube->SetMaterial(&m_brickWall);
     m_quad->SetMaterial(&m_brickWall);
-    m_active_simpleMesh = m_quad.get();
+    m_active_simpleMesh = m_cube.get();
 
     //< second stage init
     MeshBin meshes{ m_objPath };
@@ -70,33 +70,11 @@ void Viewer::Run()
     GUI::Setup(m_window, "#version 130");
     do
     {
-        evaluateDirtyValue();
-        animateExplode();
         animateCamera(*m_camera);
         render(meshes, *m_active_simpleMesh, *m_camera);
     } while(glfwGetKey(m_window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(m_window) == 0);
 
     GUI::CleanUp();
-}
-
-void Viewer::evaluateDirtyValue()
-{
-    if (m_picked_mesh_name == "Quad")
-    {
-        m_active_simpleMesh = m_quad.get();
-    }
-    else if (m_picked_mesh_name == "Cube")
-    {
-        m_active_simpleMesh = m_cube.get();
-    }
-    else
-    {
-
-    }
-}
-
-void Viewer::animateExplode()
-{
 }
 
 void Viewer::animateCamera(Camera &camera)
@@ -171,10 +149,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    if (m_simple_mesh_mode)
-        renderSimpleMesh(simplemesh, camera);
-    else
-        renderMeshBin(meshBin, camera);
+    renderSimpleMesh(simplemesh, camera);
     
     glBindVertexArray(0);
     glUseProgram(0);
@@ -198,10 +173,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     glfwPollEvents();
     glfwSwapInterval(m_enable_vsync); //< enable vsync
     m_frame_id++;
-}
-
-void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
-{
 }
 
 void Viewer::renderLight(Light& light, const Camera& camera)
@@ -249,13 +220,6 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
     mat->ActiveNormalMap();
     glBindVertexArray( simplemesh.vao() );
     glDrawArrays( GL_TRIANGLES, 0, simplemesh.vertex_num() );
-    GLenum errorCheckValue = glGetError();
-    if (errorCheckValue != GL_NO_ERROR)
-    {
-        //Err("Draw: {}", gluErrorString(errorCheckValue));
-    }
-
-    //renderLight(*m_pointLight, camera);
 }
 
 void Viewer::initOpenGLShaders()
