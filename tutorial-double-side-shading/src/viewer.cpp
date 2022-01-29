@@ -315,15 +315,9 @@ void Viewer::SaveScreen(const std::string filename)
 
     const int kSize = m_window_height * m_window_width;
     std::vector<GLfloat> pixels((size_t)kSize * 3);
-    glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
-    GLenum errorCheckValue = glGetError();
-    if (errorCheckValue != GL_NO_ERROR)
-    {
-        fprintf(stderr, "Error: Could not read color buffer: %s\n", gluErrorString(errorCheckValue));
-    }
-
+    GL_API_CHECK( glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data()) );
     stbi_write_tga(filename.c_str(), m_window_width, m_window_height, 3, pixels.data()); //< only 3 channels
-    printf("save color buffer into : %s \n", filename.c_str());
+    Log("save color buffer into : {}", filename);
 }
 
 void Viewer::SaveImageSequence(const std::string dir)
