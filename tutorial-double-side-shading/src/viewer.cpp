@@ -317,6 +317,11 @@ int Viewer::initWindow()
         throw std::runtime_error("Failed to initialize GLEW !");
         return -1;
     }
+
+    //< There are bugs in glewInit(), it would set opengl error code 
+    //< The following is an workaround
+    ClearOpenGLError(__FILE__, __LINE__); 
+
     return 0;
 }
 
