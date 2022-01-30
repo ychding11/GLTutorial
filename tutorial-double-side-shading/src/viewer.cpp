@@ -429,8 +429,6 @@ static void drawUI(Viewer &viewer)
             ImGui::Separator();
             ImGui::Checkbox("Wireframe", &displayOption.wireframe);
             ImGui::Separator();
-            ImGui::Checkbox("SimpleMesh", &viewer.m_simple_mesh_mode);
-            ImGui::Separator();
             if (viewer.m_simple_mesh_mode)
             {
                 auto picked = drawTextureDropList("Mesh type : ",
