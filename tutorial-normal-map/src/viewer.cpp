@@ -37,19 +37,15 @@ std::unique_ptr<Camera> buildCamera(const MeshType & mesh)
 
 void Viewer::Run()
 {
-    //Quad quad;
-    //Cube cube;
     m_quad = std::make_unique<Quad>();
     m_cube = std::make_unique<Cube>();
 
     m_cube->SetMaterial(&m_brickWall);
     m_quad->SetMaterial(&m_brickWall);
     m_active_simpleMesh = m_quad.get();
-    //m_active_simpleMesh = m_quad;
 
     //< second stage init
     MeshBin meshes{ m_objPath };
-
 
     glm::vec3 cameraTarget;
     float cameraDistance;
@@ -153,11 +149,10 @@ void Viewer::animateCamera(Camera &camera)
 
 void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camera &camera)
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (m_double_side_lighting)
     {
