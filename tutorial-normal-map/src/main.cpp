@@ -32,7 +32,7 @@ int main(int argc, char **argv)
         modelPath = "Model/bunny.obj";
     }
 
-    Viewer viewer{"Viewer", 1280, 720};
+    Viewer viewer{"Normal Map Viewer", 1280, 720};
     viewer.SetModel(modelPath);
     viewer.Run();
 

@@ -265,11 +265,6 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
     mat->ActiveNormalMap();
     glBindVertexArray( simplemesh.vao() );
     glDrawArrays( GL_TRIANGLES, 0, simplemesh.vertex_num() );
-    GLenum errorCheckValue = glGetError();
-    if (errorCheckValue != GL_NO_ERROR)
-    {
-        //Err("Draw: {}", gluErrorString(errorCheckValue));
-    }
 
     renderLight(*m_pointLight, camera);
 }
@@ -333,6 +328,11 @@ int Viewer::initWindow()
         throw std::runtime_error("Failed to initialize GLEW !");
         return -1;
     }
+
+    //< There are bugs in glewInit(), it would set opengl error code 
+    //< The following is an workaround
+    ClearOpenGLError(__FILE__, __LINE__); 
+
     return 0;
 }
 
