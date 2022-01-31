@@ -186,10 +186,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    if (m_simple_mesh_mode)
-        renderSimpleMesh(simplemesh, camera);
-    else
-        renderMeshBin(meshBin, camera);
+    renderSimpleMesh(simplemesh, camera);
     
     glBindVertexArray(0);
     glUseProgram(0);
@@ -213,11 +210,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     glfwPollEvents();
     glfwSwapInterval(m_enable_vsync); //< enable vsync
     m_frame_id++;
-}
-
-void Viewer::renderMeshBin(const MeshBin& m_meshBin, const Camera& m_camera)
-{
-
 }
 
 void Viewer::renderLight(Light& light, const Camera& camera)
@@ -362,15 +354,9 @@ void Viewer::SaveScreen(const std::string filename)
 
     const int kSize = m_window_height * m_window_width;
     std::vector<GLfloat> pixels((size_t)kSize * 3);
-    glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
-    GLenum errorCheckValue = glGetError();
-    if (errorCheckValue != GL_NO_ERROR)
-    {
-        fprintf(stderr, "Error: Could not read color buffer: %s\n", gluErrorString(errorCheckValue));
-    }
-
+    GL_API_CHECK( glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data()) );
     stbi_write_tga(filename.c_str(), m_window_width, m_window_height, 3, pixels.data()); //< only 3 channels
-    printf("save color buffer into : %s \n", filename.c_str());
+    Log("save color buffer into : {}", filename);
 }
 
 void Viewer::SaveImageSequence(const std::string dir)
