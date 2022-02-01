@@ -183,9 +183,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 
     renderSimpleMesh(simplemesh, camera);
     
-    glBindVertexArray(0);
-    glUseProgram(0);
-
     //< shall capture color buffer here
     if (m_capture_colorbuffer)
     {
@@ -254,10 +251,6 @@ void Viewer::renderSimpleMesh(SimpleMesh& simplemesh, const Camera& camera)
     glDrawArrays( GL_TRIANGLES, 0, simplemesh.vertex_num() );
 
     renderLight(*m_pointLight, camera);
-}
-
-void Viewer::initOpenGLShaders()
-{
 }
 
 void Viewer::initMaterials(void)
