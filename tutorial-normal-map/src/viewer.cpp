@@ -59,6 +59,10 @@ void Viewer::Run()
         m_camera = buildCamera(meshes);
     }
 
+    int value = 0;
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB, &value);
+    Log("GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB={}", value);
+
     //< it should lighting here
     m_pointLight = std::make_unique<PointLight>(
         glm::vec3{0.0, 0.1f , 0.3 * m_active_simpleMesh->LogestDim()}, glm::vec3{3.0f});
