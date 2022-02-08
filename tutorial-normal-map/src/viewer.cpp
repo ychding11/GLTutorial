@@ -59,9 +59,7 @@ void Viewer::Run()
         m_camera = buildCamera(meshes);
     }
 
-    int value = 0;
-    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB, &value);
-    Log("GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB={}", value);
+    QUERY_GL_Limit(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB);
 
     //< it should lighting here
     m_pointLight = std::make_unique<PointLight>(

@@ -45,6 +45,14 @@ inline void CheckOpenGLError(const char* stmt, const char* fname, int line)
 	}
 }
 
+#define QUERY_GL_Limit(name)                                        \
+do {                                                                \
+    int value = 0;                                                  \
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB, &value); \
+    Log(#name"={}", value);                                         \
+} while (0);
+
+
 #ifdef _DEBUG
 #define GL_API_CHECK(stmt) do {                          \
             stmt;                                        \
