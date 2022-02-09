@@ -30,10 +30,17 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
         return aabb;
     }
 
+    bool onlyDefaultMaterial = false;
     if (materials.size() == 0)
     {
-        Err("No material found in obj model : {}", filename);
-        return aabb;
+        Warn("No material found in obj model : {}", filename);
+        meshes.resize(1);
+        onlyDefaultMaterial = true;
+        //return aabb;
+    }
+    else
+    {
+        meshes.resize(materials.size());
     }
 
     //< There is a bug here: err may contain multiple '\n' terminated string
@@ -41,7 +48,6 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
     if (!err.empty())
         printf("%s", err.c_str());
 
-    meshes.resize(materials.size());
 
     //< is this macro: FLT_MAX OS dependent ?
     //< should always prefer os independent ones
@@ -56,7 +62,7 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
         //< for triangle num_face_vertices = 3
         for (const auto &num_face_vertex : shape.mesh.num_face_vertices)
         {
-            int mat = shape.mesh.material_ids[face];
+            int mat = onlyDefaultMaterial ? 0 : shape.mesh.material_ids[face];
             // Loop over triangles in the face.
             for (size_t v = 0; v < num_face_vertex; ++v)
             {
