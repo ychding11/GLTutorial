@@ -6,6 +6,13 @@
 #include <GL/glew.h>
 #include "shader.h"
 
+#define QUERY_GL_Limit(name)                                        \
+do {                                                                \
+    int value = 0;                                                  \
+    glGetIntegerv(name, &value);                                    \
+    Log(#name"={}", value);                                         \
+} while (0);
+
 class AABB;
 class Camera;
 
