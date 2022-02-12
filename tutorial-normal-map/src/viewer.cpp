@@ -15,6 +15,7 @@
 #include "objloader.h"
 #include "simpleMesh.h"
 #include "shaderUtility.h"
+#include "graphicsUtility.h"
 
 #include "camera.h" 
 #include "viewer.h" 
