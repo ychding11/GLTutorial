@@ -134,7 +134,7 @@ AABB MeshBin::loadObjModel(const std::string &filename, const std::string &base_
     MeshBin::MeshBin(const std::string &filename)
         : m_max_mesh_num(256)
     {
-        m_aabb = loadObjModel(filename, "Model/", m_meshes);
+        m_aabb = loadObjModel(filename, "", m_meshes);
         if (m_aabb.Empty())
         {
             Err("AABB is empty, exit!");
