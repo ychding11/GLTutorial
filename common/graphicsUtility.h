@@ -6,6 +6,8 @@
 #include <GL/glew.h>
 #include "shader.h"
 
+#define kInvalidGLId 0xffffffffu
+
 #define QUERY_GL_Limit(name)                                        \
 do {                                                                \
     int value = 0;                                                  \
@@ -37,3 +39,18 @@ void PostProcessing(GLuint srcTex, GLuint dstTex, const Shader& shader, std::str
 void PresentTex(const Shader& shader, std::string label = "PresentTexture");
 
 
+//
+inline bool IsValidGLId(GLuint id)
+{
+    return id != kInvalidGLId;
+}
+
+// busy wait for GPU job done
+inline static void SyncGPU()
+{
+    GLsync sync_fence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    GLenum wait_return = GL_UNSIGNALED;
+    while (wait_return != GL_ALREADY_SIGNALED && wait_return != GL_CONDITION_SATISFIED)
+        wait_return = glClientWaitSync(sync_fence, GL_SYNC_FLUSH_COMMANDS_BIT, 1);
+    glDeleteSync(sync_fence);
+}
