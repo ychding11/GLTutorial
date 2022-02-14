@@ -5,6 +5,8 @@ in vec3 positionWorld;
 in vec3 normalWorld;
 in vec4 color;
 
+layout(binding = 1, offset = 0) uniform atomic_uint uCounter;
+
 out vec4 fragColor;
 
 uniform vec3 u_eye_position;
@@ -13,6 +15,8 @@ uniform int u_show_wireframe;
 //< Lighting in Pixel shader, World Space.
 void main()
 {
+     atomicCounterIncrement(uCounter);
+
     //float minHeight = min(height);
     float minHeight = min(min(height[0],height[1]),height[2]);
     float edgeIntensity = exp2(-1.0*minHeight*minHeight);
