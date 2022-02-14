@@ -21,6 +21,11 @@ out    vec4 color;
 
 uniform vec2 u_window_size;
 
+vec2 Project(in vec3 v, in int axis)
+{
+    return axis == 0 ? v.yz : (axis == 1 ? v.xz : v.xy);
+}
+
 //< 
 //< http://strattonbrazil.blogspot.com/2011/09/single-pass-wireframe-rendering_10.html 
 //< 
@@ -34,6 +39,14 @@ void main()
     vec2 e1 = p2-p0;
     vec2 e2 = p1-p0;
     float area = abs(e1.x*e2.y - e1.y*e2.x); //< cross product
+
+    vec3 axis_weight = abs(cross(gl_in[1].gl_Position.xyz - gl_in[0].gl_Position.xyz, gl_in[2].gl_Position.xyz - gl_in[0].gl_Position.xyz));
+
+	int picked_axis = 2;
+	if(axis_weight.x >= axis_weight.y && axis_weight.x > axis_weight.z)
+        picked_axis = 0;
+	else if(axis_weight.y >= axis_weight.z && axis_weight.y > axis_weight.x)
+        picked_axis = 1;
 
     height        = vec3(area/length(e0),0,0);
     positionWorld = vdata[0].positionWorld;
