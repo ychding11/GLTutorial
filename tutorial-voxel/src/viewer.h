@@ -69,7 +69,7 @@ private:
 
     AtomicCounter m_counter;
 
-    Shader m_solidWireframeShader{"standard"};
+    Shader m_voxelShader{"voxel"};
     Shader m_vertex_normal_visualize{"vertex_normal_visualize"};
 
     std::unique_ptr<Camera> m_camera;

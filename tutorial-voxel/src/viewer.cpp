@@ -161,7 +161,7 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
 
     m_counter.Reset();
 
-    auto& shaderParam = m_solidWireframeShader.m_paramMap;
+    auto& shaderParam = m_voxelShader.m_paramMap;
     SHADER_PARAM_SET_VEC2(shaderParam, "u_window_size", windowSize );
     SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
     SHADER_PARAM_SET_VEC3(shaderParam, "u_eye_position", camera.eye());
@@ -170,8 +170,8 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     SHADER_PARAM_SET_MAT4(shaderParam, "V", viewMatrix);
     SHADER_PARAM_SET_MAT4(shaderParam, "P", projMatrix);
 
-    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, m_solidWireframeShader.Name().c_str());
-        m_solidWireframeShader.Apply();
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, m_voxelShader.Name().c_str());
+    m_voxelShader.Apply();
         meshBin.DrawBins();
         int fragment_num = m_counter.SyncAndGetValue();
         Log("Fragment numbe={}", fragment_num);
@@ -202,7 +202,7 @@ void Viewer::visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera)
 
 void Viewer::initOpenGLShaders()
 {
-    m_solidWireframeShader.Init(
+    m_voxelShader.Init(
         "shaders/voxel.vs.glsl",
         "shaders/voxel.fs.glsl",
         nullptr,
