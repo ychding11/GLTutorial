@@ -95,7 +95,7 @@ void Shader::Init(const char* vs_file_path, const char* fs_file_path,
         }
         else
         {
-            Err("Not supported data type");
+            Warn("Not supported data type");
         }
     }
 }

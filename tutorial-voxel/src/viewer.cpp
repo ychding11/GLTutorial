@@ -14,10 +14,10 @@
 
 #include "objloader.h"
 #include "simpleMesh.h"
-#include "shaderUtility.h"
 
 #include "camera.h" 
 #include "viewer.h" 
+
 
 #include "event_handler.h" 
 #include "gui.h"
@@ -39,6 +39,9 @@ void Viewer::Run()
 {
     MeshBin meshes{ m_objPath };
     m_camera = buildCamera(meshes);
+
+    m_counter.Initialize();
+    m_counter.BindAsAtomicCounter(1);
 
     glfwCallbackData cb{ m_camera.get(), m_animation_mode, GetRenderSetting(), GetDisplayOption()};
     glfwSetWindowUserPointer(m_window, &cb);
@@ -156,6 +159,8 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     glm::mat4 projMatrix = camera.projMatrix();
     glm::vec2 windowSize(m_window_width, m_window_height);
 
+    m_counter.Reset();
+
     auto& shaderParam = m_solidWireframeShader.m_paramMap;
     SHADER_PARAM_SET_VEC2(shaderParam, "u_window_size", windowSize );
     SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
@@ -168,6 +173,8 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, m_solidWireframeShader.Name().c_str());
         m_solidWireframeShader.Apply();
         meshBin.DrawBins();
+        int fragment_num = m_counter.SyncAndGetValue();
+        Log("Fragment numbe={}", fragment_num);
     glPopDebugGroup();
 
     if (m_visualize_normal)

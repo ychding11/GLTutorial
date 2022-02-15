@@ -17,6 +17,9 @@
 #include "simpleMesh.h"
 #include "config.h"
 
+#include "shaderUtility.h"
+#include "graphicsUtility.h"
+
 class MeshBin;
 
 class Viewer;
@@ -64,10 +67,12 @@ private:
 
 private:
 
+    AtomicCounter m_counter;
+
     Shader m_solidWireframeShader{"standard"};
     Shader m_vertex_normal_visualize{"vertex_normal_visualize"};
 
-    std::unique_ptr<Camera>     m_camera;
+    std::unique_ptr<Camera> m_camera;
 
 public:
     Viewer() = delete;
