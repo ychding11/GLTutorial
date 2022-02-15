@@ -203,11 +203,11 @@ void Viewer::visualizeVertexNormal(const MeshBin& meshBin, const Camera& camera)
 void Viewer::initOpenGLShaders()
 {
     m_solidWireframeShader.Init(
-        "shaders/SolidWireframe.vs.glsl",
-        "shaders/SolidWireframe.fs.glsl",
+        "shaders/voxel.vs.glsl",
+        "shaders/voxel.fs.glsl",
         nullptr,
         nullptr,
-        "shaders/SolidWireframe.gs.glsl"
+        "shaders/voxel.gs.glsl"
         );
 
     m_vertex_normal_visualize.Init(
