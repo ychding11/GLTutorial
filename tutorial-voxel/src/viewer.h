@@ -68,6 +68,7 @@ private:
 private:
 
     AtomicCounter m_counter;
+    Buffer        m_fragment_list;
 
     Shader m_voxelShader{"voxel"};
     Shader m_vertex_normal_visualize{"vertex_normal_visualize"};

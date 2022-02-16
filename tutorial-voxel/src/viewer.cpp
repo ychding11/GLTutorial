@@ -43,6 +43,9 @@ void Viewer::Run()
     m_counter.Initialize();
     m_counter.BindAsAtomicCounter(1);
 
+    m_fragment_list.Initialize();
+    m_fragment_list.BindBase(GL_SHADER_STORAGE_BUFFER, 2);
+
     glfwCallbackData cb{ m_camera.get(), m_animation_mode, GetRenderSetting(), GetDisplayOption()};
     glfwSetWindowUserPointer(m_window, &cb);
 
@@ -175,6 +178,8 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
         meshBin.DrawBins();
         int fragment_num = m_counter.SyncAndGetValue();
         Log("Fragment numbe={}", fragment_num);
+        m_fragment_list.Storage(fragment_num * sizeof(GLuint) * 2, 0);
+        Log("[VOXELIZER] : Build Fragment List : {} voxels( {} MB)", fragment_num, m_fragment_list.GetByteCount() / float(1024 * 1024));
     glPopDebugGroup();
 
     if (m_visualize_normal)

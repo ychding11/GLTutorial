@@ -96,7 +96,7 @@ public:
 	{
 		// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBufferStorage.xhtml
 		// since GL 4.5
-		glNamedBufferStorage(m_id, bytes, nullptr, flags);
+		GL_API_CHECK( glNamedBufferStorage(m_id, bytes, nullptr, flags) );
 	}
 
 	template<class T>
