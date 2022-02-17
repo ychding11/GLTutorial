@@ -178,7 +178,8 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
         meshBin.DrawBins();
         int fragment_num = m_counter.SyncAndGetValue();
         Log("Fragment numbe={}", fragment_num);
-        m_fragment_list.Storage(fragment_num * sizeof(GLuint) * 2, 0);
+        //m_fragment_list.Storage(fragment_num * sizeof(GLuint) * 2, 0);
+        m_fragment_list.MutableStorage(fragment_num * sizeof(GLuint) * 2, GL_DYNAMIC_DRAW);
         Log("[VOXELIZER] : Build Fragment List : {} voxels( {} MB)", fragment_num, m_fragment_list.GetByteCount() / float(1024 * 1024));
     glPopDebugGroup();
 

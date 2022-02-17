@@ -55,6 +55,7 @@ inline static void SyncGPU()
     glDeleteSync(sync_fence);
 }
 
+//< Buffer object wiki : https://www.khronos.org/opengl/wiki/Buffer_Object
 class Buffer
 {
 private:
@@ -92,10 +93,19 @@ public:
 
 	GLuint Get() const { return m_id; }
 
+	void MutableStorage(GLsizei bytes, GLbitfield flags)
+	{
+		// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBufferStorage.xhtml
+		// since GL 4.5
+		// mutable buffer storage
+		GL_API_CHECK( glNamedBufferData(m_id, bytes, nullptr, flags) );
+	}
+
 	void Storage(GLsizei bytes, GLbitfield flags)
 	{
 		// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBufferStorage.xhtml
 		// since GL 4.5
+		// immutable buffer storage
 		GL_API_CHECK( glNamedBufferStorage(m_id, bytes, nullptr, flags) );
 	}
 
