@@ -95,9 +95,9 @@ public:
 
 	void MutableStorage(GLsizei bytes, GLbitfield flags)
 	{
-		// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBufferStorage.xhtml
+		// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBufferData.xhtml
 		// since GL 4.5
-		// mutable buffer storage
+		// mutable buffer storage, reallocate storage each call
 		GL_API_CHECK( glNamedBufferData(m_id, bytes, nullptr, flags) );
 	}
 
