@@ -4,6 +4,7 @@ in noperspective vec3 height;
 in vec3 positionWorld;
 in vec3 normalWorld;
 in vec4 color;
+in vec3 gVoxelPos;
 
 layout(binding = 1, offset = 0) uniform atomic_uint uCounter;
 
@@ -39,5 +40,6 @@ void main()
     vec3 ambientLight  = vec3(0.06f) * lightColor;
 
     vec3 finalColor = specularLight + diffuseLight + ambientLight; 
-    fragColor = (edgeIntensity * vec4(0.1,0.1,0.1,1.0)) + ((1.0-edgeIntensity) * vec4(finalColor,1.f));
+    //fragColor = (edgeIntensity * vec4(0.1,0.1,0.1,1.0)) + ((1.0-edgeIntensity) * vec4(finalColor,1.f));
+    fragColor = vec4(gVoxelPos, 1.0); 
 }

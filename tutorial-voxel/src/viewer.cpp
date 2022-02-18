@@ -157,13 +157,17 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 
 void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
 {
+    glViewport(0, 0, 1024, 1024);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+
     glm::mat4 modelMatrix = glm::mat4(1.0);
     glm::mat4 viewMatrix = camera.viewMatrix();
     glm::mat4 projMatrix = camera.projMatrix();
     glm::vec2 windowSize(m_window_width, m_window_height);
 
     m_counter.Reset();
-
     auto& shaderParam = m_voxelShader.m_paramMap;
     SHADER_PARAM_SET_VEC2(shaderParam, "u_window_size", windowSize );
     SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
@@ -180,7 +184,7 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
         Log("Fragment numbe={}", fragment_num);
         //m_fragment_list.Storage(fragment_num * sizeof(GLuint) * 2, 0);
         m_fragment_list.MutableStorage(fragment_num * sizeof(GLuint) * 2, GL_DYNAMIC_DRAW);
-        Log("[VOXELIZER] : Build Fragment List : {} voxels( {} MB)", fragment_num, m_fragment_list.GetByteCount() / float(1024 * 1024));
+        Log("[VOXELIZER] : Build Fragment List : {}voxels( {} MB)", fragment_num, m_fragment_list.GetByteCount() / float(1024 * 1024));
     glPopDebugGroup();
 
     if (m_visualize_normal)

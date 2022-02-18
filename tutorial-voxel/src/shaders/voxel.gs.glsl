@@ -18,6 +18,7 @@ out    noperspective vec3 height;
 out    vec3 positionWorld;
 out    vec3 normalWorld;
 out    vec4 color;
+out    vec3 gVoxelPos;
 
 uniform vec2 u_window_size;
 
@@ -52,21 +53,28 @@ void main()
     positionWorld = vdata[0].positionWorld;
     normalWorld   = vdata[0].normalWorld;
     color         = vdata[0].color;
-    gl_Position   =  gl_in[0].gl_Position;
+
+    gVoxelPos = (gl_in[0].gl_Position.xyz + 1.0f) * 0.5f * 1024; //< adjust to [0, 1]
+	gl_Position = vec4(Project(gl_in[0].gl_Position.xyz, picked_axis), 1.0f, 1.0f);
+    //gl_Position   =  gl_in[0].gl_Position;
     EmitVertex();
 
     height        = vec3(0,area/length(e1),0);
     positionWorld = vdata[1].positionWorld;
     normalWorld   = vdata[1].normalWorld;
     color         = vdata[1].color;
-    gl_Position   =  gl_in[1].gl_Position;
+    gVoxelPos = (gl_in[1].gl_Position.xyz + 1.0f) * 0.5f * 1024; //< adjust to [0, 1]
+	gl_Position = vec4(Project(gl_in[1].gl_Position.xyz, picked_axis), 1.0f, 1.0f);
+    //gl_Position   =  gl_in[1].gl_Position;
     EmitVertex();
 
     height        = vec3(0,0,area/length(e2));
     positionWorld = vdata[2].positionWorld;
     normalWorld   = vdata[2].normalWorld;
     color         = vdata[2].color;
-    gl_Position   =  gl_in[2].gl_Position;
+    gVoxelPos = (gl_in[2].gl_Position.xyz + 1.0f) * 0.5f * 1024; //< adjust to [0, 1]
+	gl_Position = vec4(Project(gl_in[2].gl_Position.xyz, picked_axis), 1.0f, 1.0f);
+    //gl_Position   =  gl_in[2].gl_Position;
     EmitVertex();
 }
 
