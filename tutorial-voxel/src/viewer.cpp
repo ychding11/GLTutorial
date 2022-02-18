@@ -173,15 +173,15 @@ void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
     SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
     SHADER_PARAM_SET_VEC3(shaderParam, "u_eye_position", camera.eye());
     SHADER_PARAM_SET_INT(shaderParam, "u_show_wireframe", m_show_wireframe);
-    SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
-    SHADER_PARAM_SET_MAT4(shaderParam, "V", viewMatrix);
-    SHADER_PARAM_SET_MAT4(shaderParam, "P", projMatrix);
+    //SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
+    //SHADER_PARAM_SET_MAT4(shaderParam, "V", viewMatrix);
+    //SHADER_PARAM_SET_MAT4(shaderParam, "P", projMatrix);
 
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, m_voxelShader.Name().c_str());
     m_voxelShader.Apply();
         meshBin.DrawBins();
         int fragment_num = m_counter.SyncAndGetValue();
-        Log("Fragment numbe={}", fragment_num);
+        Log("Fragment count={}", fragment_num);
         //m_fragment_list.Storage(fragment_num * sizeof(GLuint) * 2, 0);
         m_fragment_list.MutableStorage(fragment_num * sizeof(GLuint) * 2, GL_DYNAMIC_DRAW);
         Log("[VOXELIZER] : Build Fragment List : {}voxels( {} MB)", fragment_num, m_fragment_list.GetByteCount() / float(1024 * 1024));

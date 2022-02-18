@@ -20,7 +20,8 @@ uniform vec3 u_mesh_color;
 //< Lighting in Pixel shader, World Space.
 void main()
 {
-    gl_Position = P * V * M * vec4(aPosition, 1.f);
+    //gl_Position = P * V * M * vec4(aPosition, 1.f);
+    gl_Position = vec4(aPosition, 1.f);
 
     vec3 positionWorld = (M * vec4(aPosition, 1.f)).xyz;
 
