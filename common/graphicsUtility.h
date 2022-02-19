@@ -101,6 +101,26 @@ public:
 		GL_API_CHECK( glNamedBufferData(m_id, bytes, nullptr, flags) );
 	}
 
+	//never use Data() with Storage()
+	template<class T>
+	void MutableStorage(T* begin, T* end, GLenum usage)
+	{
+		// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBufferData.xhtml
+		// since GL 4.5
+		// mutable buffer storage, reallocate storage each call
+		GL_API_CHECK( glNamedBufferData(m_id, (end - begin) * sizeof(T), begin, usage) );
+	}
+
+	//< After storage created, always prefer this one to update contents
+	template<class T>
+	void SubData(GLsizei byte_offset, const T* begin, const T* end)
+	{
+		// mutable buffer storage, avoid to reallocate storage each call
+		GL_API_CHECK( glNamedBufferSubData(m_id, byte_offset, (end - begin) * sizeof(T), begin) );
+	}
+
+
+
 	void Storage(GLsizei bytes, GLbitfield flags)
 	{
 		// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBufferStorage.xhtml
@@ -117,19 +137,6 @@ public:
 		glNamedBufferStorage(m_id, (end - begin) * sizeof(T), begin, flags);
 	}
 
-	//never use Data() with Storage()
-	template<class T>
-	void Data(T* begin, T* end, GLenum usage)
-	{
-		glNamedBufferData(m_id, (end - begin) * sizeof(T), begin, usage);
-	}
-
-	template<class T>
-	void SubData(GLsizei byte_offset, const T* begin, const T* end)
-	{
-		glNamedBufferSubData(m_id, byte_offset, (end - begin) * sizeof(T), begin);
-	}
-
 	GLint GetByteCount() const
 	{
 		GLint c = 0;
@@ -137,7 +144,10 @@ public:
 		return c;
 	}
 
-	void Bind(GLenum target) const { glBindBuffer(target, m_id); }
+	void Bind(GLenum target) const
+	{
+		glBindBuffer(target, m_id);
+	}
 
 	void BindBase(GLenum target, GLuint index) const
 	{
