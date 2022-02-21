@@ -105,7 +105,7 @@ void Viewer::animateCamera(Camera &camera)
 
 void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camera &camera)
 {
-    glEnable(GL_MULTISAMPLE);
+    //glEnable(GL_MULTISAMPLE);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
@@ -163,30 +163,21 @@ void Viewer::voxelize(const MeshBin& meshBin, const Camera& camera)
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_STENCIL_TEST);
 
-    glm::mat4 modelMatrix = glm::mat4(1.0);
-    glm::mat4 viewMatrix = camera.viewMatrix();
-    glm::mat4 projMatrix = camera.projMatrix();
-    glm::vec2 windowSize(m_window_width, m_window_height);
-
-    m_counter.Reset();
+    m_counter.Reset();    
+    m_fragment_list.BindBase(GL_SHADER_STORAGE_BUFFER, 2);
     auto& shaderParam = m_voxelShader.m_paramMap;
-    SHADER_PARAM_SET_VEC2(shaderParam, "u_window_size", windowSize );
-    SHADER_PARAM_SET_VEC3(shaderParam, "u_mesh_color", m_mesh_color);
-    SHADER_PARAM_SET_VEC3(shaderParam, "u_eye_position", camera.eye());
-    SHADER_PARAM_SET_INT(shaderParam, "u_show_wireframe", m_show_wireframe);
     SHADER_PARAM_SET_INT(shaderParam, "u_count_voxel_only", 1);
-    //SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
-    //SHADER_PARAM_SET_MAT4(shaderParam, "V", viewMatrix);
-    //SHADER_PARAM_SET_MAT4(shaderParam, "P", projMatrix);
 
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, m_voxelShader.Name().c_str());
-    m_voxelShader.Apply();
+        m_voxelShader.Apply();
         meshBin.DrawBins();
         int fragment_num = m_counter.SyncAndGetValue();
-        Log("Fragment count={}", fragment_num);
         m_fragment_list.MutableStorage(fragment_num * sizeof(GLuint) * 2, GL_DYNAMIC_DRAW);
+        Log("Fragment count={}", fragment_num);
         Log("[VOXELIZER] : Allocate fragment list : {}voxels( {} MB)", fragment_num, m_fragment_list.GetByteCount() / float(1024 * 1024));
-    SHADER_PARAM_SET_INT(shaderParam, "u_count_voxel_only", 0);
+
+        SHADER_PARAM_SET_INT(shaderParam, "u_count_voxel_only", 0);
+        m_voxelShader.Apply();
         meshBin.DrawBins();
     glPopDebugGroup();
 }
@@ -273,9 +264,9 @@ int Viewer::initWindow()
         return -1;
     }
 
-    glfwWindowHint(GLFW_SAMPLES, 4); //< MSAA
+    //glfwWindowHint(GLFW_SAMPLES, 4); //< MSAA
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 

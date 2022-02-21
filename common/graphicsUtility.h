@@ -140,18 +140,18 @@ public:
 	GLint GetByteCount() const
 	{
 		GLint c = 0;
-		glGetNamedBufferParameteriv(m_id, GL_BUFFER_SIZE, &c);
+		GL_API_CHECK( glGetNamedBufferParameteriv(m_id, GL_BUFFER_SIZE, &c) );
 		return c;
 	}
 
 	void Bind(GLenum target) const
 	{
-		glBindBuffer(target, m_id);
+		GL_API_CHECK( glBindBuffer(target, m_id) );
 	}
 
 	void BindBase(GLenum target, GLuint index) const
 	{
-		glBindBufferBase(target, index, m_id);
+		GL_API_CHECK( glBindBufferBase(target, index, m_id) );
 	}
 };
 
