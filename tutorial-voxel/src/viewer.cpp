@@ -50,6 +50,8 @@ void Viewer::Run()
     glfwSetWindowUserPointer(m_window, &cb);
 
     GUI::Setup(m_window, "#version 130");
+    //voxelize(meshBin, camera);
+    voxelize(meshes, *m_camera);
     do
     {
         animateCamera(*m_camera);
@@ -137,7 +139,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     }
 
     //renderMeshBin(meshBin, camera);
-    voxelize(meshBin, camera);
     
 
     //< shall capture color buffer here
@@ -172,7 +173,8 @@ void Viewer::voxelize(const MeshBin& meshBin, const Camera& camera)
         m_voxelShader.Apply();
         meshBin.DrawBins();
         int fragment_num = m_counter.SyncAndGetValue();
-        m_fragment_list.MutableStorage(fragment_num * sizeof(GLuint) * 2, GL_DYNAMIC_DRAW);
+        //m_fragment_list.MutableStorage(fragment_num * sizeof(GLuint) * 2, GL_DYNAMIC_DRAW);
+        m_fragment_list.Storage(fragment_num * sizeof(GLuint) * 2, 0); //<
         Log("Fragment count={}", fragment_num);
         Log("[VOXELIZER] : Allocate fragment list : {}voxels( {} MB)", fragment_num, m_fragment_list.GetByteCount() / float(1024 * 1024));
 
