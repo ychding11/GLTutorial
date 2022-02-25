@@ -50,8 +50,8 @@ void Viewer::Run()
     glfwSetWindowUserPointer(m_window, &cb);
 
     GUI::Setup(m_window, "#version 130");
-    //voxelize(meshBin, camera);
-    voxelize(meshes, *m_camera);
+    //voxelize(meshBin);
+    voxelize(meshes);
     do
     {
         animateCamera(*m_camera);
@@ -157,7 +157,7 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     drawUI(*this);
 }
 
-void Viewer::voxelize(const MeshBin& meshBin, const Camera& camera)
+void Viewer::voxelize(const MeshBin& meshBin)
 {
     glViewport(0, 0, 1024, 1024);
     glDisable(GL_CULL_FACE);
