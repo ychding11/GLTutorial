@@ -2,16 +2,17 @@
 // Copyright (c) 2021 Yaochuang Ding 
 //=================================================================================//
 
-#version 330 core
+#version 450 core
 
-struct V2F
+struct VsOut
 {
     vec3 positionWorld;
     vec3 normalWorld;
     vec4 color;
+    flat uint instaceId;
 };
 
-in V2F vdata;  // same type, name with last stage
+in VsOut vdata;  // same type, name with last stage
 
 out vec4 fragColor;
 
@@ -21,31 +22,38 @@ uniform vec3 u_eye_position;
 void main()
 {
     vec3 lightColor = vec3(1.f);
+    vec3 L = normalize(vec3(1.f));
 
-    vec3 diffuseColor = vdata.color.rgb;
+    uint i = vdata.instaceId / 10;
+    uint j = vdata.instaceId % 10;
+    float specular_power = 12 * i + 4 * j ;
 
-    vec3 n = normalize(vdata.normalWorld);
+    vec3 diffuse_albedo = vec3(0.5, 0.2, 0.7); //vdata.color.rgb;
+    vec3 specular_albedo = vec3(0.7);
+
+    vec3 N = normalize(vdata.normalWorld);
     if (!gl_FrontFacing) //< back face case
-        n = -n;
-    vec3 l = normalize(vec3(1.f));
-    float diffuse = clamp(dot(n, l), 0.f, 1.f);
+        N = -N;
+    vec3 V = normalize(u_eye_position - vdata.positionWorld);
+    vec3 R = reflect(-L, N);
 
-    vec3 v = normalize(u_eye_position - vdata.positionWorld);
-    vec3 r = reflect(-l, n);
-    float specular = pow(max(dot(v, r), 0.0), 32);
+    float diffuse  = max(dot(L, N), 0.0f);
+    float specular = pow(max(dot(V, R), 0.0f), specular_power);
 
-    if (!gl_FrontFacing)
+    if (!gl_FrontFacing) //< back face
     {
-        vec3 diffuseColor = vec3(0.1f);
+        diffuse_albedo = vec3(0.1f);
     }
-    vec3 specularLight = 0.1f  * specular * lightColor * diffuseColor;
-    vec3 diffuseLight  = 0.84f * diffuse * lightColor * diffuseColor;
-    vec3 ambientLight  = vec3(0.06f) * lightColor;
 
-    vec3 finalLight = diffuseLight + ambientLight; 
+    vec3 specularColor = specular * specular_albedo * lightColor ;
+    vec3 diffuseColor  = diffuse * diffuse_albedo * lightColor ;
+    vec3 ambientColor  = vec3(0.08f) * lightColor;
+
+    vec3 finalColor = diffuseColor + ambientColor; 
+    
     if (gl_FrontFacing) //< only front face has specular light
     {
-        finalLight += specularLight; 
+        finalColor += specularColor; 
     }
-    fragColor = vec4(finalLight, 1.0f);
+    fragColor = vec4(finalColor, 1.0f);
 }

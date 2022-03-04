@@ -99,7 +99,7 @@ void Viewer::animateCamera(Camera &camera)
 
 void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camera &camera)
 {
-    glEnable(GL_MULTISAMPLE);
+    //glEnable(GL_MULTISAMPLE);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
@@ -124,10 +124,15 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     if(m_option.wireframe)
     {
         glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+        //glEnable(GL_BLEND);
+        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //glEnable(GL_LINE_SMOOTH);
     }
     else
     {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glDisable(GL_BLEND);
+        glDisable(GL_LINE_SMOOTH);
     }
 
     renderMeshBin(meshBin, camera);
@@ -221,7 +226,7 @@ int Viewer::initWindow()
         return -1;
     }
 
-    glfwWindowHint(GLFW_SAMPLES, 4); //< MSAA
+    //glfwWindowHint(GLFW_SAMPLES, 4); //< MSAA
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);

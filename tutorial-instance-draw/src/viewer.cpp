@@ -107,7 +107,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-
     glFrontFace(GL_CCW);
     if (m_double_side_lighting)
     {
@@ -164,7 +163,6 @@ void Viewer::render(const MeshBin & meshBin, SimpleMesh &simplemesh, const Camer
 void Viewer::renderMeshBin(const MeshBin& meshBin, const Camera& camera)
 {
     glm::mat4 modelMatrix = glm::mat4(1.0);
-
     auto& shaderParam = m_instanceShader.m_paramMap;
     SHADER_PARAM_SET_MAT4(shaderParam, "M", modelMatrix);
     SHADER_PARAM_SET_MAT4(shaderParam, "V", camera.viewMatrix());
@@ -249,13 +247,12 @@ void Viewer::SavePng(const std::string filename)
      * https://www.khronos.org/opengl/wiki/Framebuffer#Read_color_buffer
      *
      **/
-
     const int kSize = m_window_height * m_window_width;
     std::vector<GLfloat> pixels((size_t)kSize * 3);
     GL_API_CHECK(glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data()));
     stbi_flip_vertically_on_write(1);
     stbi_write_png(filename.c_str(), m_window_width, m_window_height, 3, pixels.data(), m_window_width * 3); //< only 3 channels
-    Log("save color buffer into : {}", filename.c_str());
+    Log("save color buffer into: {}", filename.c_str());
 }
 void Viewer::SaveScreen(const std::string filename)
 {
@@ -263,18 +260,12 @@ void Viewer::SaveScreen(const std::string filename)
      * https://www.khronos.org/opengl/wiki/Framebuffer#Read_color_buffer
      *
      **/
-
     const int kSize = m_window_height * m_window_width;
     std::vector<GLfloat> pixels((size_t)kSize * 3);
-    glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
-    GLenum errorCheckValue = glGetError();
-    if (errorCheckValue != GL_NO_ERROR)
-    {
-        fprintf(stderr, "Error: Could not read color buffer: %s\n", gluErrorString(errorCheckValue));
-    }
-
+    GL_API_CHECK( glReadPixels(0, 0, m_window_width, m_window_height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data()) );
+    stbi_flip_vertically_on_write(1);
     stbi_write_tga(filename.c_str(), m_window_width, m_window_height, 3, pixels.data()); //< only 3 channels
-    printf("save color buffer into : %s \n", filename.c_str());
+    Log("save color buffer into: {}", filename.c_str());
 }
 
 void Viewer::SaveImageSequence(const std::string dir)
