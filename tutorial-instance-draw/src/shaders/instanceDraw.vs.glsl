@@ -9,7 +9,7 @@ struct VsOut
     vec3 positionWorld;
     vec3 normalWorld;
     vec4 color;
-    flat uint instaceId;
+    flat float specular_power;
 };
 
 out VsOut  vdata;
@@ -28,10 +28,14 @@ void main()
 {
     gl_Position = P * V * M * vec4(aPosition + aInstanceOffset, 1.f);
 
+    uint i = gl_InstanceID / 10;
+    uint j = gl_InstanceID % 10;
+    float specular_power = 12.f * i + 1.f * j ;
+
     vec3 positionWorld = (M * vec4(aPosition + aInstanceOffset, 1.f)).xyz;
 
     vdata.positionWorld = positionWorld;
     vdata.normalWorld   = mat3(transpose(inverse(M))) * aNormal;
     vdata.color = vec4(u_mesh_color, 1.0f);
-    vdata.instaceId = gl_InstanceID;
+    vdata.specular_power = specular_power;
 }

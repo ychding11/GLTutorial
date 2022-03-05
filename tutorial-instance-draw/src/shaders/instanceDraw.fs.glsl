@@ -9,7 +9,7 @@ struct VsOut
     vec3 positionWorld;
     vec3 normalWorld;
     vec4 color;
-    flat uint instaceId;
+    flat float specular_power;
 };
 
 in VsOut vdata;  // same type, name with last stage
@@ -24,9 +24,7 @@ void main()
     vec3 lightColor = vec3(1.f);
     vec3 L = normalize(vec3(1.f));
 
-    uint i = vdata.instaceId / 10;
-    uint j = vdata.instaceId % 10;
-    float specular_power = 12 * i + 4 * j ;
+    float specular_power = vdata.specular_power ;
 
     vec3 diffuse_albedo = vec3(0.5, 0.2, 0.7); //vdata.color.rgb;
     vec3 specular_albedo = vec3(0.7);
